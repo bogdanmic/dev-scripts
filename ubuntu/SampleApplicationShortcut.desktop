@@ -1,0 +1,6 @@
+[Desktop Entry]
+Type=Application
+Terminal=false
+Name=SampleApplicationName
+Icon=/path/to/application/icon/icon.png
+Exec=/path/to/application/executable/executable.sh
