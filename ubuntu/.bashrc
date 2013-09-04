@@ -112,3 +112,6 @@ if ! shopt -oq posix; then
     . /etc/bash_completion
   fi
 fi
+
+# to add something to your path add something like
+# export PATH="$PATH:/the/path/you/want/to/add/"
