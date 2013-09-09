@@ -57,7 +57,10 @@ if [ -n "$force_color_prompt" ]; then
 fi
 
 if [ "$color_prompt" = yes ]; then
-    PS1='${debian_chroot:+($debian_chroot)}\[\033[01;32m\]\u@\h\[\033[00m\]:\[\033[01;34m\]\W\[\033[00m\]\[\033[31m\]$(__git_ps1 " (%s)")\[\033[00m\]\$ '
+    # Enable git auto completion
+    source /etc/bash_completion.d/git
+    GIT_PS1_SHOWDIRTYSTATE=true
+    PS1='${debian_chroot:+($debian_chroot)}\[\e[32m\]\u@\h:\[\e[36m\]\W\[\e[31m\]$(__git_ps1)\[\e[34m\]$\[\e[00m\] '
 else
     PS1='${debian_chroot:+($debian_chroot)}\u@\h:\w\$ '
 fi
