@@ -16,6 +16,3 @@ Apache
 Php
 ---
  - **xdebug.ini** - This configuration for **xdebug** will allow you to turn the profiling and debugging functionality offered by xdebug, **on/off** by using a browser cookie. Those cokies can be added using marklets or browser extensions. Check out this [list of Xdebug browser extensions](http://xdebug.org/docs/remote).
-
- - a sample **apache virtual host file** file for **apache2 web server** only for php web applications on port **80:HTTP protocol** folder
- - a sample **partial php.ini** file for **xdebug** to be able to turn **xdebug** profiling functionality on/off with a browser cookie
