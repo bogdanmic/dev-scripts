@@ -16,6 +16,11 @@ To  get started:
  $ ./setup.sh
  ```
 
+The folder it creates:
+ - **tools** - here downloads tools like maven, node, etc.
+ - **secrets** - generates the GitHub ssh keys
+ - **work** - clones all your git repositories
+
  - **.bashrc** - Makes your ubuntu terminal prompt, colorful and ads the current branch name if in a git repository to the terminal prompt.
  - **bash_aliases** - Contains a sample alias command for **git status --short**
  - **SampleApplicationShortcut.desktop** - A sample file to create a shortcut for an application to be found in the Unity Search Bar. You need to place a file like this in **/usr/share/applications/**.
