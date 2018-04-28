@@ -1,18 +1,44 @@
-config-samples
+config-scripts
 ==============
 
-This is collection of config files to use as samples for future work.
+This is collection of scripts that I use on my linux machine to configure my
+workspace. For now I use a **Ubuntu** distribution.
 
-Ubuntu 13.04
+Ubuntu 18.04
 ------------
- - **.bashrc** - Makes your ubuntu terminal prompt, colorful and ads the current branch name if in a git repository to the terminal prompt.
- - **bash_aliases** - Contains a sample alias command for **git status --short**
- - **SampleApplicationShortcut.desktop** - A sample file to create a shortcut for an application to be found in the Unity Search Bar. You need to place a file like this in **/usr/share/applications/**.
+The [**setup.sh**](setup.sh) script when running creates directories around itself.
+So it's recommended to create a folder where to clone this repository and run the script.
 
-Apache
-------
- - **http.application.domain.conf** - A sample file that shows you how to create a virtual host for a **php web application** using **HTTP** protocol, port **80**.
+To  get started:
+ ```bash
+ $ git clone git@github.com:bogdanmic/config-scripts.git
+ $ cd config-scripts
+ $ ./setup.sh
+ ```
 
-Php
----
- - **xdebug.ini** - This configuration for **xdebug** will allow you to turn the profiling and debugging functionality offered by xdebug, **on/off** by using a browser cookie. Those cokies can be added using marklets or browser extensions. Check out this [list of Xdebug browser extensions](http://xdebug.org/docs/remote).
+The folder it creates:
+ - **tools** - here downloads tools like maven, node, etc.
+ - **secrets** - generates the GitHub ssh keys
+ - **work** - clones all your git repositories
+ - **containers** - the home directory where any containers started by then
+ setup will hold their data (e.g. dpostgres will store the databses there)
+
+What does it do?
+ - installs: git, git-flow, vim, filezilla, vlc, virtualbox, firefox, chrome,
+ skype, numix-icon-theme-circle, **atom ide**, docker, docker-compose, java8, yarn,
+ node, maven, typesafe activator, JetBrains ToolBox (makes easier to install and
+ update JetBrains products), dbeaver, awscli
+ - makes your terminal prompt nice
+ - configures git
+ - create a github ssh-key file for your github account
+ - clones all your github repositories
+ - creates some aliases to start services inside containers:
+   - dconsul - starts consul
+   - econsul - executes consul commands in the started consul container
+   - dpostgres - starts a postgres database
+   - dpgadmin - starts pgadmin4
+ - if you have a folder named **private** in the same folder where you cloned
+ this repo, then this is also possible:
+   - any aliases in the file **aliases** will be added to your bashrc
+
+***Feel free to contribute in any way.***
