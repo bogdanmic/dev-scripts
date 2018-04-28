@@ -25,7 +25,7 @@ What does it do?
  - installs: git, git-flow, vim, filezilla, vlc, virtualbox, firefox, chrome,
  skype, numix-icon-theme-circle, **atom ide**, docker, docker-compose, java8, yarn,
  node, maven, typesafe activator, JetBrains ToolBox (makes easier to install and
- update JetBrains products)
+ update JetBrains products), dbeaver
  - makes your terminal prompt nice
  - configures git
  - create a github ssh-key file for your github account
