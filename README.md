@@ -1,10 +1,21 @@
-config-samples
+config-scripts
 ==============
 
-This is collection of config files to use as samples for future work.
+This is collection of scripts that I use on my linux machine to configure my
+workspace. For now I use a **Ubuntu** distribution.
 
-Ubuntu 13.04
+Ubuntu 18.04
 ------------
+The [**setup.sh**](setup.sh) script when running creates directories around itself.
+So it's recommended to create a folder where to clone this repository and run the script.
+
+To  get started:
+ ```bash
+ $ git clone git@github.com:bogdanmic/config-scripts.git
+ $ cd config-scripts
+ $ ./setup.sh
+ ```
+
  - **.bashrc** - Makes your ubuntu terminal prompt, colorful and ads the current branch name if in a git repository to the terminal prompt.
  - **bash_aliases** - Contains a sample alias command for **git status --short**
  - **SampleApplicationShortcut.desktop** - A sample file to create a shortcut for an application to be found in the Unity Search Bar. You need to place a file like this in **/usr/share/applications/**.
