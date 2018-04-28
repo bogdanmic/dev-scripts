@@ -168,6 +168,28 @@
 #     echo "SUCCESS!"
 # fi
 
+# echo -n "d[name] starts a container of the [name] service type"
+# echo -n "e[name] executes a command in the container of the [name] service type"
+# read -p "Add aliases for docker consul(dconsul,econsul), docker postgresql(dpostgres), docker pgadmin4(dpgadmin)?[Y/n] " -n 1 -r
+# echo    # (optional) move to a new line
+# if [[ $REPLY =~ ^[Yy]$ ]]
+# then
+#     echo "alias dconsul='docker run --rm -it --net=host --name dev-consul consul'" >> ~/.bashrc
+#     # This allows us to execute command inside the dev-consul container
+#     echo "alias econsul='docker exec dev-consul consul'" >> ~/.bashrc
+#     mkdir -p ../containers
+#     containers_abs_path=$(realpath ../containers)
+#     echo -n "Enter your POSTGRES_USER and press [ENTER]: "
+#     read postgresuser
+#     echo -n "Enter your POSTGRES_PASSWORD and press [ENTER]: "
+#     read postgrespassword
+#     echo "alias dpostgres='docker run --rm -it -p 5432:5432 --name=dev-postgres -e POSTGRES_USER=$postgresuser -e POSTGRES_PASSWORD=$postgrespassword -v $containers_abs_path/postgres_home:/var/lib/postgresql/data postgres -c \"log_statement=all\" -c \"log_duration=on\" -c \"log_min_duration_statement=-1\"'" >> ~/.bashrc
+#     mkdir -p ../containers/pgadmin_home
+#     sudo chmod -R 777 ../containers/pgadmin_home
+#     echo "alias dpgadmin='docker run --rm -it --net=host --name=dev-pgadmin -v $containers_abs_path/pgadmin_home:/pgadmin thajeztah/pgadmin4'" >> ~/.bashrc
+#     echo "SUCCESS!"
+# fi
+
 # read -p "Setup GitHub SSG key ?[Y/n] " -n 1 -r
 # echo    # (optional) move to a new line
 # if [[ $REPLY =~ ^[Yy]$ ]]
