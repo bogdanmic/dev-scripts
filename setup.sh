@@ -95,6 +95,7 @@
 #     read useremail
 #     git config --global user.name "$username"
 #     git config --global user.email "$useremail"
+#     git config --global color.ui auto
 #     git config -l
 #     echo "SUCCESS!"
 # fi
@@ -125,19 +126,37 @@
 # then
 #     sudo apt install -y zip gzip tar
 #     mkdir -p ../tools
+#     tools_abs_path=$(realpath ../tools)
 #     # Get maven
 #     wget -qO- http://mirrors.m247.ro/apache/maven/maven-3/3.5.3/binaries/apache-maven-3.5.3-bin.tar.gz | tar xvz -C ../tools
+#     # Add maven to PATH
+#     echo "PATH=\$PATH:$tools_abs_path/apache-maven-3.5.3/bin" >> ~/.bashrc
+#     echo 'export MAVEN_OPTS="-Xmx512m"' >> ~/.bashrc
 #     # Get nodejs (This gets installed by yarn so we don't do this for now)
 #     # wget https://nodejs.org/dist/v8.11.1/node-v8.11.1-linux-x64.tar.xz -P ../tools
 #     # tar xf ../tools/node-v8.11.1-linux-x64.tar.xz -C ../tools && rm ../tools/node-v8.11.1-linux-x64.tar.xz
+#     # echo "PATH=\$PATH:$tools_abs_path/node-v8.11.1-linux-x64/bin" >> ~/.bashrc
 #     # Get typesafe activator
 #     wget  http://downloads.typesafe.com/typesafe-activator/1.3.12/typesafe-activator-1.3.12-minimal.zip -P ../tools
 #     unzip -o ../tools/typesafe-activator-1.3.12-minimal.zip -d ../tools && rm ../tools/typesafe-activator-1.3.12-minimal.zip
+#     # Add activator to PATH
+#     echo "PATH=\$PATH:$tools_abs_path/activator-1.3.12-minimal/bin" >> ~/.bashrc
 #     # Get JetBrains ToolBox app that makes it easier to update InteliJ ad get it.
 #     wget -qO- https://download.jetbrains.com/toolbox/jetbrains-toolbox-1.8.3678.tar.gz | tar xvz -C ../tools
 #     echo "SUCCESS!"
 # fi
-#
+
+# read -p "Configure your Terminal prompt?[Y/n] " -n 1 -r
+# echo    # (optional) move to a new line
+# if [[ $REPLY =~ ^[Yy]$ ]]
+# then
+#     echo 'export PS1='\''${debian_chroot:+($debian_chroot)}\[\033[01;32m\]\u@\h\[\033[00m\]:\[\033[01;34m\]\w\[\033[00m\]\[\033[01;31m\]$(declare -F __git_ps1 &>/dev/null && __git_ps1 " (%s)")\[\033[00m\]\[\033[01;36m\]:\$\[\033[00m\] '\' >> ~/.bashrc
+#     echo 'export GIT_PS1_SHOWDIRTYSTATE=true' >> ~/.bashrc
+#     echo 'export GIT_PS1_SHOWUNTRACKEDFILES=true' >> ~/.bashrc
+#     echo 'alias gg='\''git status -sb'\' >> ~/.bashrc
+#     echo "SUCCESS!"
+# fi
+
 # read -p "Setup GitHub SSG key ?[Y/n] " -n 1 -r
 # echo    # (optional) move to a new line
 # if [[ $REPLY =~ ^[Yy]$ ]]
@@ -170,7 +189,7 @@
 # sudo apt update
 # sudo apt -y upgrade
 #
-# read -p "Reboot? " -n 1 -r
+# read -p "Reboot?[Y/n] " -n 1 -r
 # echo    # (optional) move to a new line
 # if [[ $REPLY =~ ^[Yy]$ ]]
 # then
