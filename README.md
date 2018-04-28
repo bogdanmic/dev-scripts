@@ -20,3 +20,15 @@ The folder it creates:
  - **tools** - here downloads tools like maven, node, etc.
  - **secrets** - generates the GitHub ssh keys
  - **work** - clones all your git repositories
+
+What does it do?
+ - installs: git, git-flow, vim, filezilla, vlc, virtualbox, firefox, chrome,
+ skype, numix-icon-theme-circle, **atom ide**, docker, docker-compose, java8, yarn,
+ node, maven, typesafe activator, JetBrains ToolBox (makes easier to install and
+ update JetBrains products)
+ - makes your terminal prompt nice
+ - configures git
+ - create a github ssh-key file for your github account
+ - clones all your github repositories
+
+*** Feel free to contribute in any way. ***

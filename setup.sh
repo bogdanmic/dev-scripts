@@ -4,11 +4,11 @@
 # I use Ubuntu mainly. I'm not saying is the best choice nut it's ok.
 #
 
-# read -p "Install: git, git-flow ?[Y/n] " -n 1 -r
+# read -p "Install: git, git-flow, vim ?[Y/n] " -n 1 -r
 # echo    # (optional) move to a new line
 # if [[ $REPLY =~ ^[Yy]$ ]]
 # then
-#     sudo apt install -y git git-flow
+#     sudo apt install -y git git-flow vim
 #     echo "SUCCESS!"
 # fi
 #
