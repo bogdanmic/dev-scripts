@@ -37,5 +37,8 @@ What does it do?
    - econsul - executes consul commands in the started consul container
    - dpostgres - starts a postgres database
    - dpgadmin - starts pgadmin4
+ - if you have a folder named **private** in the same folder where you cloned
+ this repo, then this is also possible:
+   - any aliases in the file **aliases** will be added to your bashrc
 
 ***Feel free to contribute in any way.***

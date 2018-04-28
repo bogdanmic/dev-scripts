@@ -4,7 +4,7 @@
 # I use Ubuntu mainly. I'm not saying is the best choice nut it's ok.
 #
 
-# read -p "Install: git, git-flow, vim ?[Y/n] " -n 1 -r
+# read -p $'\e[32mInstall: git, git-flow, vim ?[Y/n]\e[39m ' -n 1 -r
 # echo    # (optional) move to a new line
 # if [[ $REPLY =~ ^[Yy]$ ]]
 # then
@@ -12,7 +12,7 @@
 #     echo "SUCCESS!"
 # fi
 #
-# read -p "Install: filezilla, vlc, virtualbox, firefox ?[Y/n] " -n 1 -r
+# read -p $'\e[32mInstall: filezilla, vlc, virtualbox, firefox ?[Y/n]\e[39m ' -n 1 -r
 # echo    # (optional) move to a new line
 # if [[ $REPLY =~ ^[Yy]$ ]]
 # then
@@ -20,7 +20,7 @@
 #     echo "SUCCESS!"
 # fi
 #
-# read -p "Install: chrome ?[Y/n] " -n 1 -r
+# read -p $'\e[32mInstall: chrome ?[Y/n]\e[39m ' -n 1 -r
 # echo    # (optional) move to a new line
 # if [[ $REPLY =~ ^[Yy]$ ]]
 # then
@@ -31,7 +31,7 @@
 #     echo "SUCCESS!"
 # fi
 #
-# read -p "Install: skype ?[Y/n] " -n 1 -r
+# read -p $'\e[32mInstall: skype ?[Y/n]\e[39m ' -n 1 -r
 # echo    # (optional) move to a new line
 # if [[ $REPLY =~ ^[Yy]$ ]]
 # then
@@ -42,7 +42,7 @@
 #     echo "SUCCESS!"
 # fi
 
-# read -p "Install: dbeaver (sql client) ?[Y/n] " -n 1 -r
+# read -p $'\e[32mInstall: dbeaver (sql client) ?[Y/n]\e[39m ' -n 1 -r
 # echo    # (optional) move to a new line
 # if [[ $REPLY =~ ^[Yy]$ ]]
 # then
@@ -53,7 +53,7 @@
 #     echo "SUCCESS!"
 # fi
 
-# read -p "Install: numix-icon-theme-circle ?[Y/n] " -n 1 -r
+# read -p $'\e[32mInstall: numix-icon-theme-circle ?[Y/n]\e[39m ' -n 1 -r
 # echo    # (optional) move to a new line
 # if [[ $REPLY =~ ^[Yy]$ ]]
 # then
@@ -63,7 +63,7 @@
 #     echo "SUCCESS!"
 # fi
 #
-# read -p "Install: atom ide ?[Y/n] " -n 1 -r
+# read -p $'\e[32mInstall: atom ide ?[Y/n]\e[39m ' -n 1 -r
 # echo    # (optional) move to a new line
 # if [[ $REPLY =~ ^[Yy]$ ]]
 # then
@@ -74,7 +74,7 @@
 #     echo "SUCCESS!"
 # fi
 #
-# read -p "Install: docker, docker-compose ?[Y/n] " -n 1 -r
+# read -p $'\e[32mInstall: docker, docker-compose ?[Y/n]\e[39m ' -n 1 -r
 # echo    # (optional) move to a new line
 # if [[ $REPLY =~ ^[Yy]$ ]]
 # then
@@ -95,7 +95,7 @@
 #     echo "SUCCESS!"
 # fi
 #
-# read -p "Configure  GIT ?[Y/n] " -n 1 -r
+# read -p $'\e[32mConfigure  GIT ?[Y/n]\e[39m ' -n 1 -r
 # echo    # (optional) move to a new line
 # if [[ $REPLY =~ ^[Yy]$ ]]
 # then
@@ -111,7 +111,7 @@
 #     echo "SUCCESS!"
 # fi
 #
-# read -p "Install: java8 ?[Y/n] " -n 1 -r
+# read -p $'\e[32mInstall: java8 ?[Y/n]\e[39m ' -n 1 -r
 # echo    # (optional) move to a new line
 # if [[ $REPLY =~ ^[Yy]$ ]]
 # then
@@ -121,7 +121,7 @@
 #     echo "SUCCESS!"
 # fi
 #
-# read -p "Install: yarn and node ?[Y/n] " -n 1 -r
+# read -p $'\e[32mInstall: yarn and node ?[Y/n]\e[39m ' -n 1 -r
 # echo    # (optional) move to a new line
 # if [[ $REPLY =~ ^[Yy]$ ]]
 # then
@@ -131,7 +131,7 @@
 #     echo "SUCCESS!"
 # fi
 #
-# read -p "Fetch from web: maven, activator, JetBrains ToolBox ?[Y/n] " -n 1 -r
+# read -p $'\e[32mFetch from web: maven, activator, JetBrains ToolBox ?[Y/n]\e[39m ' -n 1 -r
 # echo    # (optional) move to a new line
 # if [[ $REPLY =~ ^[Yy]$ ]]
 # then
@@ -157,7 +157,7 @@
 #     echo "SUCCESS!"
 # fi
 
-# read -p "Configure your Terminal prompt?[Y/n] " -n 1 -r
+# read -p $'\e[32mConfigure your Terminal prompt?[Y/n]\e[39m ' -n 1 -r
 # echo    # (optional) move to a new line
 # if [[ $REPLY =~ ^[Yy]$ ]]
 # then
@@ -170,7 +170,7 @@
 
 # echo -n "d[name] starts a container of the [name] service type"
 # echo -n "e[name] executes a command in the container of the [name] service type"
-# read -p "Add aliases for docker consul(dconsul,econsul), docker postgresql(dpostgres), docker pgadmin4(dpgadmin)?[Y/n] " -n 1 -r
+# read -p $'\e[32mAdd aliases for docker consul(dconsul,econsul), docker postgresql(dpostgres), docker pgadmin4(dpgadmin)?[Y/n]\e[39m ' -n 1 -r
 # echo    # (optional) move to a new line
 # if [[ $REPLY =~ ^[Yy]$ ]]
 # then
@@ -190,7 +190,20 @@
 #     echo "SUCCESS!"
 # fi
 
-# read -p "Setup GitHub SSG key ?[Y/n] " -n 1 -r
+# read -p $'\e[32mAdd any private aliases found in ../private/aliases file?[Y/n]\e[39m ' -n 1 -r
+# echo    # (optional) move to a new line
+# if [[ $REPLY =~ ^[Yy]$ ]]
+# then
+#     FILE=../private/aliases
+#     if [ -f $FILE ]; then
+#       cat $FILE >> ~/.bashrc
+#       echo "SUCCESS!"
+#     else
+#       echo "File $FILE does not exist."
+#     fi
+# fi
+
+# read -p $'\e[32mSetup GitHub SSG key ?[Y/n]\e[39m ' -n 1 -r
 # echo    # (optional) move to a new line
 # if [[ $REPLY =~ ^[Yy]$ ]]
 # then
@@ -209,7 +222,7 @@
 # fi
 
 # echo -n "!!! This might take quite a while. All = max 150 !!!"
-# read -p "Clone all your GitHub repos ?[Y/n] " -n 1 -r
+# read -p $'\e[32mClone all your GitHub repos ?[Y/n]\e[39m ' -n 1 -r
 # echo    # (optional) move to a new line
 # if [[ $REPLY =~ ^[Yy]$ ]]
 # then
@@ -225,7 +238,7 @@
 # sudo apt update
 # sudo apt -y upgrade
 #
-# read -p "Reboot?[Y/n] " -n 1 -r
+# read -p $'\e[31mReboot?[Y/n]\e[39m ' -n 1 -r
 # echo    # (optional) move to a new line
 # if [[ $REPLY =~ ^[Yy]$ ]]
 # then
