@@ -41,7 +41,18 @@
 #     rm skypeforlinux-64.deb
 #     echo "SUCCESS!"
 # fi
-#
+
+# read -p "Install: dbeaver (sql client) ?[Y/n] " -n 1 -r
+# echo    # (optional) move to a new line
+# if [[ $REPLY =~ ^[Yy]$ ]]
+# then
+#     wget https://dbeaver.jkiss.org/files/dbeaver-ce_latest_amd64.deb
+#     sudo dpkg -i dbeaver-ce_latest_amd64.deb
+#     sudo apt install -y -f
+#     rm dbeaver-ce_latest_amd64.deb
+#     echo "SUCCESS!"
+# fi
+
 # read -p "Install: numix-icon-theme-circle ?[Y/n] " -n 1 -r
 # echo    # (optional) move to a new line
 # if [[ $REPLY =~ ^[Yy]$ ]]
@@ -163,7 +174,9 @@
 # then
 #     mkdir -p ../secrets
 #     ssh-keygen -t rsa -b 4096 -C "$(git config --global user.email)" -f ../secrets/id_rsa_github
-#     ssh-add ../secrets/id_rsa_github
+#     secrets_abs_path=$(realpath ../secrets)
+#     ln -sf $secrets_abs_path/id_rsa_github ~/.ssh/
+#     ssh-add ~/.ssh/id_rsa_github
 #     echo -n "Enter your GitHub username and press [ENTER]: "
 #     read githubusername
 #     curl -u "$githubusername" \
