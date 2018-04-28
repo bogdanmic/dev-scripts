@@ -162,7 +162,7 @@
 #     cd ../work
 #     echo -n "Enter your GitHub username and press [ENTER]: "
 #     read githubusername
-#     curl -u "$githubusername" "https://api.github.com/user/repos?page=1&per_page=1" | grep -e 'ssh_url*' | cut -d \" -f 4 | xargs -L1 git clone
+#     curl -u "$githubusername" "https://api.github.com/user/repos?page=1&per_page=150" | grep -e 'ssh_url*' | cut -d \" -f 4 | xargs -L1 git clone
 #     echo "SUCCESS!"
 # fi
 
