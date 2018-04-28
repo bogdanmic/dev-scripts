@@ -221,6 +221,21 @@
 #     echo "SUCCESS!"
 # fi
 
+# read -p $'\e[32mInstall awscli?[Y/n]\e[39m ' -n 1 -r
+# echo    # (optional) move to a new line
+# if [[ $REPLY =~ ^[Yy]$ ]]
+# then
+#   sudo apt install -y python-pip
+#   pip install awscli --upgrade --user
+#   echo "PATH=\$PATH:~/.local/bin" >> ~/.bashrc
+#   read -p $'\e[32mConfigure awscli?[Y/n]\e[39m ' -n 1 -r
+#   echo    # (optional) move to a new line
+#   if [[ $REPLY =~ ^[Yy]$ ]]
+#   then
+#       ~/.local/bin/aws configure
+#   fi
+# fi
+
 # echo -n "!!! This might take quite a while. All = max 150 !!!"
 # read -p $'\e[32mClone all your GitHub repos ?[Y/n]\e[39m ' -n 1 -r
 # echo    # (optional) move to a new line
