@@ -177,6 +177,7 @@
 #     secrets_abs_path=$(realpath ../secrets)
 #     ln -sf $secrets_abs_path/id_rsa_github ~/.ssh/
 #     ssh-add ~/.ssh/id_rsa_github
+#     echo "IdentityFile ~/.ssh/id_rsa_github" >> ~/.ssh/config
 #     echo -n "Enter your GitHub username and press [ENTER]: "
 #     read githubusername
 #     curl -u "$githubusername" \
