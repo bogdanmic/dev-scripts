@@ -6,12 +6,18 @@ workspace. For now I use a **Ubuntu** distribution.
 
 Ubuntu 18.04
 ------------
-The [**setup.sh**](setup.sh) script when running creates directories around itself.
-So it's recommended to create a folder where to clone this repository and run the script.
+The [**setup.sh**](setup.sh) script when running creates directories in a specified WORK_PATH.
 
 To  get started:
+To  get started:
  ```bash
- $ git clone git@github.com:bogdanmic/config-scripts.git
+ $ bash <(curl -s https://raw.githubusercontent.com/bogdanmic/config-scripts/master/setup.sh)
+ ```
+ **NOTICE** Since you are executing an untrusted script from the interwebs, I
+ would recommend you to take a look at ti before proceeding. So probably you
+ should do this.
+ ```bash
+ $ git clone https://github.com/bogdanmic/config-scripts.git
  $ cd config-scripts
  $ ./setup.sh
  ```
