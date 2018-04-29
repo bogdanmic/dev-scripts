@@ -4,11 +4,11 @@
 # I use Ubuntu mainly. I'm not saying is the best choice nut it's ok.
 #
 
-read -p $'\e[32mInstall: git, git-flow, vim ?[Y/n]\e[39m ' -n 1 -r
+read -p $'\e[32mInstall: git, git-flow, vim, net-tools ?[Y/n]\e[39m ' -n 1 -r
 echo    # (optional) move to a new line
 if [[ $REPLY =~ ^[Yy]$ ]]
 then
-    sudo apt install -y git git-flow vim
+    sudo apt install -y git git-flow vim net-tools
     echo "SUCCESS!"
 fi
 
@@ -101,7 +101,7 @@ if [[ $REPLY =~ ^[Yy]$ ]]
 then
     echo -n "Enter your user.name and press [ENTER]: "
     read username
-    echo -n "!!! THis email will be used when configureing your GitHub SSH key !!!"
+    echo "!!! THis email will be used when configureing your GitHub SSH key !!!"
     echo -n "Enter your user.email and press [ENTER]: "
     read useremail
     git config --global user.name "$username"
