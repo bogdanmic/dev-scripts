@@ -9,7 +9,6 @@ Ubuntu 18.04
 The [**setup.sh**](setup.sh) script when running creates directories in a specified WORK_PATH.
 
 To  get started:
-To  get started:
  ```bash
  $ bash <(curl -s https://raw.githubusercontent.com/bogdanmic/config-scripts/master/setup.sh)
  ```
