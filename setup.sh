@@ -168,8 +168,8 @@ then
     echo "SUCCESS!"
 fi
 
-echo -n "d[name] starts a container of the [name] service type"
-echo -n "e[name] executes a command in the container of the [name] service type"
+echo "d[name] starts a container of the [name] service type"
+echo "e[name] executes a command in the container of the [name] service type"
 read -p $'\e[32mAdd aliases for docker consul(dconsul,econsul), docker postgresql(dpostgres), docker pgadmin4(dpgadmin)?[Y/n]\e[39m ' -n 1 -r
 echo    # (optional) move to a new line
 if [[ $REPLY =~ ^[Yy]$ ]]
@@ -236,7 +236,7 @@ then
   fi
 fi
 
-echo -n "!!! This might take quite a while. All = max 150 !!!"
+echo '!!! This might take quite a while. All = max 150 !!!'
 read -p $'\e[32mClone all your GitHub repos ?[Y/n]\e[39m ' -n 1 -r
 echo    # (optional) move to a new line
 if [[ $REPLY =~ ^[Yy]$ ]]
