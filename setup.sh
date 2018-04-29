@@ -4,6 +4,18 @@
 # I use Ubuntu mainly. I'm not saying is the best choice nut it's ok.
 #
 
+echo -en "\e[32mEnter the PATH where to do the setup\e[34m[$(pwd)]:\e[39m: "
+read -e WORK_PATH
+# If empty use the current directory
+name=${WORK_PATH:=$(pwd)}
+
+if [[ -d $WORK_PATH ]]; then
+    echo "Start working in [$WORK_PATH] ..."
+else
+    echo -e "\e[31m[$WORK_PATH] is not valid directory.\e[39m"
+    exit 1
+fi
+
 read -p $'\e[32mInstall: git, git-flow, vim, net-tools ?[Y/n]\e[39m ' -n 1 -r
 echo    # (optional) move to a new line
 if [[ $REPLY =~ ^[Yy]$ ]]
@@ -136,24 +148,24 @@ echo    # (optional) move to a new line
 if [[ $REPLY =~ ^[Yy]$ ]]
 then
     sudo apt install -y zip gzip tar
-    mkdir -p ../tools
-    tools_abs_path=$(realpath ../tools)
+    mkdir -p $WORK_PATH/tools
+    tools_abs_path=$(realpath ${WORK_PATH}tools)
     # Get maven
-    wget -qO- http://mirrors.m247.ro/apache/maven/maven-3/3.5.3/binaries/apache-maven-3.5.3-bin.tar.gz | tar xvz -C ../tools
+    wget -qO- http://mirrors.m247.ro/apache/maven/maven-3/3.5.3/binaries/apache-maven-3.5.3-bin.tar.gz | tar xvz -C $tools_abs_path
     # Add maven to PATH
     echo "PATH=\$PATH:$tools_abs_path/apache-maven-3.5.3/bin" >> ~/.bashrc
     echo 'export MAVEN_OPTS="-Xmx512m"' >> ~/.bashrc
     # Get nodejs (This gets installed by yarn so we don't do this for now)
-    # wget https://nodejs.org/dist/v8.11.1/node-v8.11.1-linux-x64.tar.xz -P ../tools
-    # tar xf ../tools/node-v8.11.1-linux-x64.tar.xz -C ../tools && rm ../tools/node-v8.11.1-linux-x64.tar.xz
+    # wget https://nodejs.org/dist/v8.11.1/node-v8.11.1-linux-x64.tar.xz -P $tools_abs_path
+    # tar xf $tools_abs_path/node-v8.11.1-linux-x64.tar.xz -C $tools_abs_path && rm $tools_abs_path/node-v8.11.1-linux-x64.tar.xz
     # echo "PATH=\$PATH:$tools_abs_path/node-v8.11.1-linux-x64/bin" >> ~/.bashrc
     # Get typesafe activator
-    wget  http://downloads.typesafe.com/typesafe-activator/1.3.12/typesafe-activator-1.3.12-minimal.zip -P ../tools
-    unzip -o ../tools/typesafe-activator-1.3.12-minimal.zip -d ../tools && rm ../tools/typesafe-activator-1.3.12-minimal.zip
+    wget  http://downloads.typesafe.com/typesafe-activator/1.3.12/typesafe-activator-1.3.12-minimal.zip -P $tools_abs_path
+    unzip -o $tools_abs_path/typesafe-activator-1.3.12-minimal.zip -d $tools_abs_path && rm $tools_abs_path/typesafe-activator-1.3.12-minimal.zip
     # Add activator to PATH
     echo "PATH=\$PATH:$tools_abs_path/activator-1.3.12-minimal/bin" >> ~/.bashrc
     # Get JetBrains ToolBox app that makes it easier to update InteliJ ad get it.
-    wget -qO- https://download.jetbrains.com/toolbox/jetbrains-toolbox-1.8.3678.tar.gz | tar xvz -C ../tools
+    wget -qO- https://download.jetbrains.com/toolbox/jetbrains-toolbox-1.8.3678.tar.gz | tar xvz -C $tools_abs_path
     echo "SUCCESS!"
 fi
 
@@ -177,24 +189,24 @@ then
     echo "alias dconsul='docker run --rm -it --net=host --name dev-consul consul'" >> ~/.bashrc
     # This allows us to execute command inside the dev-consul container
     echo "alias econsul='docker exec dev-consul consul'" >> ~/.bashrc
-    mkdir -p ../containers
-    containers_abs_path=$(realpath ../containers)
+    mkdir -p $WORK_PATH/containers
+    containers_abs_path=$(realpath ${WORK_PATH}/containers)
     echo -n "Enter your POSTGRES_USER and press [ENTER]: "
     read postgresuser
     echo -n "Enter your POSTGRES_PASSWORD and press [ENTER]: "
     read postgrespassword
     echo "alias dpostgres='docker run --rm -it -p 5432:5432 --name=dev-postgres -e POSTGRES_USER=$postgresuser -e POSTGRES_PASSWORD=$postgrespassword -v $containers_abs_path/postgres_home:/var/lib/postgresql/data postgres -c \"log_statement=all\" -c \"log_duration=on\" -c \"log_min_duration_statement=-1\"'" >> ~/.bashrc
-    mkdir -p ../containers/pgadmin_home
-    sudo chmod -R 777 ../containers/pgadmin_home
+    mkdir -p $containers_abs_path/pgadmin_home
+    sudo chmod -R 777 $containers_abs_path/pgadmin_home
     echo "alias dpgadmin='docker run --rm -it --net=host --name=dev-pgadmin -v $containers_abs_path/pgadmin_home:/pgadmin thajeztah/pgadmin4'" >> ~/.bashrc
     echo "SUCCESS!"
 fi
 
-read -p $'\e[32mAdd any private aliases found in ../private/aliases file?[Y/n]\e[39m ' -n 1 -r
+read -p $'\e[32mAdd any private aliases found in '${WORK_PATH}$'private/aliases file?[Y/n]\e[39m ' -n 1 -r
 echo    # (optional) move to a new line
 if [[ $REPLY =~ ^[Yy]$ ]]
 then
-    FILE=../private/aliases
+    FILE=${WORK_PATH}private/aliases
     if [ -f $FILE ]; then
       cat $FILE >> ~/.bashrc
       echo "SUCCESS!"
@@ -207,16 +219,16 @@ read -p $'\e[32mSetup GitHub SSG key ?[Y/n]\e[39m ' -n 1 -r
 echo    # (optional) move to a new line
 if [[ $REPLY =~ ^[Yy]$ ]]
 then
-    mkdir -p ../secrets
-    ssh-keygen -t rsa -b 4096 -C "$(git config --global user.email)" -f ../secrets/id_rsa_github
-    secrets_abs_path=$(realpath ../secrets)
+    mkdir -p ${WORK_PATH}secrets
+    secrets_abs_path=$(realpath ${WORK_PATH}secrets)
+    ssh-keygen -t rsa -b 4096 -C "$(git config --global user.email)" -f $secrets_abs_path/id_rsa_github
     ln -sf $secrets_abs_path/id_rsa_github ~/.ssh/
     ssh-add ~/.ssh/id_rsa_github
     echo "IdentityFile ~/.ssh/id_rsa_github" >> ~/.ssh/config
     echo -n "Enter your GitHub username and press [ENTER]: "
     read githubusername
     curl -u "$githubusername" \
-      --data "{\"title\":\"`lsb_release -ds`-`date +%Y-%m-%d-%H:%M:%S`\",\"key\":\"`cat ../secrets/id_rsa_github.pub`\"}" \
+      --data "{\"title\":\"`lsb_release -ds`-`date +%Y-%m-%d-%H:%M:%S`\",\"key\":\"`cat $secrets_abs_path/id_rsa_github.pub`\"}" \
       https://api.github.com/user/keys
     echo "SUCCESS!"
 fi
@@ -241,11 +253,11 @@ read -p $'\e[32mClone all your GitHub repos ?[Y/n]\e[39m ' -n 1 -r
 echo    # (optional) move to a new line
 if [[ $REPLY =~ ^[Yy]$ ]]
 then
-    mkdir -p ../work
-    cd ../work
+    mkdir -p ${WORK_PATH}work
+    cd ${WORK_PATH}work
     echo -n "Enter your GitHub username and press [ENTER]: "
     read githubusername
-    curl -u "$githubusername" "https://api.github.com/user/repos?page=1&per_page=150" | grep -e 'ssh_url*' | cut -d \" -f 4 | xargs -L1 git clone
+    curl -u "$githubusername" "https://api.github.com/user/repos?page=1&per_page=3" | grep -e 'ssh_url*' | cut -d \" -f 4 | xargs -L1 git clone
     echo "SUCCESS!"
 fi
 
