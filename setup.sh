@@ -10,6 +10,15 @@ read -e WORK_PATH
 name=${WORK_PATH:=$(pwd)}
 
 if [[ -d $WORK_PATH ]]; then
+    case "$WORK_PATH" in
+      */)
+        # The path has a trailing slach
+      ;;
+      *)
+        # The path doesn't have a trailing slach
+        WORK_PATH=$WORK_PATH/
+      ;;
+    esac
     echo "Start working in [$WORK_PATH] ..."
 else
     echo -e "\e[31m[$WORK_PATH] is not valid directory.\e[39m"
@@ -257,7 +266,7 @@ then
     cd ${WORK_PATH}work
     echo -n "Enter your GitHub username and press [ENTER]: "
     read githubusername
-    curl -u "$githubusername" "https://api.github.com/user/repos?page=1&per_page=3" | grep -e 'ssh_url*' | cut -d \" -f 4 | xargs -L1 git clone
+    curl -u "$githubusername" "https://api.github.com/user/repos?page=1&per_page=150" | grep -e 'ssh_url*' | cut -d \" -f 4 | xargs -L1 git clone
     echo "SUCCESS!"
 fi
 
