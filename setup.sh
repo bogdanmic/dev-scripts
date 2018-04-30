@@ -4,6 +4,9 @@
 # I use Ubuntu mainly. I'm not saying is the best choice nut it's ok.
 #
 
+// TODO: Maybe when adding content to the .bashrc file, instead create a file in
+// the WORK_PATH and add the changes inthere, then include that file into .bashrc
+
 echo -en "\e[32mEnter the PATH where to do the setup\e[34m[$(pwd)]:\e[39m: "
 read -e WORK_PATH
 # If empty use the current directory
@@ -253,6 +256,8 @@ if [[ $REPLY =~ ^[Yy]$ ]]
 then
     FILE=${WORK_PATH}private/aliases
     if [ -f $FILE ]; then
+      // TODO: Instead of appending the file inside .bashrc, include it so when
+      // you add more aliases they are taken into consideration
       cat $FILE >> ~/.bashrc
       echo "SUCCESS!"
     else
