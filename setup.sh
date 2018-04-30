@@ -266,7 +266,7 @@ echo "Cheching for updates ..."
 sudo apt update
 sudo apt -y upgrade
 
-ask="31mReboot?"
+ask="Reboot?"
 if continueYesNo "$ask"; then
     sudo reboot
 fi
