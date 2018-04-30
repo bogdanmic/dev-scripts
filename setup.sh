@@ -51,11 +51,13 @@ then
     if [[ $REPLY =~ ^[Yy]$ ]]
     then
         mkdir -p ${WORK_PATH}secrets
+        mkdir ~/.ssh/
         secrets_abs_path=$(realpath ${WORK_PATH}secrets)
         ssh-keygen -t rsa -b 4096 -C "$(git config --global user.email)" -f $secrets_abs_path/id_rsa_github
         ln -sf $secrets_abs_path/id_rsa_github ~/.ssh/
-        ssh-add ~/.ssh/id_rsa_github
+        eval "$(ssh-agent -s)"
         echo "IdentityFile ~/.ssh/id_rsa_github" >> ~/.ssh/config
+        ssh-add ~/.ssh/id_rsa_github
         echo -n "Enter your GitHub username and press [ENTER]: "
         read githubusername
         curl -u "$githubusername" \
@@ -164,6 +166,7 @@ then
     sudo apt update
     sudo apt install -y docker-ce
     sudo usermod -aG docker $USER
+
     # Install docker-compose
     sudo curl -L https://github.com/docker/compose/releases/download/1.21.0/docker-compose-$(uname -s)-$(uname -m) -o /usr/local/bin/docker-compose
     sudo chmod +x /usr/local/bin/docker-compose
@@ -208,20 +211,24 @@ then
         sudo apt install -y zip gzip tar
         mkdir -p $WORK_PATH/tools
         tools_abs_path=$(realpath ${WORK_PATH}tools)
+
         # Get maven
         wget -qO- http://mirrors.m247.ro/apache/maven/maven-3/3.5.3/binaries/apache-maven-3.5.3-bin.tar.gz | tar xvz -C $tools_abs_path
         # Add maven to PATH
         echo "PATH=\$PATH:$tools_abs_path/apache-maven-3.5.3/bin" >> ~/.bashrc
         echo 'export MAVEN_OPTS="-Xmx512m"' >> ~/.bashrc
+
         # Get nodejs (This gets installed by yarn so we don't do this for now)
         # wget https://nodejs.org/dist/v8.11.1/node-v8.11.1-linux-x64.tar.xz -P $tools_abs_path
         # tar xf $tools_abs_path/node-v8.11.1-linux-x64.tar.xz -C $tools_abs_path && rm $tools_abs_path/node-v8.11.1-linux-x64.tar.xz
         # echo "PATH=\$PATH:$tools_abs_path/node-v8.11.1-linux-x64/bin" >> ~/.bashrc
+
         # Get typesafe activator
         wget  http://downloads.typesafe.com/typesafe-activator/1.3.12/typesafe-activator-1.3.12-minimal.zip -P $tools_abs_path
         unzip -o $tools_abs_path/typesafe-activator-1.3.12-minimal.zip -d $tools_abs_path && rm $tools_abs_path/typesafe-activator-1.3.12-minimal.zip
         # Add activator to PATH
         echo "PATH=\$PATH:$tools_abs_path/activator-1.3.12-minimal/bin" >> ~/.bashrc
+
         # Get JetBrains ToolBox app that makes it easier to update InteliJ ad get it.
         wget -qO- https://download.jetbrains.com/toolbox/jetbrains-toolbox-1.8.3678.tar.gz | tar xvz -C $tools_abs_path
         echo "SUCCESS!"
