@@ -51,6 +51,7 @@ then
     if [[ $REPLY =~ ^[Yy]$ ]]
     then
         mkdir -p ${WORK_PATH}secrets
+	mkdir ~/.ssh/
         secrets_abs_path=$(realpath ${WORK_PATH}secrets)
         ssh-keygen -t rsa -b 4096 -C "$(git config --global user.email)" -f $secrets_abs_path/id_rsa_github
         ln -sf $secrets_abs_path/id_rsa_github ~/.ssh/
