@@ -54,9 +54,9 @@ then
         secrets_abs_path=$(realpath ${WORK_PATH}secrets)
         ssh-keygen -t rsa -b 4096 -C "$(git config --global user.email)" -f $secrets_abs_path/id_rsa_github
         ln -sf $secrets_abs_path/id_rsa_github ~/.ssh/
-	eval "$(ssh-agent -s)"
-        ssh-add ~/.ssh/id_rsa_github
+        eval "$(ssh-agent -s)"
         echo "IdentityFile ~/.ssh/id_rsa_github" >> ~/.ssh/config
+        ssh-add ~/.ssh/id_rsa_github
         echo -n "Enter your GitHub username and press [ENTER]: "
         read githubusername
         curl -u "$githubusername" \
