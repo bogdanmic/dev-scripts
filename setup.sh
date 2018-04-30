@@ -21,10 +21,20 @@ continueYesNo() {
   fi
 }
 
-echo -en "\e[32mEnter the PATH where to do the setup\e[34m[$(pwd)]:\e[39m: "
-read -e SETUP_PATH
-# If empty use the current directory
-name=${SETUP_PATH:=$(pwd)}
+askInput() {
+  echo -en "\e[32m${1}:\e[39m " > /dev/stderr  # goes to the screen
+  if [[ ! -z "$2" ]]; then
+    # If default si present
+    echo -en "\e[34m[$2]\e[39m " > /dev/stderr  # goes to the screen
+  fi
+
+  read -e input
+  # If empty, use the default
+  inputOrDefault=${input:=$2}
+  echo $inputOrDefault # This is how we return something
+}
+
+SETUP_PATH=$(askInput "Enter the PATH where to do the setup" $(pwd))
 if [[ -d $SETUP_PATH ]]; then
     # case "$SETUP_PATH" in
     #   */)
@@ -54,30 +64,29 @@ if continueYesNo "$ask"; then
 
     ask="Configure  GIT?"
     if continueYesNo "$ask"; then
-        echo -n "Enter your user.name and press [ENTER]: "
-        read username
-        echo "!!! This email will be used when configureing your GitHub SSH key !!!"
-        echo -n "Enter your user.email and press [ENTER]: "
-        read useremail
-        git config --global user.name "$username"
-        git config --global user.email "$useremail"
+        github_username=$(askInput "Enter your GIT user.name" $github_username)
+        github_useremail=$(askInput "Enter your GIT user.email" $github_useremail)
+
+        git config --global user.name "$github_username"
+        git config --global user.email "$github_useremail"
         git config --global color.ui auto
         git config -l
     fi
 
-    ask="Setup GitHub SSG key?"
+    ask="Setup GitHub SSH key?"
     if continueYesNo "$ask"; then
         mkdir -p $SETUP_PATH_SECRETS
-        mkdir ~/.ssh/
+        mkdir -p ~/.ssh/
 
         ssh-keygen -t rsa -b 4096 -C "$(git config --global user.email)" -f $SETUP_PATH_SECRETS/id_rsa_github
         ln -sf $SETUP_PATH_SECRETS/id_rsa_github ~/.ssh/
         eval "$(ssh-agent -s)"
         echo "IdentityFile ~/.ssh/id_rsa_github" >> ~/.ssh/config
         ssh-add ~/.ssh/id_rsa_github
-        echo -n "Enter your GitHub username and press [ENTER]: "
-        read githubusername
-        curl -u "$githubusername" \
+
+        github_username=$(askInput "Enter your GitHub user.name" $github_username)
+
+        curl -u "$github_username" \
           --data "{\"title\":\"`lsb_release -ds`-`date +%Y-%m-%d-%H:%M:%S`\",\"key\":\"`cat $SETUP_PATH_SECRETS/id_rsa_github.pub`\"}" \
           https://api.github.com/user/keys
     fi
@@ -88,9 +97,9 @@ if continueYesNo "$ask"; then
         mkdir -p $SETUP_PATH_WORK
         cd $SETUP_PATH_WORK
 
-        echo -n "Enter your GitHub username and press [ENTER]: "
-        read githubusername
-        curl -u "$githubusername" "https://api.github.com/user/repos?page=1&per_page=150" | grep -e 'ssh_url*' | cut -d \" -f 4 | xargs -L1 git clone
+        github_username=$(askInput "Enter your GitHub user.name" $github_username)
+
+        curl -u "$github_username" "https://api.github.com/user/repos?page=1&per_page=150" | grep -e 'ssh_url*' | cut -d \" -f 4 | xargs -L1 git clone
     fi
 
     ask="Configure your Terminal prompt for GIT?"
@@ -161,8 +170,8 @@ if continueYesNo "$ask"; then
     sudo curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
     # In some cases if the Linux used is to fresh(new), then the docker package
     # might not be available yet so we can use the previous version one
-    sudo add-apt-repository -y "deb [arch=amd64] https://download.docker.com/linux/ubuntu artful stable"
-    # sudo add-apt-repository -y "deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable
+    # sudo add-apt-repository -y "deb [arch=amd64] https://download.docker.com/linux/ubuntu artful stable"
+    sudo add-apt-repository -y "deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable"
     sudo apt update
     sudo apt install -y docker-ce
     sudo usermod -aG docker $USER
@@ -181,10 +190,9 @@ if continueYesNo "$ask"; then
         echo "alias econsul='docker exec dev-consul consul'" >> ~/.bashrc
         mkdir -p $SETUP_PATH_CONTAINERS
 
-        echo -n "Enter your POSTGRES_USER and press [ENTER]: "
-        read postgresuser
-        echo -n "Enter your POSTGRES_PASSWORD and press [ENTER]: "
-        read postgrespassword
+        postgresuser=$(askInput "Enter your POSTGRES_USER" $postgresuser)
+        postgrespassword=$(askInput "Enter your POSTGRES_PASSWORD" $postgrespassword)
+
         echo "alias dpostgres='docker run --rm -it -p 5432:5432 --name=dev-postgres -e POSTGRES_USER=$postgresuser -e POSTGRES_PASSWORD=$postgrespassword -v $SETUP_PATH_CONTAINERS/postgres_home:/var/lib/postgresql/data postgres -c \"log_statement=all\" -c \"log_duration=on\" -c \"log_min_duration_statement=-1\"'" >> ~/.bashrc
         mkdir -p $SETUP_PATH_CONTAINERS/pgadmin_home
         sudo chmod -R 777 $SETUP_PATH_CONTAINERS/pgadmin_home
@@ -249,15 +257,14 @@ if continueYesNo "$ask"; then
     fi
 fi
 
-ask="Install awscli?"
+ask="Install: awscli?"
 if continueYesNo "$ask"; then
   sudo apt install -y python-pip
   pip install awscli --upgrade --user
   echo "PATH=\$PATH:~/.local/bin" >> ~/.bashrc
-  read -p $'\e[32mConfigure awscli?[Y/n]\e[39m ' -n 1 -r
-  echo    # (optional) move to a new line
-  if [[ $REPLY =~ ^[Yy]$ ]]
-  then
+
+  ask="Configure awscli?"
+  if continueYesNo "$ask"; then
       ~/.local/bin/aws configure
   fi
 fi
