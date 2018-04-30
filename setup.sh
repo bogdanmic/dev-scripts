@@ -240,8 +240,8 @@ ask="Add any private aliases found in ${SETUP_PATH_PRIVATE}/aliases file?"
 if continueYesNo "$ask"; then
     FILE=$SETUP_PATH_PRIVATE/aliases
     if [ -f $FILE ]; then
-      // TODO: Instead of appending the file inside .bashrc, include it so when
-      // you add more aliases they are taken into consideration
+      # TODO: Instead of appending the file inside .bashrc, include it so when
+      # you add more aliases they are taken into consideration
       cat $FILE >> ~/.bashrc
       echo "SUCCESS!"
     else
