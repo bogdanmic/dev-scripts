@@ -6,7 +6,7 @@ workspace. For now I use a **Ubuntu** distribution.
 
 Ubuntu 18.04
 ------------
-The [**setup.sh**](setup.sh) script when running creates directories in a specified WORK_PATH.
+The [**setup.sh**](setup.sh) script when running creates directories in a specified **SETUP_PATH**.
 
 To  get started:
  ```bash
@@ -42,8 +42,7 @@ What does it do?
    - econsul - executes consul commands in the started consul container
    - dpostgres - starts a postgres database
    - dpgadmin - starts pgadmin4
- - if you have a folder named **private** in the same folder where you cloned
- this repo, then this is also possible:
-   - any aliases in the file **aliases** will be added to your bashrc
+ - if you have a folder named **private** in the **SETUP_PATH**, then this is also possible:
+   - any aliases in the file **aliases** will be added to your **bashrc**
 
 ***Feel free to contribute in any way.***

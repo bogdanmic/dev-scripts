@@ -47,7 +47,7 @@ appendFileToBashProfile(){
   fi
 }
 
-SETUP_PATH=$(askInput "Enter the PATH where to do the setup" $(pwd))
+SETUP_PATH=$(askInput "Enter the SETUP_PATH where to do the setup" $(pwd))
 if [[ -d $SETUP_PATH ]]; then
     echo "Start working in [$SETUP_PATH] ..."
 else
