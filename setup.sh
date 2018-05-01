@@ -4,9 +4,6 @@
 # I use Ubuntu mainly. I'm not saying is the best choice nut it's ok.
 #
 
-# TODO: Maybe when adding content to the .bashrc file, instead create a file in
-# the SETUP_PATH and add the changes inthere, then include that file into .bashrc
-
 continueYesNo() {
   echo -en "\e[32m${1} \e[34m[Y/n]\e[39m "
   read -n 1 -r
@@ -34,17 +31,24 @@ askInput() {
   echo $inputOrDefault # This is how we return something
 }
 
+customizeBash(){
+  # The $SETUP_PATH_SECRETS is initialized when the script starts
+  mkdir -p $SETUP_PATH_SECRETS
+  echo $1 >> $BASH_CUSTOMIZATION_FILE
+}
+
+appendFileToBashProfile(){
+  if [ -f $1 ]; then
+    echo -e "if [ -f $1 ]; then \n\t. $1 \nfi" >> ~/.bashrc
+
+    echo "File [$1] was added!"
+  else
+    echo -e "\e[31mFile [$1] does not exist!\e[39m"
+  fi
+}
+
 SETUP_PATH=$(askInput "Enter the PATH where to do the setup" $(pwd))
 if [[ -d $SETUP_PATH ]]; then
-    # case "$SETUP_PATH" in
-    #   */)
-    #     # The path has a trailing slash
-    #   ;;
-    #   *)
-    #     # The path doesn't have a trailing slash
-    #     SETUP_PATH=$SETUP_PATH/
-    #   ;;
-    # esac
     echo "Start working in [$SETUP_PATH] ..."
 else
     echo -e "\e[31m[$SETUP_PATH] is not valid directory.\e[39m"
@@ -55,8 +59,11 @@ fi
 SETUP_PATH_SECRETS=$(realpath ${SETUP_PATH}/secrets)
 SETUP_PATH_WORK=$(realpath ${SETUP_PATH}/work)
 SETUP_PATH_CONTAINERS=$(realpath ${SETUP_PATH_CONTAINERS}/containers)
-SETUP_PATH_TOOLS=$(realpath ${WORK_PATH}/tools)
-SETUP_PATH_PRIVATE=$(realpath ${WORK_PATH}/private)
+SETUP_PATH_TOOLS=$(realpath ${SETUP_PATH}/tools)
+SETUP_PATH_PRIVATE=$(realpath ${SETUP_PATH}/private)
+
+BASH_CUSTOMIZATION_FILE=$SETUP_PATH_SECRETS/bash_customization
+BASH_PRIVATE_FILE=$SETUP_PATH_PRIVATE/aliases
 
 ask="Install: git, git-flow?"
 if continueYesNo "$ask"; then
@@ -104,12 +111,11 @@ if continueYesNo "$ask"; then
 
     ask="Configure your Terminal prompt for GIT?"
     if continueYesNo "$ask"; then
-        echo 'export PS1='\''${debian_chroot:+($debian_chroot)}\[\033[01;32m\]\u@\h\[\033[00m\]:\[\033[01;34m\]\w\[\033[00m\]\[\033[01;31m\]$(declare -F __git_ps1 &>/dev/null && __git_ps1 " (%s)")\[\033[00m\]\[\033[01;36m\]:\$\[\033[00m\] '\' >> ~/.bashrc
-        echo 'export GIT_PS1_SHOWDIRTYSTATE=true' >> ~/.bashrc
-        echo 'export GIT_PS1_SHOWUNTRACKEDFILES=true' >> ~/.bashrc
-        echo 'alias gg='\''git status -sb'\' >> ~/.bashrc
+        customizeBash 'export PS1='\''${debian_chroot:+($debian_chroot)}\[\033[01;32m\]\u@\h\[\033[00m\]:\[\033[01;34m\]\w\[\033[00m\]\[\033[01;31m\]$(declare -F __git_ps1 &>/dev/null && __git_ps1 " (%s)")\[\033[00m\]\[\033[01;36m\]:\$\[\033[00m\] '\'
+        customizeBash 'export GIT_PS1_SHOWDIRTYSTATE=true'
+        customizeBash 'export GIT_PS1_SHOWUNTRACKEDFILES=true'
+        customizeBash 'alias gg='\''git status -sb'\'
     fi
-
     echo "SUCCESS!"
 fi
 
@@ -185,18 +191,18 @@ if continueYesNo "$ask"; then
     echo "e[name] executes a command in the container of the [name] service type"
     ask="Add aliases for docker consul(dconsul,econsul), docker postgresql(dpostgres), docker pgadmin4(dpgadmin)?"
     if continueYesNo "$ask"; then
-        echo "alias dconsul='docker run --rm -it --net=host --name dev-consul consul'" >> ~/.bashrc
+        customizeBash "alias dconsul='docker run --rm -it --net=host --name dev-consul consul'"
         # This allows us to execute command inside the dev-consul container
-        echo "alias econsul='docker exec dev-consul consul'" >> ~/.bashrc
+        customizeBash "alias econsul='docker exec dev-consul consul'"
         mkdir -p $SETUP_PATH_CONTAINERS
 
         postgresuser=$(askInput "Enter your POSTGRES_USER" $postgresuser)
         postgrespassword=$(askInput "Enter your POSTGRES_PASSWORD" $postgrespassword)
 
-        echo "alias dpostgres='docker run --rm -it -p 5432:5432 --name=dev-postgres -e POSTGRES_USER=$postgresuser -e POSTGRES_PASSWORD=$postgrespassword -v $SETUP_PATH_CONTAINERS/postgres_home:/var/lib/postgresql/data postgres -c \"log_statement=all\" -c \"log_duration=on\" -c \"log_min_duration_statement=-1\"'" >> ~/.bashrc
+        customizeBash "alias dpostgres='docker run --rm -it -p 5432:5432 --name=dev-postgres -e POSTGRES_USER=$postgresuser -e POSTGRES_PASSWORD=$postgrespassword -v $SETUP_PATH_CONTAINERS/postgres_home:/var/lib/postgresql/data postgres -c \"log_statement=all\" -c \"log_duration=on\" -c \"log_min_duration_statement=-1\"'"
         mkdir -p $SETUP_PATH_CONTAINERS/pgadmin_home
         sudo chmod -R 777 $SETUP_PATH_CONTAINERS/pgadmin_home
-        echo "alias dpgadmin='docker run --rm -it --net=host --name=dev-pgadmin -v $SETUP_PATH_CONTAINERS/pgadmin_home:/pgadmin thajeztah/pgadmin4'" >> ~/.bashrc
+        customizeBash "alias dpgadmin='docker run --rm -it --net=host --name=dev-pgadmin -v $SETUP_PATH_CONTAINERS/pgadmin_home:/pgadmin thajeztah/pgadmin4'"
     fi
     echo "SUCCESS!"
 fi
@@ -215,19 +221,19 @@ if continueYesNo "$ask"; then
         # Get maven
         wget -qO- http://mirrors.m247.ro/apache/maven/maven-3/3.5.3/binaries/apache-maven-3.5.3-bin.tar.gz | tar xvz -C $SETUP_PATH_TOOLS
         # Add maven to PATH
-        echo "PATH=\$PATH:$SETUP_PATH_TOOLS/apache-maven-3.5.3/bin" >> ~/.bashrc
-        echo 'export MAVEN_OPTS="-Xmx512m"' >> ~/.bashrc
+        customizeBash "PATH=\$PATH:$SETUP_PATH_TOOLS/apache-maven-3.5.3/bin"
+        customizeBash 'export MAVEN_OPTS="-Xmx512m"'
 
         # Get nodejs (This gets installed by yarn so we don't do this for now)
         # wget https://nodejs.org/dist/v8.11.1/node-v8.11.1-linux-x64.tar.xz -P $tools_abs_path
         # tar xf $tools_abs_path/node-v8.11.1-linux-x64.tar.xz -C $tools_abs_path && rm $tools_abs_path/node-v8.11.1-linux-x64.tar.xz
-        # echo "PATH=\$PATH:$tools_abs_path/node-v8.11.1-linux-x64/bin" >> ~/.bashrc
+        # customizeBash "PATH=\$PATH:$tools_abs_path/node-v8.11.1-linux-x64/bin"
 
         # Get typesafe activator
         wget  http://downloads.typesafe.com/typesafe-activator/1.3.12/typesafe-activator-1.3.12-minimal.zip -P $SETUP_PATH_TOOLS
         unzip -o $SETUP_PATH_TOOLS/typesafe-activator-1.3.12-minimal.zip -d $SETUP_PATH_TOOLS && rm $SETUP_PATH_TOOLS/typesafe-activator-1.3.12-minimal.zip
         # Add activator to PATH
-        echo "PATH=\$PATH:$SETUP_PATH_TOOLS/activator-1.3.12-minimal/bin" >> ~/.bashrc
+        customizeBash "PATH=\$PATH:$SETUP_PATH_TOOLS/activator-1.3.12-minimal/bin"
 
         # Get JetBrains ToolBox app that makes it easier to update InteliJ ad get it.
         wget -qO- https://download.jetbrains.com/toolbox/jetbrains-toolbox-1.8.3678.tar.gz | tar xvz -C $SETUP_PATH_TOOLS
@@ -244,16 +250,13 @@ if continueYesNo "$ask"; then
     echo "SUCCESS!"
 fi
 
-ask="Add any private aliases found in ${SETUP_PATH_PRIVATE}/aliases file?"
+ask="Add any private aliases found in ${BASH_PRIVATE_FILE} file?"
 if continueYesNo "$ask"; then
-    FILE=$SETUP_PATH_PRIVATE/aliases
-    if [ -f $FILE ]; then
-      # TODO: Instead of appending the file inside .bashrc, include it so when
-      # you add more aliases they are taken into consideration
-      cat $FILE >> ~/.bashrc
+    if [ -f $BASH_PRIVATE_FILE ]; then
+      appendFileToBashProfile $BASH_PRIVATE_FILE
       echo "SUCCESS!"
     else
-      echo "File $FILE does not exist."
+      echo "File $BASH_PRIVATE_FILE does not exist."
     fi
 fi
 
@@ -261,13 +264,16 @@ ask="Install: awscli?"
 if continueYesNo "$ask"; then
   sudo apt install -y python-pip
   pip install awscli --upgrade --user
-  echo "PATH=\$PATH:~/.local/bin" >> ~/.bashrc
+  customizeBash "PATH=\$PATH:~/.local/bin"
 
   ask="Configure awscli?"
   if continueYesNo "$ask"; then
       ~/.local/bin/aws configure
   fi
 fi
+
+# Add all the bash customization that we did to the ~/.bashrc file.
+appendFileToBashProfile $BASH_CUSTOMIZATION_FILE
 
 echo "Cheching for updates ..."
 sudo apt update
