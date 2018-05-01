@@ -115,6 +115,7 @@ if continueYesNo "$ask"; then
         customizeBash 'export GIT_PS1_SHOWDIRTYSTATE=true'
         customizeBash 'export GIT_PS1_SHOWUNTRACKEDFILES=true'
         customizeBash 'alias gg='\''git status -sb'\'
+        customizeBash "alias myip='ifconfig | sed -En '\''s/127.0.0.1//;s/.*inet (addr:)?(([0-9]*\.){3}[0-9]*).*/\2/p'\'"
     fi
     echo "SUCCESS!"
 fi
