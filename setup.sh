@@ -58,7 +58,7 @@ fi
 # Define paths that we will use (All these have the slash because we added above)
 SETUP_PATH_SECRETS=$(realpath ${SETUP_PATH}/secrets)
 SETUP_PATH_WORK=$(realpath ${SETUP_PATH}/work)
-SETUP_PATH_CONTAINERS=$(realpath ${SETUP_PATH_CONTAINERS}/containers)
+SETUP_PATH_CONTAINERS=$(realpath ${SETUP_PATH}/containers)
 SETUP_PATH_TOOLS=$(realpath ${SETUP_PATH}/tools)
 SETUP_PATH_PRIVATE=$(realpath ${SETUP_PATH}/private)
 
