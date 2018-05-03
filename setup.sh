@@ -192,15 +192,17 @@ if continueYesNo "$ask"; then
     echo "e[name] executes a command in the container of the [name] service type"
     ask="Add aliases for docker consul(dconsul,econsul), docker postgresql(dpostgres), docker pgadmin4(dpgadmin)?"
     if continueYesNo "$ask"; then
+        mkdir -p $SETUP_PATH_CONTAINERS
+
         customizeBash "alias dconsul='docker run --rm -it --net=host --name dev-consul consul'"
         # This allows us to execute command inside the dev-consul container
-        customizeBash "alias econsul='docker exec dev-consul consul'"
-        mkdir -p $SETUP_PATH_CONTAINERS
+        customizeBash "alias econsul='docker exec -i dev-consul consul'"
 
         postgresuser=$(askInput "Enter your POSTGRES_USER" $postgresuser)
         postgrespassword=$(askInput "Enter your POSTGRES_PASSWORD" $postgrespassword)
-
         customizeBash "alias dpostgres='docker run --rm -it -p 5432:5432 --name=dev-postgres -e POSTGRES_USER=$postgresuser -e POSTGRES_PASSWORD=$postgrespassword -v $SETUP_PATH_CONTAINERS/postgres_home:/var/lib/postgresql/data postgres -c \"log_statement=all\" -c \"log_duration=on\" -c \"log_min_duration_statement=-1\"'"
+        customizeBash "alias epsql='PGPASSWORD=$postgrespassword docker exec -i dev-postgres psql -h localhost -U $postgresuser '"
+        
         mkdir -p $SETUP_PATH_CONTAINERS/pgadmin_home
         sudo chmod -R 777 $SETUP_PATH_CONTAINERS/pgadmin_home
         customizeBash "alias dpgadmin='docker run --rm -it --net=host --name=dev-pgadmin -v $SETUP_PATH_CONTAINERS/pgadmin_home:/pgadmin thajeztah/pgadmin4'"
