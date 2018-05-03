@@ -41,6 +41,11 @@ What does it do?
    - dconsul - starts consul
    - econsul - executes consul commands in the started consul container
    - dpostgres - starts a postgres database
+   - epsql - executes psql commands in the started postgres container
+     e.g. To do a restore:
+     ```bash
+      $ cat db_backup_file | epsql db_name
+     ```
    - dpgadmin - starts pgadmin4
  - if you have a folder named **private** in the **SETUP_PATH**, then this is also possible:
    - any aliases in the file **aliases** will be added to your **bashrc**
