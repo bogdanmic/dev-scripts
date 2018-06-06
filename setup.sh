@@ -114,7 +114,7 @@ if continueYesNo "$ask"; then
         customizeBash 'export PS1='\''${debian_chroot:+($debian_chroot)}\[\033[01;32m\]\u@\h\[\033[00m\]:\[\033[01;34m\]\w\[\033[00m\]\[\033[01;31m\]$(declare -F __git_ps1 &>/dev/null && __git_ps1 " (%s)")\[\033[00m\]\[\033[01;36m\]:\$\[\033[00m\] '\'
         customizeBash 'export GIT_PS1_SHOWDIRTYSTATE=true'
         customizeBash 'export GIT_PS1_SHOWUNTRACKEDFILES=true'
-        customizeBash 'alias gg='\''git status -sb'\'
+        customizeBash 'alias gg='\''echo "Latest 3 tags:" && git tag --sort=-version:refname | head -n 3 && git status -sb'\'
         customizeBash "alias myip='ifconfig | sed -En '\''s/127.0.0.1//;s/.*inet (addr:)?(([0-9]*\.){3}[0-9]*).*/\2/p'\'"
     fi
     echo "SUCCESS!"
@@ -202,7 +202,7 @@ if continueYesNo "$ask"; then
         postgrespassword=$(askInput "Enter your POSTGRES_PASSWORD" $postgrespassword)
         customizeBash "alias dpostgres='docker run --rm -it -p 5432:5432 --name=dev-postgres -e POSTGRES_USER=$postgresuser -e POSTGRES_PASSWORD=$postgrespassword -v $SETUP_PATH_CONTAINERS/postgres_home:/var/lib/postgresql/data postgres -c \"log_statement=all\" -c \"log_duration=on\" -c \"log_min_duration_statement=-1\"'"
         customizeBash "alias epsql='PGPASSWORD=$postgrespassword docker exec -i dev-postgres psql -h localhost -U $postgresuser '"
-        
+
         mkdir -p $SETUP_PATH_CONTAINERS/pgadmin_home
         sudo chmod -R 777 $SETUP_PATH_CONTAINERS/pgadmin_home
         customizeBash "alias dpgadmin='docker run --rm -it --net=host --name=dev-pgadmin -v $SETUP_PATH_CONTAINERS/pgadmin_home:/pgadmin thajeztah/pgadmin4'"
