@@ -20,6 +20,10 @@ To  get started:
  $ cd config-scripts
  $ ./setup.sh
  ```
+If you want to go through the steps without any changes to your computer you can run it like this
+ ```bash
+ $ ./setup.sh --dry-run
+ ```
 
 The folder it creates:
  - **tools** - here downloads tools like maven, node, etc.
@@ -44,9 +48,24 @@ What does it do?
    - epsql - executes psql commands in the started postgres container
      e.g. To do a restore:
      ```bash
-      $ cat db_backup_file | epsql db_name
+     $ cat db_backup_file | epsql db_name
      ```
    - dpgadmin - starts pgadmin4
+   - dmongo - starts mongodb
+   - emongo - starts the mongo client
+   - emongodump - executes a mongodb dump
+     e.g. To dump a database:
+     ```bash
+     $ emongodump db_name > file_name.gz
+     ```
+   - emongorestore - executes a restore into mongodb
+     e.g. TO restore a database:
+     ```bash
+     # This restores in the same database
+     $ cat file_name.gz | emongorestore
+     # To restore in a different database
+     $ cat file_name.gz | emongorestore --nsFrom "<OLD_DB_NAME>.*" --nsTo "<NEW_DB_NAME>.*"
+     ```
  - if you have a folder named **private** in the **SETUP_PATH**, then this is also possible:
    - any aliases in the file **aliases** will be added to your **bashrc**
 
