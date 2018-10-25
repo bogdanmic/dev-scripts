@@ -4,57 +4,7 @@
 # I use Ubuntu mainly. I'm not saying is the best choice nut it's ok.
 #
 
-continueYesNo() {
-  echo -en "\e[32m >>> ${1} \e[34m[Y/n]\e[39m "
-  read -n 1 -r
-  echo    # (optional) move to a new line
-  if [[ $REPLY =~ ^[Yy]$ ]]
-  then
-    # 0 = true
-    return 0
-  else
-    # 1 = false
-    return 1
-  fi
-}
-
-askInput() {
-  echo -en "\e[32m >>> ${1}:\e[39m " > /dev/stderr  # goes to the screen
-  if [[ ! -z "$2" ]]; then
-    # If default si present
-    echo -en "\e[34m[$2]\e[39m " > /dev/stderr  # goes to the screen
-  fi
-
-  read -e input
-  # If empty, use the default
-  inputOrDefault=${input:=$2}
-  echo $inputOrDefault # This is how we return something
-}
-
-runCommand() {
-  if $DRY_RUN; then
-    echo -e " >>> [DRY-RUN] \e[32m${1}\e[39m " > /dev/stderr  # goes to the screen
-  else
-    eval $1
-  fi
-}
-
-customizeBash(){
-  # The $SETUP_PATH_PRIVATE is initialized when the script starts
-  runCommand "mkdir -p $SETUP_PATH_PRIVATE"
-  runCommand "echo $1 >> $BASH_CUSTOMIZATION_FILE"
-}
-
-appendFileToBashProfile(){
-  if [ -f $1 ]; then
-    runCommand "echo -e \"if [ -f $1 ]; then \n\t. $1 \nfi\" >> ~/.bashrc"
-
-    echo " >>> File [$1] was added!"
-  else
-    echo -e " >>> \e[31mFile [$1] does not exist!\e[39m"
-  fi
-}
-
+# Read command line arguments.
 
 # We can use this to simulate the run of the script.
 DRY_RUN=false
@@ -78,11 +28,77 @@ esac
 done
 set -- "${POSITIONAL[@]}" # restore positional parameters
 
-SETUP_PATH=$(askInput "Where do you want to do the setup? SETUP_PATH=" $(pwd))
+output(){
+  if $DRY_RUN; then
+    PREFIX="DRY_RUN"
+  else
+    PREFIX="LIVE_RUN"
+  fi
+  printf " >>> [%s] - \e[32m%s\e[39m" $PREFIX "$1" > /dev/stderr
+  if [[ ! -z "$2" ]]; then
+    printf " \e[34m%s\e[39m " "[$2]" > /dev/stderr
+  fi
+
+  if [[ ! $3 ]]; then
+    printf "\n" > /dev/stderr
+  fi
+}
+
+continueYesNo() {
+  output "$1" "Y/n" false
+  read -n 1 -r
+  echo    # (optional) move to a new line
+  if [[ $REPLY =~ ^[Yy]$ ]]
+  then
+    # 0 = true
+    return 0
+  else
+    # 1 = false
+    return 1
+  fi
+}
+
+askInput() {
+  output "$1" "$2" false
+
+  read -e input
+  # If empty, use the default
+  inputOrDefault=${input:=$2}
+  echo $inputOrDefault # This is how we return something
+}
+
+runCommand() {
+  if $DRY_RUN; then
+    output "# $1"
+  else
+    eval $1
+  fi
+}
+
+customizeBash(){
+  # The $SETUP_PATH_PRIVATE is initialized when the script starts
+  runCommand "mkdir -p $SETUP_PATH_PRIVATE"
+  runCommand "echo $1 >> $BASH_CUSTOMIZATION_FILE"
+}
+
+appendFileToBashProfile(){
+  if [ -f $1 ]; then
+    runCommand "echo -e \"if [ -f $1 ]; then \n\t. $1 \nfi\" >> ~/.bashrc"
+
+    output "File [$1] was added!"
+  else
+    output "File [$1] does not exist!"
+  fi
+}
+
+
+
+
+SETUP_PATH=$(askInput "Where do you want to do the setup? SETUP_PATH:" $(pwd))
 if [[ -d $SETUP_PATH ]]; then
-    echo " >>> Start working in [$SETUP_PATH] ..."
+    output "Start working in..." $SETUP_PATH
 else
-    echo -e "\e[31m >>> [$SETUP_PATH] is not valid directory.\e[39m"
+    output "[$SETUP_PATH] is not valid directory."
     exit 1
 fi
 
@@ -92,11 +108,11 @@ SETUP_PATH_CONTAINERS=$(realpath ${SETUP_PATH}/containers)
 SETUP_PATH_TOOLS=$(realpath ${SETUP_PATH}/tools)
 SETUP_PATH_PRIVATE=$(realpath ${SETUP_PATH}/private)
 
-echo " >>> This script will use the following paths where applicable:"
-echo -e " >>> \e[34m[$SETUP_PATH_PRIVATE]:\e[39m - stores keys and customization files"
-echo -e " >>> \e[34m[$SETUP_PATH_WORK]:\e[39m - stores your GitHub repositories"
-echo -e " >>> \e[34m[$SETUP_PATH_CONTAINERS]:\e[39m - stores Docker containers data"
-echo -e " >>> \e[34m[$SETUP_PATH_TOOLS]:\e[39m - stores tools that we will use for development"
+output "This script will use the following paths where applicable:"
+output "   to store keys and customization files" $SETUP_PATH_PRIVATE
+output "   to store your GitHub repositories" $SETUP_PATH_WORK
+output "   to stores Docker containers data" $SETUP_PATH_CONTAINERS
+output "   to store tools that we will use for development" $SETUP_PATH_TOOLS
 
 ask="Continue?"
 if ! continueYesNo "$ask"; then
@@ -112,8 +128,8 @@ if continueYesNo "$ask"; then
 
     ask="Configure  GIT?"
     if continueYesNo "$ask"; then
-        github_username=$(askInput "Enter your GIT user.name" $github_username)
-        github_useremail=$(askInput "Enter your GIT user.email" $github_useremail)
+        github_username=$(askInput "Enter your GIT user.name: " $github_username)
+        github_useremail=$(askInput "Enter your GIT user.email: " $github_useremail)
 
         runCommand "git config --global user.name \"$github_username\""
         runCommand "git config --global user.email \"$github_useremail\""
@@ -143,7 +159,7 @@ if continueYesNo "$ask"; then
         fi
     fi
 
-    echo ' >>> !!! This might take quite a while. All = max 150 !!!'
+    output '!!! This might take quite a while. All = max 150 !!!'
     ask="Clone all your GitHub repos?"
     if continueYesNo "$ask"; then
         runCommand "mkdir -p $SETUP_PATH_WORK"
@@ -166,13 +182,13 @@ if continueYesNo "$ask"; then
         customizeBash 'alias gg='\''echo "Latest 3 tags:" && git tag --sort=-version:refname | head -n 3 && git status -sb'\'
         customizeBash "alias myip='ifconfig | sed -En '\''s/127.0.0.1//;s/.*inet (addr:)?(([0-9]*\.){3}[0-9]*).*/\2/p'\'"
     fi
-    echo " >>> SUCCESS!"
+    output "SUCCESS!"
 fi
 
 ask="Install: filezilla, vlc, virtualbox, firefox, vim, net-tools?"
 if continueYesNo "$ask"; then
     runCommand "sudo apt install -y filezilla vlc virtualbox firefox vim net-tools"
-    echo " >>> SUCCESS!"
+    output "SUCCESS!"
 fi
 
 ask="Install: chrome?"
@@ -182,7 +198,7 @@ if continueYesNo "$ask"; then
     runCommand "sudo curl -L https://dl.google.com/linux/linux_signing_key.pub | sudo apt-key add -"
     runCommand "sudo apt update"
     runCommand "sudo apt install -y google-chrome-stable"
-    echo " >>> SUCCESS!"
+    output "SUCCESS!"
 fi
 
 ask="Install: skype?"
@@ -191,7 +207,7 @@ if continueYesNo "$ask"; then
     runCommand "sudo dpkg -i skypeforlinux-64.deb"
     runCommand "sudo apt install -y -f"
     runCommand "rm skypeforlinux-64.deb"
-    echo " >>> SUCCESS!"
+    output "SUCCESS!"
 fi
 
 ask="Install: dbeaver (sql client)?"
@@ -200,7 +216,7 @@ if continueYesNo "$ask"; then
     runCommand "sudo dpkg -i dbeaver-ce_latest_amd64.deb"
     runCommand "sudo apt install -y -f"
     runCommand "rm dbeaver-ce_latest_amd64.deb"
-    echo " >>> SUCCESS!"
+    output "SUCCESS!"
 fi
 
 ask="Install: numix-icon-theme-circle?"
@@ -208,7 +224,7 @@ if continueYesNo "$ask"; then
     runCommand "sudo add-apt-repository -y ppa:numix/ppa"
     runCommand "sudo apt update"
     runCommand "sudo apt install -y numix-icon-theme-circle"
-    echo " >>> SUCCESS!"
+    output "SUCCESS!"
 fi
 
 ask="Install: atom ide?"
@@ -217,7 +233,7 @@ if continueYesNo "$ask"; then
     runCommand "sudo sh -c 'echo \"deb [arch=amd64] https://packagecloud.io/AtomEditor/atom/any/ any main\" > /etc/apt/sources.list.d/atom.list'"
     runCommand "sudo apt update"
     runCommand "sudo apt install -y atom"
-    echo " >>> SUCCESS!"
+    output "SUCCESS!"
 fi
 
 ask="Install: docker, docker-compose?"
@@ -238,8 +254,8 @@ if continueYesNo "$ask"; then
     runCommand "sudo chmod +x /usr/local/bin/docker-compose"
     runCommand "sudo curl -L https://raw.githubusercontent.com/docker/compose/1.21.0/contrib/completion/bash/docker-compose -o /etc/bash_completion.d/docker-compose"
 
-    echo " >>> d[name] starts a container of the [name] service type"
-    echo " >>> e[name] executes a command in the container of the [name] service type"
+    output "d[name] starts a container of the [name] service type"
+    output "e[name] executes a command in the container of the [name] service type"
     ask="Add aliases for docker consul(dconsul,econsul), docker postgresql(dpostgres), docker pgadmin4(dpgadmin)?"
     if continueYesNo "$ask"; then
         runCommand "mkdir -p $SETUP_PATH_CONTAINERS"
@@ -248,8 +264,8 @@ if continueYesNo "$ask"; then
         # This allows us to execute command inside the dev-consul container
         customizeBash "alias econsul='docker exec -i dev-consul consul'"
 
-        postgresuser=$(askInput "Enter your POSTGRES_USER" $postgresuser)
-        postgrespassword=$(askInput "Enter your POSTGRES_PASSWORD" $postgrespassword)
+        postgresuser=$(askInput "Enter your POSTGRES_USER:" $postgresuser)
+        postgrespassword=$(askInput "Enter your POSTGRES_PASSWORD:" $postgrespassword)
         customizeBash "alias dpostgres='docker run --rm -it -p 5432:5432 --name=dev-postgres -e POSTGRES_USER=$postgresuser -e POSTGRES_PASSWORD=$postgrespassword -v $SETUP_PATH_CONTAINERS/postgres_home:/var/lib/postgresql/data postgres -c \"log_statement=all\" -c \"log_duration=on\" -c \"log_min_duration_statement=-1\"'"
         customizeBash "alias epsql='PGPASSWORD=$postgrespassword docker exec -i dev-postgres psql -h localhost -U $postgresuser '"
 
@@ -276,7 +292,7 @@ if continueYesNo "$ask"; then
             runCommand "rm mongodb-compass_1.15.4_amd64.deb"
         fi
     fi
-    echo " >>> SUCCESS!"
+    output "SUCCESS!"
 fi
 
 ask="Install: java8?"
@@ -305,14 +321,14 @@ if continueYesNo "$ask"; then
         # Get JetBrains ToolBox app that makes it easier to update InteliJ ad get it.
         runCommand "wget -qO- https://download.jetbrains.com/toolbox/jetbrains-toolbox-1.8.3678.tar.gz | tar xvz -C $SETUP_PATH_TOOLS"
     fi
-    echo " >>> SUCCESS!"
+    output "SUCCESS!"
 fi
 #
 ask="Install: nodejs?"
 if continueYesNo "$ask"; then
     runCommand "wget -qO- https://deb.nodesource.com/setup_8.x | sudo -E bash -"
     runCommand "sudo apt-get install -y nodejs"
-    echo " >>> SUCCESS!"
+    output "SUCCESS!"
 fi
 
 ask="Install: yarn?"
@@ -320,16 +336,16 @@ if continueYesNo "$ask"; then
     runCommand "curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | sudo apt-key add -"
     runCommand "echo \"deb https://dl.yarnpkg.com/debian/ stable main\" | sudo tee /etc/apt/sources.list.d/yarn.list"
     runCommand "sudo apt update && sudo apt install -y yarn"
-    echo " >>> SUCCESS!"
+    output "SUCCESS!"
 fi
 
 ask="Add any private aliases found in ${BASH_PRIVATE_FILE} file?"
 if continueYesNo "$ask"; then
     if [ -f $BASH_PRIVATE_FILE ]; then
       appendFileToBashProfile $BASH_PRIVATE_FILE
-      echo " >>> SUCCESS!"
+      output "SUCCESS!"
     else
-      echo " >>> File $BASH_PRIVATE_FILE does not exist."
+      output "File $BASH_PRIVATE_FILE does not exist."
     fi
 fi
 
@@ -348,7 +364,7 @@ fi
 # Add all the bash customization that we did to the ~/.bashrc file.
 appendFileToBashProfile $BASH_CUSTOMIZATION_FILE
 
-echo " >>> Cheching for updates ..."
+output "Cheching for updates ..."
 runCommand "sudo apt update"
 runCommand "sudo apt -y upgrade"
 runCommand "sudo apt -y autoremove"
