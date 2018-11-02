@@ -194,6 +194,7 @@ fi
 ask="Install: chrome?"
 if continueYesNo "$ask"; then
     # TODO: Check if google-chrome-stable is allready available before adding the apt-repository
+    # apt-cache policy google-chrome-stable <- this might help
     runCommand "sudo add-apt-repository -y \"deb [arch=amd64] http://dl.google.com/linux/chrome/deb/ stable main\""
     runCommand "sudo curl -L https://dl.google.com/linux/linux_signing_key.pub | sudo apt-key add -"
     runCommand "sudo apt update"
@@ -297,7 +298,7 @@ if continueYesNo "$ask"; then
     if continueYesNo "$ask"; then
         runCommand "mkdir -p $SETUP_PATH_CONTAINERS"
 
-        customizeBash "alias dconsul='docker run --rm -it --hostname=dev-rabbitmq -p 15672:15672 -p 5672:5672 --name dev-rabbitmq -v $SETUP_PATH_CONTAINERS/rabbitmq_home:/var/lib/rabbitmq rabbitmq:management-alpine'"
+        customizeBash "alias drabbit='docker run --rm -it --hostname=dev-rabbitmq -p 15672:15672 -p 5672:5672 --name dev-rabbitmq -v $SETUP_PATH_CONTAINERS/rabbitmq_home:/var/lib/rabbitmq rabbitmq:management-alpine'"
     fi
     output "SUCCESS!"
 fi
