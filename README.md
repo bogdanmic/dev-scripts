@@ -25,9 +25,9 @@ If you want to go through the steps without any changes to your computer you can
  $ ./setup.sh --dry-run
  ```
 
-The folder it creates:
+The folder it creates if they don't exist:
  - **tools** - here downloads tools like maven, node, etc.
- - **secrets** - generates the GitHub ssh keys
+ - **private** - generates the GitHub ssh keys
  - **work** - clones all your git repositories
  - **containers** - the home directory where any containers started by then
  setup will hold their data (e.g. dpostgres will store the databses there)
@@ -59,13 +59,14 @@ What does it do?
      $ emongodump db_name > file_name.gz
      ```
    - emongorestore - executes a restore into mongodb
-     e.g. TO restore a database:
+     e.g. To restore a database:
      ```bash
      # This restores in the same database
      $ cat file_name.gz | emongorestore
      # To restore in a different database
      $ cat file_name.gz | emongorestore --nsFrom "<OLD_DB_NAME>.*" --nsTo "<NEW_DB_NAME>.*"
      ```
+   - drabbit - starts rabbitmq. it starts with the management console enabled http://localhost:15672 with default user/pass **guest/guest**
  - if you have a folder named **private** in the **SETUP_PATH**, then this is also possible:
    - any aliases in the file **aliases** will be added to your **bashrc**
 

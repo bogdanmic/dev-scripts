@@ -292,6 +292,13 @@ if continueYesNo "$ask"; then
             runCommand "rm mongodb-compass_1.15.4_amd64.deb"
         fi
     fi
+
+    ask="Add aliases for rabbitmq consul(drabbitmq)?"
+    if continueYesNo "$ask"; then
+        runCommand "mkdir -p $SETUP_PATH_CONTAINERS"
+
+        customizeBash "alias dconsul='docker run --rm -it --hostname=dev-rabbitmq -p 15672:15672 -p 5672:5672 --name dev-rabbitmq -v $SETUP_PATH_CONTAINERS/rabbitmq_home:/var/lib/rabbitmq rabbitmq:management-alpine'"
+    fi
     output "SUCCESS!"
 fi
 
