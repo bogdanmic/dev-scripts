@@ -193,11 +193,13 @@ fi
 
 ask="Install: chrome?"
 if continueYesNo "$ask"; then
-    # TODO: Check if google-chrome-stable is allready available before adding the apt-repository
-    # apt-cache policy google-chrome-stable <- this might help
-    runCommand "sudo add-apt-repository -y \"deb [arch=amd64] http://dl.google.com/linux/chrome/deb/ stable main\""
-    runCommand "sudo curl -L https://dl.google.com/linux/linux_signing_key.pub | sudo apt-key add -"
-    runCommand "sudo apt update"
+    if apt-cache show google-chrome-stable >> /dev/null; then
+      output "google-chrome-stable package exists. Installing ..."
+    else
+      runCommand "sudo add-apt-repository -y \"deb [arch=amd64] http://dl.google.com/linux/chrome/deb/ stable main\""
+      runCommand "sudo curl -L https://dl.google.com/linux/linux_signing_key.pub | sudo apt-key add -"
+      runCommand "sudo apt update"
+    fi
     runCommand "sudo apt install -y google-chrome-stable"
     output "SUCCESS!"
 fi
@@ -230,10 +232,10 @@ fi
 
 ask="Install: atom ide?"
 if continueYesNo "$ask"; then
-    runCommand "sudo curl -L https://packagecloud.io/AtomEditor/atom/gpgkey | sudo apt-key add -"
-    runCommand "sudo sh -c 'echo \"deb [arch=amd64] https://packagecloud.io/AtomEditor/atom/any/ any main\" > /etc/apt/sources.list.d/atom.list'"
-    runCommand "sudo apt update"
-    runCommand "sudo apt install -y atom"
+    runCommand "wget https://atom.io/download/deb"
+    runCommand "sudo dpkg -i atom-amd64.deb"
+    runCommand "sudo apt install -y -f"
+    runCommand "rm atom-amd64.deb"
     output "SUCCESS!"
 fi
 
