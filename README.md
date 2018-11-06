@@ -42,23 +42,23 @@ What does it do?
  - create a github ssh-key file for your github account
  - clones all your github repositories
  - creates some aliases to start services inside containers:
-   - dconsul - starts consul
-   - econsul - executes consul commands in the started consul container
-   - dpostgres - starts a postgres database
-   - epsql - executes psql commands in the started postgres container
+   - **dconsul** - starts consul
+   - **econsul** - executes consul commands in the started consul container
+   - **dpostgres** - starts a postgres database
+   - **epsql** - executes psql commands in the started postgres container
      e.g. To do a restore:
      ```bash
      $ cat db_backup_file | epsql db_name
      ```
-   - dpgadmin - starts pgadmin4
-   - dmongo - starts mongodb
-   - emongo - starts the mongo client
-   - emongodump - executes a mongodb dump
+   - **dpgadmin** - starts pgadmin4
+   - **dmongo** - starts mongodb
+   - **emongo** - starts the mongo client
+   - **emongodump** - executes a mongodb dump
      e.g. To dump a database:
      ```bash
      $ emongodump db_name > file_name.gz
      ```
-   - emongorestore - executes a restore into mongodb
+   - **emongorestore** - executes a restore into mongodb
      e.g. To restore a database:
      ```bash
      # This restores in the same database
@@ -66,7 +66,16 @@ What does it do?
      # To restore in a different database
      $ cat file_name.gz | emongorestore --nsFrom "<OLD_DB_NAME>.*" --nsTo "<NEW_DB_NAME>.*"
      ```
-   - drabbit - starts rabbitmq. it starts with the management console enabled http://localhost:15672 with default user/pass **guest/guest**
+   - **drabbit** - starts rabbitmq. it starts with the management console enabled http://localhost:15672 with default user/pass **guest/guest**
+   - **dmysql** - starts mysql
+   - **emysqldump** - executes a mysql db dump
+     ```bash
+     $ emysqldump DB_NAME > DUMP_FILE.sql
+     ```
+   - **emysqlrestore** - executes a restore from a mysql dump
+     ```bash
+     $ cat DUMP_FILE.sql | emysqlrestore DB_NAME
+     ```
  - if you have a folder named **private** in the **SETUP_PATH**, then this is also possible:
    - any aliases in the file **aliases** will be added to your **bashrc**
 

@@ -296,11 +296,30 @@ if continueYesNo "$ask"; then
         fi
     fi
 
-    ask="Add aliases for rabbitmq consul(drabbitmq)?"
+    ask="Add aliases for docker rabbitmq(drabbitmq)?"
     if continueYesNo "$ask"; then
         runCommand "mkdir -p $SETUP_PATH_CONTAINERS"
 
         customizeBash "alias drabbit='docker run --rm -it --hostname=dev-rabbitmq -p 15672:15672 -p 5672:5672 --name dev-rabbitmq -v $SETUP_PATH_CONTAINERS/rabbitmq_home:/var/lib/rabbitmq rabbitmq:management-alpine'"
+    fi
+
+    # TODO: Upgrade to 8 when needed.
+    ask="Add aliases for docker mysql 5.7(dmysql)?"
+    if continueYesNo "$ask"; then
+        runCommand "mkdir -p $SETUP_PATH_CONTAINERS"
+
+        postgrespassword=$(askInput "Enter your MYSQL_ROOT_PASSWORD:" $mysqlrootpassword)
+        customizeBash "alias dmysql='docker run --rm -it -p 3306:3306 --name dev-mysql -e MYSQL_ROOT_PASSWORD=$mysqlrootpassword -v $SETUP_PATH_CONTAINERS/mysql_home:/var/lib/mysql mysql:5.7'"
+        customizeBash "alias emysqlrestore='docker exec -i dev-mysql mysql -uroot -p$mysqlrootpassword'"
+        customizeBash "alias emysqldump='docker exec -i dev-mysql mysqldump -uroot -p$mysqlrootpassword'"
+
+        ask="Install: Mysql Workbench (UI for Mysql)?"
+        if continueYesNo "$ask"; then
+            runCommand "wget https://dev.mysql.com/get/Downloads/MySQLGUITools/mysql-workbench-community_8.0.13-1ubuntu18.04_amd64.deb"
+            runCommand "sudo dpkg -i mysql-workbench-community_8.0.13-1ubuntu18.04_amd64.deb"
+            runCommand "sudo apt install -y -f"
+            runCommand "rm mysql-workbench-community_8.0.13-1ubuntu18.04_amd64.deb"
+        fi
     fi
     output "SUCCESS!"
 fi
