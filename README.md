@@ -6,14 +6,18 @@ workspace. For now I use a **Ubuntu** distribution.
 
 Ubuntu 18.04
 ------------
-The [**setup.sh**](setup.sh) script when running creates directories in a specified **SETUP_PATH**.
+The [**setup.sh**](setup.sh) script when running creates the following directory structure in a specified **SETUP_PATH**:
+ - **tools** - if it requires to download certain dev tools, this is the folder used to store them. *e.g. maven, jetbrains-toolbox, etc.*
+ - **private** - here we will store secrets like the GitHub ssh keys, bash customization file and if an **aliases** file is present with your personal aliases, it will be added to your ***bashrc*** profile
+ - **work** - here you will find clones of all your GitHub repositories
+ - **containers** - this will be the home directory where any **docker** services used will hold their data *(e.g. dpostgres will store the databases there)*
 
-To  get started:
+### Get started
  ```bash
  $ bash <(curl -s https://raw.githubusercontent.com/bogdanmic/config-scripts/master/setup.sh)
  ```
- **NOTICE** Since you are executing an untrusted script from the interwebs, I
- would recommend you to take a look at ti before proceeding. So probably you
+ **NOTICE:** Since you are executing an untrusted script from the interwebs, I
+ would recommend you to take a look at it before proceeding. So probably you
  should do this.
  ```bash
  $ git clone https://github.com/bogdanmic/config-scripts.git
@@ -25,23 +29,38 @@ If you want to go through the steps without any changes to your computer you can
  $ ./setup.sh --dry-run
  ```
 
-The folder it creates if they don't exist:
- - **tools** - here downloads tools like maven, node, etc.
- - **private** - generates the GitHub ssh keys
- - **work** - clones all your git repositories
- - **containers** - the home directory where any containers started by then
- setup will hold their data (e.g. dpostgres will store the databses there)
+### What does it do?
+This script runs in multiple steps that are optional and some depend on others. These steps are in order with their substeps:
+- Install **git, git-flow**
+  - Configure  GIT
+  - Setup GitHub SSH key
+  - Clone all your GitHub repositories (max 200)
+  - Configure your Terminal prompt for GIT
+- Install **filezilla, vlc, virtualbox, firefox, vim, net-tools**
+- Install **chrome** browser
+- Install **skype**
+- Install **dbeaver** (sql client)
+- Install **numix-icon-theme-circle** this is just a icon theme I like :)
+- Install **atom ide** a quite decent and lightweight IDE
+- Install **docker, docker-compose**
+  - Add aliases for docker consul(**dconsul,econsul**), docker postgresql(**dpostgres**), docker pgadmin4(**dpgadmin**)
+  - Add aliases for docker mongo(**dmongo,emongo**)
+    - Install **MongoDB Compass** (UI for MongoDB)
+  - Add aliases for docker rabbitmq(**drabbit**)
+  - Add aliases for docker mysql 5.7(**dmysql**)
+    - Install: **MySql Workbench** (UI for Mysql)
+- Install **java8**
+  - Install **maven, activator, JetBrains ToolBox** (makes it easier to install and
+  update JetBrains products)
+- Install **nodejs**
+- Install **yarn**
+- Add any private aliases found in the **aliases** file
+- Install **awscli**
+  - Configure awscli
+- Add all the bash customization that we did to the **~/.bashrc** file.
+- Update and Reboot
 
-What does it do?
- - installs: git, git-flow, vim, filezilla, vlc, virtualbox, firefox, chrome,
- skype, numix-icon-theme-circle, **atom ide**, docker, docker-compose, java8, yarn,
- node, maven, typesafe activator, JetBrains ToolBox (makes easier to install and
- update JetBrains products), dbeaver, awscli, net-tools
- - makes your terminal prompt nice
- - configures git
- - create a github ssh-key file for your github account
- - clones all your github repositories
- - creates some aliases to start services inside containers:
+### The aliases generated and how to use them
    - **dconsul** - starts consul
    - **econsul** - executes consul commands in the started consul container
    - **dpostgres** - starts a postgres database
@@ -76,7 +95,6 @@ What does it do?
      ```bash
      $ cat DUMP_FILE.sql | emysqlrestore DB_NAME
      ```
- - if you have a folder named **private** in the **SETUP_PATH**, then this is also possible:
-   - any aliases in the file **aliases** will be added to your **bashrc**
+
 
 ***Feel free to contribute in any way.***

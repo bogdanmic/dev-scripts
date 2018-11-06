@@ -159,7 +159,7 @@ if continueYesNo "$ask"; then
         fi
     fi
 
-    output '!!! This might take quite a while. All = max 150 !!!'
+    output '!!! This might take quite a while. All = max 200 !!!'
     ask="Clone all your GitHub repos?"
     if continueYesNo "$ask"; then
         runCommand "mkdir -p $SETUP_PATH_WORK"
@@ -168,7 +168,7 @@ if continueYesNo "$ask"; then
         github_username=$(askInput "Enter your GitHub user.name" $github_username)
 
         if ! $DRY_RUN; then
-          curl -u "$github_username" "https://api.github.com/user/repos?page=1&per_page=150" | grep -e 'ssh_url*' | cut -d \" -f 4 | xargs -L1 git clone
+          curl -u "$github_username" "https://api.github.com/user/repos?page=1&per_page=200" | grep -e 'ssh_url*' | cut -d \" -f 4 | xargs -L1 git clone
         else
           runCommand "Some complicated command that clones your github  repositories."
         fi
@@ -296,7 +296,7 @@ if continueYesNo "$ask"; then
         fi
     fi
 
-    ask="Add aliases for docker rabbitmq(drabbitmq)?"
+    ask="Add aliases for docker rabbitmq(drabbit)?"
     if continueYesNo "$ask"; then
         runCommand "mkdir -p $SETUP_PATH_CONTAINERS"
 
@@ -313,7 +313,7 @@ if continueYesNo "$ask"; then
         customizeBash "alias emysqlrestore='docker exec -i dev-mysql mysql -uroot -p$mysqlrootpassword'"
         customizeBash "alias emysqldump='docker exec -i dev-mysql mysqldump -uroot -p$mysqlrootpassword'"
 
-        ask="Install: Mysql Workbench (UI for Mysql)?"
+        ask="Install: MySql Workbench (UI for Mysql)?"
         if continueYesNo "$ask"; then
             runCommand "wget https://dev.mysql.com/get/Downloads/MySQLGUITools/mysql-workbench-community_8.0.13-1ubuntu18.04_amd64.deb"
             runCommand "sudo dpkg -i mysql-workbench-community_8.0.13-1ubuntu18.04_amd64.deb"
