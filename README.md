@@ -4,15 +4,14 @@ config-scripts
 This is collection of scripts that I use on my linux machine to configure my
 workspace. For now I use a **Ubuntu** distribution.
 
-Ubuntu 18.04
-------------
 The [**setup.sh**](setup.sh) script when running creates the following directory structure in a specified **SETUP_PATH**:
  - **tools** - if it requires to download certain dev tools, this is the folder used to store them. *e.g. maven, jetbrains-toolbox, etc.*
  - **private** - here we will store secrets like the GitHub ssh keys, bash customization file and if an **aliases** file is present with your personal aliases, it will be added to your ***bashrc*** profile
  - **work** - here you will find clones of all your GitHub repositories
  - **containers** - this will be the home directory where any **docker** services used will hold their data *(e.g. dpostgres will store the databases there)*
 
-### Get started
+Get started
+------------
  ```bash
  $ bash <(curl -s https://raw.githubusercontent.com/bogdanmic/config-scripts/master/setup.sh)
  ```
@@ -29,7 +28,8 @@ If you want to go through the steps without any changes to your computer you can
  $ ./setup.sh --dry-run
  ```
 
-### What does it do?
+What does it do?
+------------
 This script runs in multiple steps that are optional and some depend on others. These steps are in order with their substeps:
 - Install **git, git-flow**
   - Configure  GIT
@@ -60,7 +60,8 @@ This script runs in multiple steps that are optional and some depend on others. 
 - Add all the bash customization that we did to the **~/.bashrc** file.
 - Update and Reboot
 
-### The aliases generated and how to use them
+The aliases generated and how to use them
+------------
    - **dconsul** - starts consul
    - **econsul** - executes consul commands in the started consul container
    - **dpostgres** - starts a postgres database
