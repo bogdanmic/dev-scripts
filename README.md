@@ -66,14 +66,14 @@ The aliases generated and how to use them
 - **gg** - Shows the latest 3 git tags and shows the git status
 - **myip** - Shows your IPs
 
-#### Consul
+#### [Consul](https://www.consul.io/)
 - **dconsul** - Starts consul docker container
 - **econsul** - Executes consul command into the consul docker container
 ```bash
 $  econsul members
 ```
 
-#### Postgres
+#### [Postgres](https://www.postgresql.org/)
 - **dpostgres** - Starts potgres docker container
 - **epsql** - Executes command inside the docker postgres container
 ```bash
@@ -82,7 +82,7 @@ $ cat DB_BACKUP_FILE | epsql DB_NAME
 ```
 - **dpgadmin** - Starts PgAdmin in a docker container. It can be accessed at: http://0.0.0.0:5050/browser/
 
-#### MongoDb
+#### [MongoDb](https://www.mongodb.com/)
 - **dmongo** - Starts mongodb docker container
 - **emongo** - Gain access to the mongo shell client from the docker container
 - **emongodump** - You can use this to create a mongo database backup file
@@ -98,10 +98,10 @@ $ cat  DB_BACKUP_FILE.gz | emongorestore
 $ cat  DB_BACKUP_FILE.gz | emongorestore "OLD_DB_NAME.*" --nsTo "NEW_DB_NAME.*"
 ```
 
-#### RabbitMq
+#### [RabbitMQ](https://www.rabbitmq.com/)
 - **drabbit** - Starts the rabbitmq docker container. It's started with the management console enabled. You can access it at http://localhost:15672 with default user/pass **guest/guest**
 
-#### MySql 5.7 (for now)
+#### [MySQL](https://www.mysql.com/) 5.7 (for now)
 - **dmysql** - Starts the mysql docker container
 - **emysqldump** - You can use this to create mysql database backups
 ```bash
