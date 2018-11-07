@@ -62,40 +62,56 @@ This script runs in multiple steps that are optional and some depend on others. 
 
 The aliases generated and how to use them
 ------------
-   - **dconsul** - starts consul
-   - **econsul** - executes consul commands in the started consul container
-   - **dpostgres** - starts a postgres database
-   - **epsql** - executes psql commands in the started postgres container
-     e.g. To do a restore:
-     ```bash
-     $ cat db_backup_file | epsql db_name
-     ```
-   - **dpgadmin** - starts pgadmin4
-   - **dmongo** - starts mongodb
-   - **emongo** - starts the mongo client
-   - **emongodump** - executes a mongodb dump
-     e.g. To dump a database:
-     ```bash
-     $ emongodump db_name > file_name.gz
-     ```
-   - **emongorestore** - executes a restore into mongodb
-     e.g. To restore a database:
-     ```bash
-     # This restores in the same database
-     $ cat file_name.gz | emongorestore
-     # To restore in a different database
-     $ cat file_name.gz | emongorestore --nsFrom "<OLD_DB_NAME>.*" --nsTo "<NEW_DB_NAME>.*"
-     ```
-   - **drabbit** - starts rabbitmq. it starts with the management console enabled http://localhost:15672 with default user/pass **guest/guest**
-   - **dmysql** - starts mysql
-   - **emysqldump** - executes a mysql db dump
-     ```bash
-     $ emysqldump DB_NAME > DUMP_FILE.sql
-     ```
-   - **emysqlrestore** - executes a restore from a mysql dump
-     ```bash
-     $ cat DUMP_FILE.sql | emysqlrestore DB_NAME
-     ```
+#### Miscellaneous
+- **gg** - Shows the latest 3 git tags and shows the git status
+- **myip** - Shows your IPs
 
+#### Consul
+- **dconsul** - Starts consul docker container
+- **econsul** - Executes consul command into the consul docker container
+```bash
+$  econsul members
+```
 
-***Feel free to contribute in any way.***
+#### Postgres
+- **dpostgres** - Starts potgres docker container
+- **epsql** - Executes command inside the docker postgres container
+```bash
+# To restore a database dump
+$ cat DB_BACKUP_FILE | epsql DB_NAME
+```
+- **dpgadmin** - Starts PgAdmin in a docker container. It can be accessed at: http://0.0.0.0:5050/browser/
+
+#### MongoDb
+- **dmongo** - Starts mongodb docker container
+- **emongo** - Gain access to the mongo shell client from the docker container
+- **emongodump** - You can use this to create a mongo database backup file
+```bash
+# Create a dump file for a given database
+$ emongodump DB_NAME | DB_BACKUP_FILE.gz
+```
+- **emongorestore** - You can use this to restore a mongo database from a backup file
+```bash
+# To restore in the same database
+$ cat  DB_BACKUP_FILE.gz | emongorestore
+# To restore in a different database
+$ cat  DB_BACKUP_FILE.gz | emongorestore "OLD_DB_NAME.*" --nsTo "NEW_DB_NAME.*"
+```
+
+#### RabbitMq
+- **drabbit** - Starts the rabbitmq docker container. It's started with the management console enabled. You can access it at http://localhost:15672 with default user/pass **guest/guest**
+
+#### MySql 5.7 (for now)
+- **dmysql** - Starts the mysql docker container
+- **emysqldump** - You can use this to create mysql database backups
+```bash
+# To create a database backup file
+$ emysqldump DB_NAME > DB_BACKUP_FILE.sql
+```
+- **emysqlrestore** - You can use this to restore a mysql database backup
+```bash
+# To restore a database backup file
+$ cat DB_BACKUP_FILE.sql | emysqlrestore DB_NAME
+```
+
+##### ***Feel free to contribute in any way.***

@@ -277,7 +277,7 @@ if continueYesNo "$ask"; then
         customizeBash "alias dpgadmin='docker run --rm -it --net=host --name=dev-pgadmin -v $SETUP_PATH_CONTAINERS/pgadmin_home:/pgadmin thajeztah/pgadmin4'"
     fi
 
-    ask="Add aliases for docker mongo(dmongo,emongo)?"
+    ask="Add aliases for docker mongodb(dmongo,emongo)?"
     if continueYesNo "$ask"; then
         runCommand "mkdir -p $SETUP_PATH_CONTAINERS"
 
