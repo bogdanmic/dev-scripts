@@ -49,6 +49,7 @@ This script runs in multiple steps that are optional and some depend on others. 
   - Add aliases for docker rabbitmq(**drabbit**)
   - Add aliases for docker mysql 5.7(**dmysql**)
     - Install: **MySql Workbench** (UI for Mysql)
+  - Add aliases for docker elasticsearch(**delastic**)
 - Install **java8**
   - Install **maven, activator, JetBrains ToolBox** (makes it easier to install and
   update JetBrains products)
@@ -113,5 +114,69 @@ $ emysqldump DB_NAME > DB_BACKUP_FILE.sql
 # To restore a database backup file
 $ cat DB_BACKUP_FILE.sql | emysqlrestore DB_NAME
 ```
+
+#### [ElasticSearch](https://www.elastic.co/products/elasticsearch/)
+This is a strange case. We create two mounted volumes for this:
+- ***elasticsearch_home*** - here we will store the elasticsearch database
+- ***elasticsearch_backups*** - here we will store snapshots(backups) of our indices
+
+To view all available indices in your elastic search access http://localhost:9200/_cat/indices?pretty
+
+Now we can create snapshots for our indices:
+```bash
+# Register a folder  where we will create some snapshots. I usually do a folder for each  index
+# BACKUP_FOLDER_NAME = the index name
+$ curl -X PUT \
+      "http://localhost:9200/_snapshot/BACKUP_FOLDER_NAME" \
+      -H 'content-type: application/json' \
+      -d "{
+            \"type\": \"fs\",
+            \"settings\": {
+                \"location\": \"BACKUP_FOLDER_NAME\",
+                \"compress\": true
+            }
+        }"
+
+# Now to trigger a snapshot of the desired index
+# We use the previous define BACKUP_FOLDER_NAME.
+# The backups are incremental so SNAPSHOT_NAME needs to be unique.
+# For each snapshot we can specify what indices to include but we do only one INDEX_NAME
+$ curl -X PUT \
+      "http://localhost:9200/_snapshot/BACKUP_FOLDER_NAME/SNAPSHOT_NAME?wait_for_completion=true" \
+      -H 'content-type: application/json' \
+      -d "{
+          \"indices\": \"INDEX_NAME\",
+          \"ignore_unavailable\": true,
+          \"include_global_state\": false
+        }"
+```
+Bellow we will handle the restoring of a snapshot that we got from another elastic search server.
+Usually this is done by copying the BACKUP_FOLDER_NAME from that server onto the new one and following the next steps.
+```bash
+# Now if you followed the recommendations above, you should be in possession of a tar/zip file
+# that contains the BACKUP_FOLDER_NAME created above Take that and extract it into
+# your elasticsearch_backups folder so we can start the restore process.
+# If elastic search was running while you added the contents to the folder, you need to restart it.
+$ curl -X PUT \
+      "http://localhost:9200/_snapshot/BACKUP_FOLDER_NAME" \
+      -H 'content-type: application/json' \
+      -d "{
+            \"type\": \"fs\",
+            \"settings\": {
+                \"location\": \"BACKUP_FOLDER_NAME\",
+                \"compress\": true
+            }
+        }"
+```
+Now that you registered the backup repository, if you go to http://localhost:9200/_snapshot/BACKUP_FOLDER_NAME/_all you should see all available snapshots that were created. Pick the one you want to restore and:
+```bash
+# SNAPSHOT_NAME is a name picked from the available snapshots
+$ curl -X POST \
+      http://localhost:9200/_snapshot/BACKUP_FOLDER_NAME/SNAPSHOT_NAME/_restore \
+      -H 'content-type: application/json'
+```
+To monitor the restore progress you can access http://localhost:9200/_snapshot/BACKUP_FOLDER_NAME/SNAPSHOT_NAME
+
+After the restore is done you can access the index you restored http://localhost:9200/INDEX_NAME/_search
 
 ##### ***Feel free to contribute in any way.***

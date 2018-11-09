@@ -321,6 +321,13 @@ if continueYesNo "$ask"; then
             runCommand "rm mysql-workbench-community_8.0.13-1ubuntu18.04_amd64.deb"
         fi
     fi
+
+    ask="Add aliases for docker elasticsearch(delastic)?"
+    if continueYesNo "$ask"; then
+        runCommand "mkdir -p $SETUP_PATH_CONTAINERS"
+
+        customizeBash "alias delastic='docker run --rm -it -p 9200:9200 -p 9300:9300 --name dev-elasticsearch -e cluster.name=dev-elasticsearch -e discovery.type=single-node -e path.repo=/usr/share/elasticsearch/backups -v $SETUP_PATH_CONTAINERS/elasticsearch_home:/usr/share/elasticsearch/data -v $SETUP_PATH_CONTAINERS/elasticsearch_backups:/usr/share/elasticsearch/backups elasticsearch:6.4.2'"
+    fi
     output "SUCCESS!"
 fi
 
