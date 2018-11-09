@@ -177,6 +177,8 @@ $ curl -X POST \
 ```
 To monitor the restore progress you can access http://localhost:9200/_snapshot/BACKUP_FOLDER_NAME/SNAPSHOT_NAME
 
+For more details you can read the [official documentation](https://www.elastic.co/guide/en/elasticsearch/reference/current/modules-snapshots.html).
+
 After the restore is done you can access the index you restored http://localhost:9200/INDEX_NAME/_search
 
 ##### ***Feel free to contribute in any way.***
