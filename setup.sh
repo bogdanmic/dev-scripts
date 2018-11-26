@@ -326,7 +326,12 @@ if continueYesNo "$ask"; then
     if continueYesNo "$ask"; then
         runCommand "mkdir -p $SETUP_PATH_CONTAINERS"
 
-        customizeBash "alias delastic='docker run --rm -it -p 9200:9200 -p 9300:9300 --name dev-elasticsearch -e cluster.name=dev-elasticsearch -e discovery.type=single-node -e path.repo=/usr/share/elasticsearch/backups -v $SETUP_PATH_CONTAINERS/elasticsearch_home:/usr/share/elasticsearch/data -v $SETUP_PATH_CONTAINERS/elasticsearch_backups:/usr/share/elasticsearch/backups elasticsearch:6.4.2'"
+        customizeBash "alias delastic='docker run --rm -it -p 9200:9200 -p 9300:9300 --name dev-elasticsearch -e cluster.name=dev-elasticsearch -e discovery.type=single-node -e path.repo=/usr/share/elasticsearch/backups -v $SETUP_PATH_CONTAINERS/elasticsearch_home:/usr/share/elasticsearch/data -v $SETUP_PATH_CONTAINERS/elasticsearch_backups:/usr/share/elasticsearch/backups elasticsearch:6.5.1'"
+
+        ask="Install: Kibana (dkibana)?"
+        if continueYesNo "$ask"; then
+            customizeBash "alias dkibana='docker run --rm -it --net=host --name=dev-kibana -e ELASTICSEARCH_URL=http://localhost:9200/ kibana:6.5.1'"
+        fi
     fi
     output "SUCCESS!"
 fi

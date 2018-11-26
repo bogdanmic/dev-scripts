@@ -49,7 +49,7 @@ This script runs in multiple steps that are optional and some depend on others. 
   - Add aliases for docker rabbitmq(**drabbit**)
   - Add aliases for docker mysql 5.7(**dmysql**)
     - Install: **MySql Workbench** (UI for Mysql)
-  - Add aliases for docker elasticsearch(**delastic**)
+  - Add aliases for docker elasticsearch(**delastic**),  docker kibana(**dkibana**)
 - Install **java8**
   - Install **maven, activator, JetBrains ToolBox** (makes it easier to install and
   update JetBrains products)
@@ -116,6 +116,9 @@ $ cat DB_BACKUP_FILE.sql | emysqlrestore DB_NAME
 ```
 
 #### [ElasticSearch](https://www.elastic.co/products/elasticsearch/)
+- **delastic** - Starts ElasticSearch docker container
+- **dkibana** - Starts Kibana docker container. It can be accessed at: http://localhost:5601
+
 This is a strange case. We create two mounted volumes for this:
 - ***elasticsearch_home*** - here we will store the elasticsearch database
 - ***elasticsearch_backups*** - here we will store snapshots(backups) of our indices
