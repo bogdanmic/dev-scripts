@@ -239,6 +239,15 @@ if continueYesNo "$ask"; then
     output "SUCCESS!"
 fi
 
+ask="Install: vscode ide?"
+if continueYesNo "$ask"; then
+    runCommand "wget -0 vscode.deb https://go.microsoft.com/fwlink/?LinkID=760868"
+    runCommand "sudo dpkg -i vscode.deb"
+    runCommand "sudo apt install -y -f"
+    runCommand "rm vscode.deb"
+    output "SUCCESS!"
+fi
+
 ask="Install: docker, docker-compose?"
 if continueYesNo "$ask"; then
     # Install docker
@@ -269,7 +278,7 @@ if continueYesNo "$ask"; then
 
         postgresuser=$(askInput "Enter your POSTGRES_USER:" $postgresuser)
         postgrespassword=$(askInput "Enter your POSTGRES_PASSWORD:" $postgrespassword)
-        customizeBash "alias dpostgres='docker run --rm -it -p 5432:5432 --name=dev-postgres -e POSTGRES_USER=$postgresuser -e POSTGRES_PASSWORD=$postgrespassword -v $SETUP_PATH_CONTAINERS/postgres_home:/var/lib/postgresql/data postgres -c \"log_statement=all\" -c \"log_duration=on\" -c \"log_min_duration_statement=-1\"'"
+        customizeBash "alias dpostgres='docker run --rm -it -p 5432:5432 --name=dev-postgres -e POSTGRES_USER=$postgresuser -e POSTGRES_PASSWORD=$postgrespassword -v $SETUP_PATH_CONTAINERS/postgres_home:/var/lib/postgresql/data postgres:10 -c \"log_statement=all\" -c \"log_duration=on\" -c \"log_min_duration_statement=-1\"'"
         customizeBash "alias epsql='PGPASSWORD=$postgrespassword docker exec -i dev-postgres psql -h localhost -U $postgresuser '"
 
         runCommand "mkdir -p $SETUP_PATH_CONTAINERS/pgadmin_home"

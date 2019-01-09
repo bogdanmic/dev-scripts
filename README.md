@@ -42,6 +42,7 @@ This script runs in multiple steps that are optional and some depend on others. 
 - Install **dbeaver** (sql client)
 - Install **numix-icon-theme-circle** this is just a icon theme I like :)
 - Install **atom ide** a quite decent and lightweight IDE
+- Install **vscode ide** a quite decent and lightweight IDE and an alternative to **atom ide**
 - Install **docker, docker-compose**
   - Add aliases for docker consul(**dconsul,econsul**), docker postgresql(**dpostgres**), docker pgadmin4(**dpgadmin**)
   - Add aliases for docker mongo(**dmongo,emongo**)
