@@ -78,7 +78,11 @@ runCommand() {
 customizeBash(){
   # The $SETUP_PATH_PRIVATE is initialized when the script starts
   runCommand "mkdir -p $SETUP_PATH_PRIVATE"
-  runCommand "echo $1 >> $BASH_CUSTOMIZATION_FILE"
+  if $DRY_RUN; then
+    output "# echo $1 >> $BASH_CUSTOMIZATION_FILE"
+  else
+    echo $1 >> $BASH_CUSTOMIZATION_FILE
+  fi
 }
 
 appendFileToBashProfile(){
