@@ -92,8 +92,6 @@ appendFileToBashProfile(){
 }
 
 
-
-
 SETUP_PATH=$(askInput "Where do you want to do the setup? SETUP_PATH:" $(pwd))
 if [[ -d $SETUP_PATH ]]; then
     output "Start working in..." $SETUP_PATH
@@ -196,9 +194,10 @@ if continueYesNo "$ask"; then
     if apt-cache show google-chrome-stable >> /dev/null; then
       output "google-chrome-stable package exists. Installing ..."
     else
-      runCommand "sudo add-apt-repository -y \"deb [arch=amd64] http://dl.google.com/linux/chrome/deb/ stable main\""
-      runCommand "sudo curl -L https://dl.google.com/linux/linux_signing_key.pub | sudo apt-key add -"
-      runCommand "sudo apt update"
+      runCommand "wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb"
+      runCommand "sudo dpkg -i google-chrome-stable_current_amd64.deb"
+      runCommand "sudo apt install -y -f"
+      runCommand "rm google-chrome-stable_current_amd64.deb"
     fi
     runCommand "sudo apt install -y google-chrome-stable"
     output "SUCCESS!"
@@ -241,7 +240,7 @@ fi
 
 ask="Install: vscode ide?"
 if continueYesNo "$ask"; then
-    runCommand "wget -0 vscode.deb https://go.microsoft.com/fwlink/?LinkID=760868"
+    runCommand "wget -0 vscode.deb https://update.code.visualstudio.com/latest/linux-deb-x64/stable"
     runCommand "sudo dpkg -i vscode.deb"
     runCommand "sudo apt install -y -f"
     runCommand "rm vscode.deb"
@@ -357,9 +356,9 @@ if continueYesNo "$ask"; then
         runCommand "mkdir -p $SETUP_PATH_TOOLS"
 
         # Get maven
-        runCommand "wget -qO- http://mirrors.m247.ro/apache/maven/maven-3/3.5.3/binaries/apache-maven-3.5.3-bin.tar.gz | tar xvz -C $SETUP_PATH_TOOLS"
+        runCommand "wget -qO- http://apache.javapipe.com/maven/maven-3/3.6.0/binaries/apache-maven-3.6.0-bin.tar.gz | tar xvz -C $SETUP_PATH_TOOLS"
         # Add maven to PATH
-        customizeBash "PATH=\$PATH:$SETUP_PATH_TOOLS/apache-maven-3.5.3/bin"
+        customizeBash "PATH=\$PATH:$SETUP_PATH_TOOLS/apache-maven-3.6.0/bin"
         customizeBash 'export MAVEN_OPTS="-Xmx512m"'
 
         # Get typesafe activator
@@ -411,6 +410,7 @@ if continueYesNo "$ask"; then
   fi
 fi
 
+output "Add all the bash customization that we did to the ~/.bashrc file ..."
 # Add all the bash customization that we did to the ~/.bashrc file.
 appendFileToBashProfile $BASH_CUSTOMIZATION_FILE
 
