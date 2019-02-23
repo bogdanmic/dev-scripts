@@ -249,6 +249,28 @@ if continueYesNo "$ask"; then
     runCommand "sudo apt install -y -f"
     runCommand "rm vscode.deb"
     output "SUCCESS!"
+    ask="Install: vscode ide - recommended extensions?"
+    if continueYesNo "$ask"; then
+      # This is a pack of extensions but for some reason did not work as expected
+      # Installing one by one seemed to work
+      runCommand "code --install-extension vscjava.vscode-java-pack"
+      # Same here
+      runCommand "code --install-extension Pivotal.vscode-boot-dev-pack"
+      runCommand "code --install-extension gabrielbb.vscode-lombok"
+      runCommand "code --install-extension eamodio.gitlens"
+      runCommand "code --install-extension CoenraadS.bracket-pair-colorizer-2"
+      # This does not work because it doesn't have the full name.
+      # And it's not on the marketplace either
+      # runCommand "code --install-extension vscode-icons"
+      # An alternative to the vscode-icons
+      runCommand "code --install-extension PKief.material-icon-theme"
+      runCommand "code --install-extension IBM.output-colorizer"
+      runCommand "code --install-extension streetsidesoftware.code-spell-checker"
+      runCommand "code --install-extension Gruntfuggly.todo-tree"
+      # runCommand "code --install-extension Shan.code-settings-sync"
+      runCommand "code --install-extension Angular.ng-template"
+      runCommand "code --install-extension GitHub.vscode-pull-request-github"
+    fi
 fi
 
 ask="Install: docker, docker-compose?"
