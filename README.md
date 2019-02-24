@@ -41,8 +41,6 @@ This script runs in multiple steps that are optional and some depend on others. 
 - Install **skype**
 - Install **dbeaver** (sql client)
 - Install **numix-icon-theme-circle** this is just a icon theme I like :)
-- Install **atom ide** a quite decent and lightweight IDE
-- Install **vscode ide** a quite decent and lightweight IDE and an alternative to **atom ide**
 - Install **docker, docker-compose**
   - Add aliases for docker consul(**dconsul,econsul**), docker postgresql(**dpostgres**), docker pgadmin4(**dpgadmin**)
   - Add aliases for docker mongo(**dmongo,emongo**)
@@ -59,6 +57,8 @@ This script runs in multiple steps that are optional and some depend on others. 
 - Add any private aliases found in the **aliases** file
 - Install **awscli**
   - Configure awscli
+- Install **atom ide** a quite decent and lightweight IDE
+- Install **vscode ide** a quite decent and lightweight IDE and an alternative to **atom ide** and some extensions for it. Beware that they might not all work as expected so please check it out. Also there is one extension that will sync your settings and your extensions to github so that one might just suffice.
 - Add all the bash customization that we did to the **~/.bashrc** file.
 - Update and Reboot
 

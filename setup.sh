@@ -233,45 +233,6 @@ if continueYesNo "$ask"; then
     output "SUCCESS!"
 fi
 
-ask="Install: atom ide?"
-if continueYesNo "$ask"; then
-    runCommand "wget https://atom.io/download/deb"
-    runCommand "sudo dpkg -i atom-amd64.deb"
-    runCommand "sudo apt install -y -f"
-    runCommand "rm atom-amd64.deb"
-    output "SUCCESS!"
-fi
-
-ask="Install: vscode ide?"
-if continueYesNo "$ask"; then
-    runCommand "wget -0 vscode.deb https://update.code.visualstudio.com/latest/linux-deb-x64/stable"
-    runCommand "sudo dpkg -i vscode.deb"
-    runCommand "sudo apt install -y -f"
-    runCommand "rm vscode.deb"
-    output "SUCCESS!"
-    ask="Install: vscode ide - recommended extensions?"
-    if continueYesNo "$ask"; then
-      # This is a pack of extensions but for some reason did not work as expected
-      # Installing one by one seemed to work
-      runCommand "code --install-extension vscjava.vscode-java-pack"
-      # Same here
-      runCommand "code --install-extension Pivotal.vscode-boot-dev-pack"
-      runCommand "code --install-extension gabrielbb.vscode-lombok"
-      runCommand "code --install-extension eamodio.gitlens"
-      runCommand "code --install-extension CoenraadS.bracket-pair-colorizer-2"
-      # This does not work because it doesn't have the full name.
-      # And it's not on the marketplace either
-      # runCommand "code --install-extension vscode-icons"
-      # An alternative to the vscode-icons
-      runCommand "code --install-extension PKief.material-icon-theme"
-      runCommand "code --install-extension IBM.output-colorizer"
-      runCommand "code --install-extension streetsidesoftware.code-spell-checker"
-      runCommand "code --install-extension Gruntfuggly.todo-tree"
-      # runCommand "code --install-extension Shan.code-settings-sync"
-      runCommand "code --install-extension Angular.ng-template"
-      runCommand "code --install-extension GitHub.vscode-pull-request-github"
-    fi
-fi
 
 ask="Install: docker, docker-compose?"
 if continueYesNo "$ask"; then
@@ -398,7 +359,7 @@ if continueYesNo "$ask"; then
     fi
     output "SUCCESS!"
 fi
-#
+
 ask="Install: nodejs?"
 if continueYesNo "$ask"; then
     runCommand "wget -qO- https://deb.nodesource.com/setup_8.x | sudo -E bash -"
@@ -434,6 +395,48 @@ if continueYesNo "$ask"; then
   if continueYesNo "$ask"; then
       runCommand "~/.local/bin/aws configure"
   fi
+fi
+
+# We install the IDEs last just o be sure we did not miss any dependency
+ask="Install: atom ide?"
+if continueYesNo "$ask"; then
+    runCommand "wget https://atom.io/download/deb"
+    runCommand "sudo dpkg -i atom-amd64.deb"
+    runCommand "sudo apt install -y -f"
+    runCommand "rm atom-amd64.deb"
+    output "SUCCESS!"
+fi
+
+# We install the IDE after installing Java because it's a prerequisite
+ask="Install: vscode ide?"
+if continueYesNo "$ask"; then
+    runCommand "wget -0 vscode.deb https://update.code.visualstudio.com/latest/linux-deb-x64/stable"
+    runCommand "sudo dpkg -i vscode.deb"
+    runCommand "sudo apt install -y -f"
+    runCommand "rm vscode.deb"
+    output "SUCCESS!"
+    ask="Install: vscode ide - recommended extensions?"
+    if continueYesNo "$ask"; then
+      # This is a pack of extensions but for some reason did not work as expected
+      # Installing one by one seemed to work
+      runCommand "code --install-extension vscjava.vscode-java-pack"
+      # Same here
+      runCommand "code --install-extension Pivotal.vscode-boot-dev-pack"
+      runCommand "code --install-extension gabrielbb.vscode-lombok"
+      runCommand "code --install-extension eamodio.gitlens"
+      runCommand "code --install-extension CoenraadS.bracket-pair-colorizer-2"
+      # This does not work because it doesn't have the full name.
+      # And it's not on the marketplace either
+      # runCommand "code --install-extension vscode-icons"
+      # An alternative to the vscode-icons. It looks better it seems
+      runCommand "code --install-extension PKief.material-icon-theme"
+      runCommand "code --install-extension IBM.output-colorizer"
+      runCommand "code --install-extension streetsidesoftware.code-spell-checker"
+      runCommand "code --install-extension Gruntfuggly.todo-tree"
+      runCommand "code --install-extension Shan.code-settings-sync"
+      runCommand "code --install-extension Angular.ng-template"
+      runCommand "code --install-extension GitHub.vscode-pull-request-github"
+    fi
 fi
 
 output "Add all the bash customization that we did to the ~/.bashrc file ..."
