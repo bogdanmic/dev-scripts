@@ -407,16 +407,6 @@ if continueYesNo "$ask"; then
 fi
 
 # We install the IDEs last just o be sure we did not miss any dependency
-ask="Install: Sublime Text 3?"
-if continueYesNo "$ask"; then
-    runCommand "wget -qO - https://download.sublimetext.com/sublimehq-pub.gpg | sudo apt-key add -"
-    runCommand "echo 'deb https://download.sublimetext.com/ apt/stable/' | sudo tee /etc/apt/sources.list.d/sublime-text.list"
-    runCommand "sudo apt-get update"
-    runCommand "sudo apt-get install sublime-text"
-    output "SUCCESS!"
-fi
-
-# We install the IDEs last just o be sure we did not miss any dependency
 ask="Install: atom ide?"
 if continueYesNo "$ask"; then
     runCommand "wget https://atom.io/download/deb"

@@ -57,6 +57,7 @@ This script runs in multiple steps that are optional and some depend on others. 
 - Add any private aliases found in the **aliases** file
 - Install **awscli**
   - Configure awscli
+- Install **slack desktop**
 - Install **atom ide** a quite decent and lightweight IDE
 - Install **vscode ide** a quite decent and lightweight IDE and an alternative to **atom ide** and some extensions for it. Beware that they might not all work as expected so please check it out. Also there is one extension that will sync your settings and your extensions to github so that one might just suffice.
 - Add all the bash customization that we did to the **~/.bashrc** file.
