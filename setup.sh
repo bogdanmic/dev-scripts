@@ -398,6 +398,25 @@ if continueYesNo "$ask"; then
 fi
 
 # We install the IDEs last just o be sure we did not miss any dependency
+ask="Install: slack-desktop?"
+if continueYesNo "$ask"; then
+    runCommand "sudo snap install slack --classic"
+    runCommand "sudo apt-get update"
+    runCommand "sudo apt-get upgrade slack-desktop"
+    output "SUCCESS!"
+fi
+
+# We install the IDEs last just o be sure we did not miss any dependency
+ask="Install: Sublime Text 3?"
+if continueYesNo "$ask"; then
+    runCommand "wget -qO - https://download.sublimetext.com/sublimehq-pub.gpg | sudo apt-key add -"
+    runCommand "echo 'deb https://download.sublimetext.com/ apt/stable/' | sudo tee /etc/apt/sources.list.d/sublime-text.list"
+    runCommand "sudo apt-get update"
+    runCommand "sudo apt-get install sublime-text"
+    output "SUCCESS!"
+fi
+
+# We install the IDEs last just o be sure we did not miss any dependency
 ask="Install: atom ide?"
 if continueYesNo "$ask"; then
     runCommand "wget https://atom.io/download/deb"
@@ -439,6 +458,7 @@ if continueYesNo "$ask"; then
     fi
 fi
 
+# final stuff
 output "Add all the bash customization that we did to the ~/.bashrc file ..."
 # Add all the bash customization that we did to the ~/.bashrc file.
 appendFileToBashProfile $BASH_CUSTOMIZATION_FILE
