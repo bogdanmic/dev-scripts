@@ -397,7 +397,7 @@ if continueYesNo "$ask"; then
   fi
 fi
 
-# We install the IDEs last just o be sure we did not miss any dependency
+# We install slack
 ask="Install: slack-desktop?"
 if continueYesNo "$ask"; then
     runCommand "sudo snap install slack --classic"
