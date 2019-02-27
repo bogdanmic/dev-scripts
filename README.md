@@ -118,7 +118,7 @@ $ cat DB_BACKUP_FILE.sql | emysqlrestore DB_NAME
 
 #### [ElasticSearch](https://www.elastic.co/products/elasticsearch/)
 - **delastic** - Starts ElasticSearch docker container
-- **dkibana** - Starts Kibana docker container. It can be accessed at: http://localhost:5601
+- **dkibana** - Starts Kibana docker container. It can be accessed at: [http://localhost:5601](http://localhost:5601)
 
 This is a strange case. We create two mounted volumes for this:
 - ***elasticsearch_home*** - here we will store the elasticsearch database

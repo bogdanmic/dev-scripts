@@ -325,7 +325,7 @@ if continueYesNo "$ask"; then
 
         ask="Install: Kibana (dkibana)?"
         if continueYesNo "$ask"; then
-            customizeBash "alias dkibana='docker run --rm -it --net=host --name=dev-kibana -e ELASTICSEARCH_URL=http://localhost:9200/ kibana:6.5.1'"
+            customizeBash "alias dkibana='docker run --rm -it --net=host --name=dev-kibana -e ELASTICSEARCH_URL=http://localhost:9200/ kibana:6.6.1'"
         fi
     fi
     output "SUCCESS!"
