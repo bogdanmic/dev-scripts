@@ -241,8 +241,8 @@ if continueYesNo "$ask"; then
     runCommand "sudo curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -"
     # In some cases if the Linux used is to fresh(new), then the docker package
     # might not be available yet so we can use the previous version one
-    runCommand "sudo add-apt-repository -y \"deb [arch=amd64] https://download.docker.com/linux/ubuntu artful stable\""
-    # sudo add-apt-repository -y "deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable"
+    # runCommand "sudo add-apt-repository -y \"deb [arch=amd64] https://download.docker.com/linux/ubuntu artful stable\""
+    sudo add-apt-repository -y "deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable"
     runCommand "sudo apt update"
     runCommand "sudo apt install -y docker-ce"
     runCommand "sudo usermod -aG docker $USER"
@@ -355,18 +355,19 @@ if continueYesNo "$ask"; then
         customizeBash "PATH=\$PATH:$SETUP_PATH_TOOLS/activator-1.3.12-minimal/bin"
 
         # Get JetBrains ToolBox app that makes it easier to update InteliJ ad get it.
-        runCommand "wget -qO- https://download.jetbrains.com/toolbox/jetbrains-toolbox-1.8.3678.tar.gz | tar xvz -C $SETUP_PATH_TOOLS"
+        runCommand "wget -qO- https://download.jetbrains.com/toolbox/jetbrains-toolbox-1.13.4801.tar.gz | tar xvz -C $SETUP_PATH_TOOLS"
     fi
     output "SUCCESS!"
 fi
 
 ask="Install: nodejs?"
 if continueYesNo "$ask"; then
-    runCommand "wget -qO- https://deb.nodesource.com/setup_8.x | sudo -E bash -"
+    runCommand "wget -qO- https://deb.nodesource.com/setup_10.x | sudo -E bash -"
     runCommand "sudo apt-get install -y nodejs"
     output "SUCCESS!"
 fi
 
+#  TODO: Yarn comes with node. Do we need this anymore?
 ask="Install: yarn?"
 if continueYesNo "$ask"; then
     runCommand "curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | sudo apt-key add -"
@@ -436,8 +437,19 @@ if continueYesNo "$ask"; then
       runCommand "code --install-extension Shan.code-settings-sync"
       runCommand "code --install-extension Angular.ng-template"
       runCommand "code --install-extension GitHub.vscode-pull-request-github"
+      runCommand "code --install-extension wayou.vscode-todo-highlight"
     fi
 fi
+
+
+ask="Install: Postman?"
+if continueYesNo "$ask"; then
+    runCommand "wget -qO- https://dl.pstmn.io/download/latest/linux64 | tar xvz -C $SETUP_PATH_TOOLS"
+    # Add postman to PATH
+    customizeBash "PATH=\$PATH:$SETUP_PATH_TOOLS/Postman"
+    output "SUCCESS!"
+fi
+
 
 output "Add all the bash customization that we did to the ~/.bashrc file ..."
 # Add all the bash customization that we did to the ~/.bashrc file.
