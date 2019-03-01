@@ -458,6 +458,14 @@ if continueYesNo "$ask"; then
     output "SUCCESS!"
 fi
 
+# We install slack
+ask="Install: slack-desktop?"
+if continueYesNo "$ask"; then
+    runCommand "sudo snap install slack --classic"
+    runCommand "sudo apt-get update"
+    runCommand "sudo apt-get upgrade slack-desktop"
+    output "SUCCESS!"
+fi
 
 output "Add all the bash customization that we did to the ~/.bashrc file ..."
 # Add all the bash customization that we did to the ~/.bashrc file.

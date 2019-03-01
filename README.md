@@ -72,6 +72,7 @@ as expected so please check it out. Also there is one extension that will sync
 your settings and your extensions to github so that one might just suffice.
 - Install **Postman** a rest client app. Can be invoked with Postman from a 
 terminal or it should appear in the star menu
+- Install **Slack App**
 - Add all the bash customization that we did to the **~/.bashrc** file.
 - Update and Reboot
 
