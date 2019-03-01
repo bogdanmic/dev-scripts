@@ -4,11 +4,16 @@ config-scripts
 This is collection of scripts that I use on my linux machine to configure my
 workspace. For now I use a **Ubuntu** distribution.
 
-The [**setup.sh**](setup.sh) script when running creates the following directory structure in a specified **SETUP_PATH**:
- - **tools** - if it requires to download certain dev tools, this is the folder used to store them. *e.g. maven, jetbrains-toolbox, etc.*
- - **private** - here we will store secrets like the GitHub ssh keys, bash customization file and if an **aliases** file is present with your personal aliases, it will be added to your ***bashrc*** profile
+The [**setup.sh**](setup.sh) script when running creates the following directory 
+structure in a specified **SETUP_PATH**:
+ - **tools** - if it requires to download certain dev tools, this is the folder 
+ used to store them. *e.g. maven, jetbrains-toolbox, etc.*
+ - **private** - here we will store secrets like the GitHub ssh keys, bash 
+ customization file and if an **aliases** file is present with your personal 
+ aliases, it will be added to your ***bashrc*** profile
  - **work** - here you will find clones of all your GitHub repositories
- - **containers** - this will be the home directory where any **docker** services used will hold their data *(e.g. dpostgres will store the databases there)*
+ - **containers** - this will be the home directory where any **docker** services 
+ used will hold their data *(e.g. dpostgres will store the databases there)*
 
 Get started
 ------------
@@ -23,14 +28,16 @@ Get started
  $ cd config-scripts
  $ ./setup.sh
  ```
-If you want to go through the steps without any changes to your computer you can run it like this
+If you want to go through the steps without any changes to your computer you can 
+run it like this
  ```bash
  $ ./setup.sh --dry-run
  ```
 
 What does it do?
 ------------
-This script runs in multiple steps that are optional and some depend on others. These steps are in order with their substeps:
+This script runs in multiple steps that are optional and some depend on others. 
+These steps are in order with their substeps:
 - Install **git, git-flow**
   - Configure  GIT
   - Setup GitHub SSH key
@@ -42,7 +49,8 @@ This script runs in multiple steps that are optional and some depend on others. 
 - Install **dbeaver** (sql client)
 - Install **numix-icon-theme-circle** this is just a icon theme I like :)
 - Install **docker, docker-compose**
-  - Add aliases for docker consul(**dconsul,econsul**), docker postgresql(**dpostgres**), docker pgadmin4(**dpgadmin**)
+  - Add aliases for docker consul(**dconsul,econsul**), 
+  docker postgresql(**dpostgres**), docker pgadmin4(**dpgadmin**)
   - Add aliases for docker mongo(**dmongo,emongo**)
     - Install **MongoDB Compass** (UI for MongoDB)
   - Add aliases for docker rabbitmq(**drabbit**)
@@ -58,8 +66,12 @@ This script runs in multiple steps that are optional and some depend on others. 
 - Install **awscli**
   - Configure awscli
 - Install **atom ide** a quite decent and lightweight IDE
-- Install **vscode ide** a quite decent and lightweight IDE and an alternative to **atom ide** and some extensions for it. Beware that they might not all work as expected so please check it out. Also there is one extension that will sync your settings and your extensions to github so that one might just suffice.
-- Install **Postman** a rest client app
+- Install **vscode ide** a quite decent and lightweight IDE and an alternative 
+to **atom ide** and some extensions for it. Beware that they might not all work 
+as expected so please check it out. Also there is one extension that will sync 
+your settings and your extensions to github so that one might just suffice.
+- Install **Postman** a rest client app. Can be invoked with Postman from a 
+terminal or it should appear in the star menu
 - Add all the bash customization that we did to the **~/.bashrc** file.
 - Update and Reboot
 
@@ -83,7 +95,8 @@ $  econsul members
 # To restore a database dump
 $ cat DB_BACKUP_FILE | epsql DB_NAME
 ```
-- **dpgadmin** - Starts PgAdmin in a docker container. It can be accessed at: http://0.0.0.0:5050/browser/
+- **dpgadmin** - Starts PgAdmin in a docker container. It can be accessed at: 
+[http://0.0.0.0:5050/browser/](http://0.0.0.0:5050/browser/)
 
 #### [MongoDb](https://www.mongodb.com/)
 - **dmongo** - Starts mongodb docker container
@@ -102,7 +115,9 @@ $ cat  DB_BACKUP_FILE.gz | emongorestore "OLD_DB_NAME.*" --nsTo "NEW_DB_NAME.*"
 ```
 
 #### [RabbitMQ](https://www.rabbitmq.com/)
-- **drabbit** - Starts the rabbitmq docker container. It's started with the management console enabled. You can access it at http://localhost:15672 with default user/pass **guest/guest**
+- **drabbit** - Starts the rabbitmq docker container. It's started with the 
+management console enabled. You can access it at [http://localhost:15672](http://localhost:15672) 
+with default user/pass **guest/guest**
 
 #### [MySQL](https://www.mysql.com/) 5.7 (for now)
 - **dmysql** - Starts the mysql docker container
@@ -119,13 +134,15 @@ $ cat DB_BACKUP_FILE.sql | emysqlrestore DB_NAME
 
 #### [ElasticSearch](https://www.elastic.co/products/elasticsearch/)
 - **delastic** - Starts ElasticSearch docker container
-- **dkibana** - Starts Kibana docker container. It can be accessed at: [http://localhost:5601](http://localhost:5601)
+- **dkibana** - Starts Kibana docker container. It can be accessed at: 
+[http://localhost:5601](http://localhost:5601)
 
 This is a strange case. We create two mounted volumes for this:
 - ***elasticsearch_home*** - here we will store the elasticsearch database
 - ***elasticsearch_backups*** - here we will store snapshots(backups) of our indices
 
-To view all available indices in your elastic search access http://localhost:9200/_cat/indices?pretty
+To view all available indices in your elastic search access 
+[http://localhost:9200/_cat/indices?pretty](http://localhost:9200/_cat/indices?pretty)
 
 Now we can create snapshots for our indices:
 ```bash

@@ -441,12 +441,20 @@ if continueYesNo "$ask"; then
     fi
 fi
 
-
 ask="Install: Postman?"
 if continueYesNo "$ask"; then
     runCommand "wget -qO- https://dl.pstmn.io/download/latest/linux64 | tar xvz -C $SETUP_PATH_TOOLS"
     # Add postman to PATH
     customizeBash "PATH=\$PATH:$SETUP_PATH_TOOLS/Postman"
+    runCommand "echo -e \"[Desktop Entry]\n
+      Version=1.0\n
+      Type=Application\n
+      Terminal=false\n
+      Exec=$SETUP_PATH_TOOLS/Postman/Postman\n
+      Name=Postman\n
+      Comment=Postman\n
+      Icon=$SETUP_PATH_TOOLS/Postman/app/resources/app/assets/icon.png\" > $SETUP_PATH_TOOLS/Postman/Postman.desktop"
+    runCommand "sudo ln -s $SETUP_PATH_TOOLS/Postman/Postman.desktop ~/.local/share/applications/"
     output "SUCCESS!"
 fi
 
