@@ -242,7 +242,7 @@ if continueYesNo "$ask"; then
     # In some cases if the Linux used is to fresh(new), then the docker package
     # might not be available yet so we can use the previous version one
     # runCommand "sudo add-apt-repository -y \"deb [arch=amd64] https://download.docker.com/linux/ubuntu artful stable\""
-    sudo add-apt-repository -y "deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable"
+    runCommand "sudo add-apt-repository -y \"deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable\""
     runCommand "sudo apt update"
     runCommand "sudo apt install -y docker-ce"
     runCommand "sudo usermod -aG docker $USER"
