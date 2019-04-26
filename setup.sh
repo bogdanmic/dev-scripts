@@ -328,15 +328,15 @@ if continueYesNo "$ask"; then
     output "SUCCESS!"
 fi
 
-ask="Install: openjdk-12? (java8 from oracle can't be installed with script ATM)"
+ask="Install: openjdk-11? (java8 from oracle can't be installed with script ATM)"
 if continueYesNo "$ask"; then
     # TODO: ppa:webupd8team/java is not available ATM because of some Oracle licences stuff starting with Ubuntu 19.04.
     # runCommand "sudo add-apt-repository -y ppa:webupd8team/java"
     # runCommand "sudo apt update"
     # runCommand "sudo apt install -y oracle-java8-installer"
-    runCommand "sudo add-apt-repository -y ppa:openjdk-r/ppa"
-    runCommand "sudo apt update"
-    runCommand "sudo apt-get install -y openjdk-12-jdk"
+    # runCommand "sudo add-apt-repository -y ppa:openjdk-r/ppa"
+    # runCommand "sudo apt update"
+    runCommand "sudo apt install -y openjdk-11-jdk"
 
     ask="Install: maven, activator, JetBrains ToolBox?"
     if continueYesNo "$ask"; then
