@@ -231,7 +231,6 @@ if continueYesNo "$ask"; then
     output "SUCCESS!"
 fi
 
-
 ask="Install: docker, docker-compose?"
 if continueYesNo "$ask"; then
     # Install docker
@@ -349,7 +348,7 @@ if continueYesNo "$ask"; then
         customizeBash 'export MAVEN_OPTS="-Xmx512m"'
 
         # Get typesafe activator
-        runCommand "wget  http://downloads.typesafe.com/typesafe-activator/1.3.12/typesafe-activator-1.3.12-minimal.zip -P $SETUP_PATH_TOOLS"
+        runCommand "wget http://downloads.typesafe.com/typesafe-activator/1.3.12/typesafe-activator-1.3.12-minimal.zip -P $SETUP_PATH_TOOLS"
         runCommand "unzip -o $SETUP_PATH_TOOLS/typesafe-activator-1.3.12-minimal.zip -d $SETUP_PATH_TOOLS && rm $SETUP_PATH_TOOLS/typesafe-activator-1.3.12-minimal.zip"
         # Add activator to PATH
         customizeBash "PATH=\$PATH:$SETUP_PATH_TOOLS/activator-1.3.12-minimal/bin"
@@ -364,6 +363,15 @@ ask="Install: nodejs?"
 if continueYesNo "$ask"; then
     runCommand "wget -qO- https://deb.nodesource.com/setup_10.x | sudo -E bash -"
     runCommand "sudo apt-get install -y nodejs"
+    output "SUCCESS!"
+fi
+
+ask="Install: Tilix terminal?"
+if continueYesNo "$ask"; then
+    runCommand "sudo add-apt-repository -y ppa:webupd8team/terminix"
+    runCommand "sudo apt-get update"
+    runCommand "sudo apt-get install tilix"
+    runCommand "sudo update-alternatives --config x-terminal-emulator"
     output "SUCCESS!"
 fi
 
