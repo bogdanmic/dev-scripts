@@ -161,7 +161,7 @@ if continueYesNo "$ask"; then
         fi
     fi
 
-    output '!!! This might take quite a while. All = max 200 !!!'
+    output '!!! This might take quite a while. All = max 300 (3 requests, each time input the password)!!!'
     ask="Clone all your GitHub repos?"
     if continueYesNo "$ask"; then
         runCommand "mkdir -p $SETUP_PATH_WORK"
@@ -170,7 +170,9 @@ if continueYesNo "$ask"; then
         github_username=$(askInput "Enter your GitHub user.name" $github_username)
 
         if ! $DRY_RUN; then
-          curl -u "$github_username" "https://api.github.com/user/repos?page=1&per_page=200" | grep -e 'ssh_url*' | cut -d \" -f 4 | xargs -L1 git clone
+          curl -u "$github_username" "https://api.github.com/user/repos?page=1&per_page=100" | grep -e 'ssh_url*' | cut -d \" -f 4 | xargs -L1 git clone
+          curl -u "$github_username" "https://api.github.com/user/repos?page=2&per_page=100" | grep -e 'ssh_url*' | cut -d \" -f 4 | xargs -L1 git clone
+          curl -u "$github_username" "https://api.github.com/user/repos?page=3&per_page=100" | grep -e 'ssh_url*' | cut -d \" -f 4 | xargs -L1 git clone
         else
           runCommand "Some complicated command that clones your github  repositories."
         fi
@@ -195,15 +197,10 @@ fi
 
 ask="Install: chrome?"
 if continueYesNo "$ask"; then
-    if apt-cache show google-chrome-stable >> /dev/null; then
-      output "google-chrome-stable package exists. Installing ..."
-    else
-      runCommand "wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb"
-      runCommand "sudo dpkg -i google-chrome-stable_current_amd64.deb"
-      runCommand "sudo apt install -y -f"
-      runCommand "rm google-chrome-stable_current_amd64.deb"
-    fi
-    runCommand "sudo apt install -y google-chrome-stable"
+    runCommand "wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb"
+    runCommand "sudo dpkg -i google-chrome-stable_current_amd64.deb"
+    runCommand "sudo apt install -y -f"
+    runCommand "rm google-chrome-stable_current_amd64.deb"
     output "SUCCESS!"
 fi
 
@@ -225,6 +222,7 @@ if continueYesNo "$ask"; then
     output "SUCCESS!"
 fi
 
+#TODO: Maybe loose this???
 ask="Install: numix-icon-theme-circle?"
 if continueYesNo "$ask"; then
     runCommand "sudo add-apt-repository -y ppa:numix/ppa"
@@ -241,8 +239,8 @@ if continueYesNo "$ask"; then
     runCommand "sudo curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -"
     # In some cases if the Linux used is to fresh(new), then the docker package
     # might not be available yet so we can use the previous version one
-    # runCommand "sudo add-apt-repository -y \"deb [arch=amd64] https://download.docker.com/linux/ubuntu artful stable\""
-    runCommand "sudo add-apt-repository -y \"deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable\""
+     runCommand "sudo add-apt-repository -y \"deb [arch=amd64] https://download.docker.com/linux/ubuntu cosmic stable\""
+#    runCommand "sudo add-apt-repository -y \"deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable\""
     runCommand "sudo apt update"
     runCommand "sudo apt install -y docker-ce"
     runCommand "sudo usermod -aG docker $USER"
@@ -282,19 +280,19 @@ if continueYesNo "$ask"; then
         customizeBash "alias emongorestore='docker exec -i dev-mongo mongorestore --gzip --archive'"
         customizeBash "alias emongodump='docker exec -i dev-mongo mongodump --archive --gzip --db'"
 
+        # TODO: Upgrade this when it's fixed. It's something from their side. Version 1.18 might work as expected.
         ask="Install: MongoDB Compass (UI for MongoDB)?"
         if continueYesNo "$ask"; then
-            runCommand "wget https://downloads.mongodb.com/compass/mongodb-compass_1.15.4_amd64.deb"
-            runCommand "sudo dpkg -i mongodb-compass_1.15.4_amd64.deb"
+            runCommand "wget -O mongodb-compass_amd64.deb https://downloads.mongodb.com/compass/mongodb-compass_1.17.0_amd64.deb"
+            runCommand "sudo dpkg -i mongodb-compass_amd64.deb"
             runCommand "sudo apt install -y -f"
-            runCommand "rm mongodb-compass_1.15.4_amd64.deb"
+            runCommand "rm mongodb-compass_amd64.deb"
         fi
     fi
 
     ask="Add aliases for docker rabbitmq(drabbit)?"
     if continueYesNo "$ask"; then
         runCommand "mkdir -p $SETUP_PATH_CONTAINERS"
-
         customizeBash "alias drabbit='docker run --rm -it --hostname=dev-rabbitmq -p 15672:15672 -p 5672:5672 --name dev-rabbitmq -v $SETUP_PATH_CONTAINERS/rabbitmq_home:/var/lib/rabbitmq rabbitmq:management-alpine'"
     fi
 
@@ -308,19 +306,19 @@ if continueYesNo "$ask"; then
         customizeBash "alias emysqlrestore='docker exec -i dev-mysql mysql -uroot -p$mysqlrootpassword'"
         customizeBash "alias emysqldump='docker exec -i dev-mysql mysqldump -uroot -p$mysqlrootpassword'"
 
+        #TODO: THis does not work because of some missing dependencies.At least not on kubuntu 19.04
         ask="Install: MySql Workbench (UI for Mysql)?"
         if continueYesNo "$ask"; then
-            runCommand "wget https://dev.mysql.com/get/Downloads/MySQLGUITools/mysql-workbench-community_8.0.13-1ubuntu18.04_amd64.deb"
-            runCommand "sudo dpkg -i mysql-workbench-community_8.0.13-1ubuntu18.04_amd64.deb"
+            runCommand "wget -O mysql-workbench-community_amd64.deb https://cdn.mysql.com//Downloads/MySQLGUITools/mysql-workbench-community_8.0.16-1ubuntu18.04_amd64.deb"
+            runCommand "sudo dpkg -i mysql-workbench-community_amd64.deb"
             runCommand "sudo apt install -y -f"
-            runCommand "rm mysql-workbench-community_8.0.13-1ubuntu18.04_amd64.deb"
+            runCommand "rm mysql-workbench-community_amd64.deb"
         fi
     fi
 
     ask="Add aliases for docker elasticsearch(delastic)?"
     if continueYesNo "$ask"; then
         runCommand "mkdir -p $SETUP_PATH_CONTAINERS"
-
         customizeBash "alias delastic='docker run --rm -it -p 9200:9200 -p 9300:9300 --name dev-elasticsearch -e cluster.name=dev-elasticsearch -e discovery.type=single-node -e path.repo=/usr/share/elasticsearch/backups -v $SETUP_PATH_CONTAINERS/elasticsearch_home:/usr/share/elasticsearch/data -v $SETUP_PATH_CONTAINERS/elasticsearch_backups:/usr/share/elasticsearch/backups elasticsearch:6.6.1'"
 
         ask="Install: Kibana (dkibana)?"
@@ -331,11 +329,13 @@ if continueYesNo "$ask"; then
     output "SUCCESS!"
 fi
 
-ask="Install: java8?"
+ask="Install: openjdk-12? (java8 from oracle can't be installed with script ATM)"
 if continueYesNo "$ask"; then
-    runCommand "sudo add-apt-repository -y ppa:webupd8team/java"
-    runCommand "sudo apt update"
-    runCommand "sudo apt install -y oracle-java8-installer"
+# TODO: ppa:webupd8team/java is not available ATM because of some Oracle licences stuff starting with Ubuntu 19.04.
+#    runCommand "sudo add-apt-repository -y ppa:webupd8team/java"
+#    runCommand "sudo apt update"
+#    runCommand "sudo apt install -y oracle-java8-installer"
+    runCommand "sudo apt-get install openjdk-12-jdk"
 
     ask="Install: maven, activator, JetBrains ToolBox?"
     if continueYesNo "$ask"; then
@@ -367,14 +367,14 @@ if continueYesNo "$ask"; then
     output "SUCCESS!"
 fi
 
-#  TODO: Yarn comes with node. Do we need this anymore?
-ask="Install: yarn?"
-if continueYesNo "$ask"; then
-    runCommand "curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | sudo apt-key add -"
-    runCommand "echo \"deb https://dl.yarnpkg.com/debian/ stable main\" | sudo tee /etc/apt/sources.list.d/yarn.list"
-    runCommand "sudo apt update && sudo apt install -y yarn"
-    output "SUCCESS!"
-fi
+##  TODO: Yarn comes with node. Do we need this anymore?
+#ask="Install: yarn?"
+#if continueYesNo "$ask"; then
+#    runCommand "curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | sudo apt-key add -"
+#    runCommand "echo \"deb https://dl.yarnpkg.com/debian/ stable main\" | sudo tee /etc/apt/sources.list.d/yarn.list"
+#    runCommand "sudo apt update && sudo apt install -y yarn"
+#    output "SUCCESS!"
+#fi
 
 ask="Add any private aliases found in ${BASH_PRIVATE_FILE} file?"
 if continueYesNo "$ask"; then
@@ -398,10 +398,11 @@ if continueYesNo "$ask"; then
   fi
 fi
 
+# TODO: Maybe remove this. Sadly VsCode is more mature for my needs.
 # We install the IDEs last just o be sure we did not miss any dependency
 ask="Install: atom ide?"
 if continueYesNo "$ask"; then
-    runCommand "wget https://atom.io/download/deb"
+    runCommand "wget -O atom-amd64.deb https://atom.io/download/deb"
     runCommand "sudo dpkg -i atom-amd64.deb"
     runCommand "sudo apt install -y -f"
     runCommand "rm atom-amd64.deb"
@@ -411,33 +412,14 @@ fi
 # We install the IDE after installing Java because it's a prerequisite
 ask="Install: vscode ide?"
 if continueYesNo "$ask"; then
-    runCommand "wget -0 vscode.deb https://update.code.visualstudio.com/latest/linux-deb-x64/stable"
+    runCommand "wget -O vscode.deb https://update.code.visualstudio.com/latest/linux-deb-x64/stable"
     runCommand "sudo dpkg -i vscode.deb"
     runCommand "sudo apt install -y -f"
     runCommand "rm vscode.deb"
     output "SUCCESS!"
-    ask="Install: vscode ide - recommended extensions?"
+    ask="Install: vscode ide - settings sync extension?"
     if continueYesNo "$ask"; then
-      # This is a pack of extensions but for some reason did not work as expected
-      # Installing one by one seemed to work
-      runCommand "code --install-extension vscjava.vscode-java-pack"
-      # Same here
-      runCommand "code --install-extension Pivotal.vscode-boot-dev-pack"
-      runCommand "code --install-extension gabrielbb.vscode-lombok"
-      runCommand "code --install-extension eamodio.gitlens"
-      runCommand "code --install-extension CoenraadS.bracket-pair-colorizer-2"
-      # This does not work because it doesn't have the full name.
-      # And it's not on the marketplace either
-      # runCommand "code --install-extension vscode-icons"
-      # An alternative to the vscode-icons. It looks better it seems
-      runCommand "code --install-extension PKief.material-icon-theme"
-      runCommand "code --install-extension IBM.output-colorizer"
-      runCommand "code --install-extension streetsidesoftware.code-spell-checker"
-      runCommand "code --install-extension Gruntfuggly.todo-tree"
       runCommand "code --install-extension Shan.code-settings-sync"
-      runCommand "code --install-extension Angular.ng-template"
-      runCommand "code --install-extension GitHub.vscode-pull-request-github"
-      runCommand "code --install-extension wayou.vscode-todo-highlight"
     fi
 fi
 
@@ -453,8 +435,9 @@ if continueYesNo "$ask"; then
       Exec=$SETUP_PATH_TOOLS/Postman/Postman\n
       Name=Postman\n
       Comment=Postman\n
-      Icon=$SETUP_PATH_TOOLS/Postman/app/resources/app/assets/icon.png\" > $SETUP_PATH_TOOLS/Postman/Postman.desktop"
-    runCommand "sudo ln -s $SETUP_PATH_TOOLS/Postman/Postman.desktop ~/.local/share/applications/"
+      Icon=$SETUP_PATH_TOOLS/Postman/app/resources/app/assets/icon.png\" > $SETUP_PATH_TOOLS/Postman.desktop"
+    runCommand "mkdir -p ~/.local/share/applications/"
+    runCommand "sudo ln -s $SETUP_PATH_TOOLS/Postman.desktop ~/.local/share/applications/"
     output "SUCCESS!"
 fi
 
