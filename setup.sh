@@ -469,8 +469,8 @@ appendFileToBashProfile $BASH_CUSTOMIZATION_FILE
 
 output "Cheching for updates ..."
 runCommand "sudo apt update"
-runCommand "sudo apt -y upgrade"
-runCommand "sudo apt -y autoremove"
+runCommand "sudo apt upgrade -y"
+runCommand "sudo apt autoremove -y"
 
 ask="Reboot?"
 if continueYesNo "$ask"; then
