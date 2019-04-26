@@ -452,10 +452,10 @@ fi
 ask="Install: awscli?"
 if continueYesNo "$ask"; then
   #TODO: This needs some more testing.
-  runCommand "cd ~"
   runCommand "curl -O https://bootstrap.pypa.io/get-pip.py"
   runCommand "python3 get-pip.py --user"
-  runCommand "pip3 install awscli --upgrade --user"
+  runCommand "~/.local/bin/pip3 install awscli --upgrade --user"
+  runCommand "rm get-pip.py"
   customizeBash "PATH=\$PATH:~/.local/bin"
 
   ask="Configure awscli?"
