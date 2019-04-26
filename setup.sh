@@ -189,9 +189,9 @@ if continueYesNo "$ask"; then
     output "SUCCESS!"
 fi
 
-ask="Install: filezilla, vlc, virtualbox, firefox, vim, net-tools?"
+ask="Install: filezilla, vlc, firefox, vim, net-tools?"
 if continueYesNo "$ask"; then
-    runCommand "sudo apt install -y filezilla vlc virtualbox firefox vim net-tools"
+    runCommand "sudo apt install -y filezilla vlc firefox vim net-tools"
     output "SUCCESS!"
 fi
 
