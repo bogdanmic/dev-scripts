@@ -453,9 +453,13 @@ fi
 # We install slack
 ask="Install: slack-desktop?"
 if continueYesNo "$ask"; then
-    runCommand "sudo snap install slack --classic"
-    runCommand "sudo apt-get update"
-    runCommand "sudo apt-get upgrade slack-desktop"
+    # runCommand "sudo snap install slack --classic"
+    # runCommand "sudo apt-get update"
+    # runCommand "sudo apt-get upgrade slack-desktop"
+    runCommand "wget -O slack-desktop.deb https://downloads.slack-edge.com/linux_releases/slack-desktop-3.3.8-amd64.deb"
+    runCommand "sudo dpkg -i slack-desktop.deb"
+    runCommand "sudo apt install -y -f"
+    runCommand "rm slack-desktop.deb"
     output "SUCCESS!"
 fi
 
