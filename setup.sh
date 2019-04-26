@@ -121,6 +121,8 @@ if ! continueYesNo "$ask"; then
     exit 1
 fi
 
+runCommand "sudo apt install -y curl"
+
 BASH_CUSTOMIZATION_FILE=$SETUP_PATH_PRIVATE/bash_customization
 BASH_PRIVATE_FILE=$SETUP_PATH_PRIVATE/aliases
 
@@ -405,17 +407,6 @@ if continueYesNo "$ask"; then
   if continueYesNo "$ask"; then
       runCommand "~/.local/bin/aws configure"
   fi
-fi
-
-# TODO: Maybe remove this. Sadly VsCode is more mature for my needs.
-# We install the IDEs last just o be sure we did not miss any dependency
-ask="Install: atom ide?"
-if continueYesNo "$ask"; then
-    runCommand "wget -O atom-amd64.deb https://atom.io/download/deb"
-    runCommand "sudo dpkg -i atom-amd64.deb"
-    runCommand "sudo apt install -y -f"
-    runCommand "rm atom-amd64.deb"
-    output "SUCCESS!"
 fi
 
 # We install the IDE after installing Java because it's a prerequisite
