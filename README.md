@@ -2,7 +2,7 @@ config-scripts
 ==============
 
 This is collection of scripts that I use on my linux machine to configure my
-workspace. For now I use a **Ubuntu** distribution.
+workspace. For now I use a **Ubuntu** distribution. It should work fairly decent with all **Ubuntu** based distros.
 
 The [**setup.sh**](setup.sh) script when running creates the following directory 
 structure in a specified **SETUP_PATH**:
@@ -41,13 +41,14 @@ These steps are in order with their substeps:
 - Install **git, git-flow**
   - Configure  GIT
   - Setup GitHub SSH key
-  - Clone all your GitHub repositories (max 200)
+  - Clone all your GitHub repositories (3 api requests of 100 each)
   - Configure your Terminal prompt for GIT
-- Install **filezilla, vlc, virtualbox, firefox, vim, net-tools**
+- Install **filezilla, vlc, firefox, vim, net-tools**
 - Install **chrome** browser
 - Install **skype**
 - Install **dbeaver** (sql client)
-- Install **numix-icon-theme-circle** this is just a icon theme I like :)
+- Install **numix-icon-theme-circle** this is just a icon theme I like, suited for a dock setup
+- Install **papirus-icon-theme** this is just a icon theme I like, suited for a classic setup
 - Install **docker, docker-compose**
   - Add aliases for docker consul(**dconsul,econsul**), 
   docker postgresql(**dpostgres**), docker pgadmin4(**dpgadmin**)
@@ -57,22 +58,20 @@ These steps are in order with their substeps:
   - Add aliases for docker mysql 5.7(**dmysql**)
     - Install: **MySql Workbench** (UI for Mysql)
   - Add aliases for docker elasticsearch(**delastic**),  docker kibana(**dkibana**)
-- Install **java8**
+- Install **java11 (openjdk-11)**. We installed java8 before Orachle changed his licence policies.
   - Install **maven, activator, JetBrains ToolBox** (makes it easier to install and
   update JetBrains products)
 - Install **nodejs**
-- Install **yarn** TODO: This might not be needed if it comes directly with node
+  - Install **yarn**
+- Install **Tilix** tiling terminal emulator
 - Add any private aliases found in the **aliases** file
-- Install **awscli**
-  - Configure awscli
-- Install **atom ide** a quite decent and lightweight IDE
 - Install **vscode ide** a quite decent and lightweight IDE and an alternative 
-to **atom ide** and some extensions for it. Beware that they might not all work 
-as expected so please check it out. Also there is one extension that will sync 
-your settings and your extensions to github so that one might just suffice.
+to **atom ide**. Add a extension for **Settings sync** to github.
 - Install **Postman** a rest client app. Can be invoked with Postman from a 
-terminal or it should appear in the star menu
+terminal or it should appear in the start menu.
 - Install **Slack App**
+- Install **awscli**. This one needs a bit more testing...
+  - Configure awscli
 - Add all the bash customization that we did to the **~/.bashrc** file.
 - Update and Reboot
 
