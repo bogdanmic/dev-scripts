@@ -224,12 +224,19 @@ if continueYesNo "$ask"; then
     output "SUCCESS!"
 fi
 
-#TODO: Maybe loose this???
 ask="Install: numix-icon-theme-circle?"
 if continueYesNo "$ask"; then
     runCommand "sudo add-apt-repository -y ppa:numix/ppa"
     runCommand "sudo apt update"
     runCommand "sudo apt install -y numix-icon-theme-circle"
+    output "SUCCESS!"
+fi
+
+ask="Install: papirus-icon-theme?"
+if continueYesNo "$ask"; then
+    runCommand "sudo add-apt-repository -y ppa:papirus/papirus"
+    runCommand "sudo apt update"
+    runCommand "sudo apt install -y papirus-icon-theme"
     output "SUCCESS!"
 fi
 
@@ -397,18 +404,6 @@ if continueYesNo "$ask"; then
     fi
 fi
 
-ask="Install: awscli?"
-if continueYesNo "$ask"; then
-  runCommand "sudo apt install -y python-pip"
-  runCommand "pip install awscli --upgrade --user"
-  customizeBash "PATH=\$PATH:~/.local/bin"
-
-  ask="Configure awscli?"
-  if continueYesNo "$ask"; then
-      runCommand "~/.local/bin/aws configure"
-  fi
-fi
-
 # We install the IDE after installing Java because it's a prerequisite
 ask="Install: vscode ide?"
 if continueYesNo "$ask"; then
@@ -452,6 +447,21 @@ if continueYesNo "$ask"; then
     runCommand "sudo apt install -y -f"
     runCommand "rm slack-desktop.deb"
     output "SUCCESS!"
+fi
+
+ask="Install: awscli?"
+if continueYesNo "$ask"; then
+  #TODO: This needs some more testing.
+  runCommand "cd ~"
+  runCommand "curl -O https://bootstrap.pypa.io/get-pip.py"
+  runCommand "python3 get-pip.py --user"
+  runCommand "pip3 install awscli --upgrade --user"
+  customizeBash "PATH=\$PATH:~/.local/bin"
+
+  ask="Configure awscli?"
+  if continueYesNo "$ask"; then
+      runCommand "~/.local/bin/aws configure"
+  fi
 fi
 
 output "Add all the bash customization that we did to the ~/.bashrc file ..."
