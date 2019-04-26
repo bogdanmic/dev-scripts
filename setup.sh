@@ -334,7 +334,7 @@ if continueYesNo "$ask"; then
 #    runCommand "sudo add-apt-repository -y ppa:webupd8team/java"
 #    runCommand "sudo apt update"
 #    runCommand "sudo apt install -y oracle-java8-installer"
-    runCommand "sudo apt-get install openjdk-12-jdk"
+    runCommand "sudo apt-get install -y openjdk-12-jdk"
 
     ask="Install: maven, activator, JetBrains ToolBox?"
     if continueYesNo "$ask"; then
@@ -364,25 +364,24 @@ if continueYesNo "$ask"; then
     runCommand "wget -qO- https://deb.nodesource.com/setup_10.x | sudo -E bash -"
     runCommand "sudo apt-get install -y nodejs"
     output "SUCCESS!"
+
+    ask="Install: yarn?"
+    if continueYesNo "$ask"; then
+        runCommand "curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | sudo apt-key add -"
+        runCommand "echo \"deb https://dl.yarnpkg.com/debian/ stable main\" | sudo tee /etc/apt/sources.list.d/yarn.list"
+        runCommand "sudo apt update && sudo apt install -y yarn"
+        output "SUCCESS!"
+    fi
 fi
 
 ask="Install: Tilix terminal?"
 if continueYesNo "$ask"; then
     runCommand "sudo add-apt-repository -y ppa:webupd8team/terminix"
     runCommand "sudo apt-get update"
-    runCommand "sudo apt-get install tilix"
+    runCommand "sudo apt-get install -y tilix"
     runCommand "sudo update-alternatives --config x-terminal-emulator"
     output "SUCCESS!"
 fi
-
-##  TODO: Yarn comes with node. Do we need this anymore?
-#ask="Install: yarn?"
-#if continueYesNo "$ask"; then
-#    runCommand "curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | sudo apt-key add -"
-#    runCommand "echo \"deb https://dl.yarnpkg.com/debian/ stable main\" | sudo tee /etc/apt/sources.list.d/yarn.list"
-#    runCommand "sudo apt update && sudo apt install -y yarn"
-#    output "SUCCESS!"
-#fi
 
 ask="Add any private aliases found in ${BASH_PRIVATE_FILE} file?"
 if continueYesNo "$ask"; then
