@@ -345,7 +345,7 @@ if continueYesNo "$ask"; then
     # runCommand "sudo apt install -y oracle-java8-installer"
     # runCommand "sudo add-apt-repository -y ppa:openjdk-r/ppa"
     # runCommand "sudo apt update"
-    runCommand "sudo apt install -y openjdk-11-jdk"
+    runCommand "sudo apt install -y openjdk-11-jdk openjdk-8-jdk"
 
     ask="Install: maven, activator, JetBrains ToolBox?"
     if continueYesNo "$ask"; then
