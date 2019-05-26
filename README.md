@@ -58,7 +58,7 @@ These steps are in order with their substeps:
   - Add aliases for docker mysql 5.7(**dmysql**)
     - Install: **MySql Workbench** (UI for Mysql)
   - Add aliases for docker elasticsearch(**delastic**),  docker kibana(**dkibana**)
-- Install **java11 (openjdk-11)**. We installed java8 before Orachle changed his licence policies.
+- Install **java11 and java8 (openjdk-11-jdk openjdk-8-jdk)**. We installed java8 before Oracle changed his licence policies. To change from one version of Java to another ```$ sudo update-alternatives --config java```
   - Install **maven, activator, JetBrains ToolBox** (makes it easier to install and
   update JetBrains products)
 - Install **nodejs**
