@@ -106,14 +106,12 @@ fi
 
 # Define paths that we will use (All these have the slash because we added above)
 SETUP_PATH_WORK=$(realpath ${SETUP_PATH}/work)
-SETUP_PATH_CONTAINERS=$(realpath ${SETUP_PATH}/containers)
 SETUP_PATH_TOOLS=$(realpath ${SETUP_PATH}/tools)
 SETUP_PATH_PRIVATE=$(realpath ${SETUP_PATH}/private)
 
 output "This script will use the following paths where applicable:"
 output "   to store keys and customization files" $SETUP_PATH_PRIVATE
 output "   to store your GitHub repositories" $SETUP_PATH_WORK
-output "   to stores Docker containers data" $SETUP_PATH_CONTAINERS
 output "   to store tools that we will use for development" $SETUP_PATH_TOOLS
 
 ask="Continue?"
@@ -258,83 +256,33 @@ if continueYesNo "$ask"; then
     runCommand "sudo chmod +x /usr/local/bin/docker-compose"
     runCommand "sudo curl -L https://raw.githubusercontent.com/docker/compose/1.21.0/contrib/completion/bash/docker-compose -o /etc/bash_completion.d/docker-compose"
 
-    output "d[name] starts a container of the [name] service type"
-    output "e[name] executes a command in the container of the [name] service type"
-    ask="Add aliases for docker consul(dconsul,econsul), docker postgresql(dpostgres), docker pgadmin4(dpgadmin)?"
-    if continueYesNo "$ask"; then
-        runCommand "mkdir -p $SETUP_PATH_CONTAINERS"
-
-        customizeBash "alias dconsul='docker run --rm -it --net=host --name dev-consul consul'"
-        # This allows us to execute command inside the dev-consul container
-        customizeBash "alias econsul='docker exec -i dev-consul consul'"
-
-        postgresuser=$(askInput "Enter your POSTGRES_USER:" $postgresuser)
-        postgrespassword=$(askInput "Enter your POSTGRES_PASSWORD:" $postgrespassword)
-        customizeBash "alias dpostgres='docker run --rm -it -p 5432:5432 --name=dev-postgres -e POSTGRES_USER=$postgresuser -e POSTGRES_PASSWORD=$postgrespassword -v $SETUP_PATH_CONTAINERS/postgres_home:/var/lib/postgresql/data postgres:10 -c \"log_statement=all\" -c \"log_duration=on\" -c \"log_min_duration_statement=-1\"'"
-        customizeBash "alias epsql='PGPASSWORD=$postgrespassword docker exec -i dev-postgres psql -h localhost -U $postgresuser '"
-
-        runCommand "mkdir -p $SETUP_PATH_CONTAINERS/pgadmin_home"
-        runCommand "sudo chmod -R 777 $SETUP_PATH_CONTAINERS/pgadmin_home"
-        customizeBash "alias dpgadmin='docker run --rm -it --net=host --name=dev-pgadmin -v $SETUP_PATH_CONTAINERS/pgadmin_home:/pgadmin thajeztah/pgadmin4'"
-    fi
-
-    ask="Add aliases for docker mongodb(dmongo,emongo)?"
-    if continueYesNo "$ask"; then
-        runCommand "mkdir -p $SETUP_PATH_CONTAINERS"
-
-        customizeBash "alias dmongo='docker run --rm -it -p 27017:27017 --name=dev-mongo -v $SETUP_PATH_CONTAINERS/mongodb_home:/data/db mongo'"
-        # This allows us to execute command inside the dev-consul container
-        customizeBash "alias emongo='docker exec -it dev-mongo bash -c mongo'"
-        customizeBash "alias emongorestore='docker exec -i dev-mongo mongorestore --gzip --archive'"
-        customizeBash "alias emongodump='docker exec -i dev-mongo mongodump --archive --gzip --db'"
-
-        # TODO: Upgrade this when it's fixed. It's something from their side. Version 1.18 might work as expected.
-        ask="Install: MongoDB Compass (UI for MongoDB)?"
-        if continueYesNo "$ask"; then
-            runCommand "wget -O mongodb-compass_amd64.deb https://downloads.mongodb.com/compass/mongodb-compass_1.17.0_amd64.deb"
-            runCommand "sudo dpkg -i mongodb-compass_amd64.deb"
-            runCommand "sudo apt install -y -f"
-            runCommand "rm mongodb-compass_amd64.deb"
-        fi
-    fi
-
-    ask="Add aliases for docker rabbitmq(drabbit)?"
-    if continueYesNo "$ask"; then
-        runCommand "mkdir -p $SETUP_PATH_CONTAINERS"
-        customizeBash "alias drabbit='docker run --rm -it --hostname=dev-rabbitmq -p 15672:15672 -p 5672:5672 --name dev-rabbitmq -v $SETUP_PATH_CONTAINERS/rabbitmq_home:/var/lib/rabbitmq rabbitmq:management-alpine'"
-    fi
-
-    # TODO: Upgrade to 8 when needed.
-    ask="Add aliases for docker mysql 5.7(dmysql)?"
-    if continueYesNo "$ask"; then
-        runCommand "mkdir -p $SETUP_PATH_CONTAINERS"
-
-        postgrespassword=$(askInput "Enter your MYSQL_ROOT_PASSWORD:" $mysqlrootpassword)
-        customizeBash "alias dmysql='docker run --rm -it -p 3306:3306 --name dev-mysql -e MYSQL_ROOT_PASSWORD=$mysqlrootpassword -v $SETUP_PATH_CONTAINERS/mysql_home:/var/lib/mysql mysql:5.7'"
-        customizeBash "alias emysqlrestore='docker exec -i dev-mysql mysql -uroot -p$mysqlrootpassword'"
-        customizeBash "alias emysqldump='docker exec -i dev-mysql mysqldump -uroot -p$mysqlrootpassword'"
-
-        #TODO: THis does not work because of some missing dependencies.At least not on kubuntu 19.04
-        ask="Install: MySql Workbench (UI for Mysql)?"
-        if continueYesNo "$ask"; then
-            runCommand "wget -O mysql-workbench-community_amd64.deb https://cdn.mysql.com//Downloads/MySQLGUITools/mysql-workbench-community_8.0.16-1ubuntu18.04_amd64.deb"
-            runCommand "sudo dpkg -i mysql-workbench-community_amd64.deb"
-            runCommand "sudo apt install -y -f"
-            runCommand "rm mysql-workbench-community_amd64.deb"
-        fi
-    fi
-
-    ask="Add aliases for docker elasticsearch(delastic)?"
-    if continueYesNo "$ask"; then
-        runCommand "mkdir -p $SETUP_PATH_CONTAINERS"
-        customizeBash "alias delastic='docker run --rm -it -p 9200:9200 -p 9300:9300 --name dev-elasticsearch -e cluster.name=dev-elasticsearch -e discovery.type=single-node -e path.repo=/usr/share/elasticsearch/backups -v $SETUP_PATH_CONTAINERS/elasticsearch_home:/usr/share/elasticsearch/data -v $SETUP_PATH_CONTAINERS/elasticsearch_backups:/usr/share/elasticsearch/backups elasticsearch:6.6.1'"
-
-        ask="Install: Kibana (dkibana)?"
-        if continueYesNo "$ask"; then
-            customizeBash "alias dkibana='docker run --rm -it --net=host --name=dev-kibana -e ELASTICSEARCH_URL=http://localhost:9200/ kibana:6.6.1'"
-        fi
-    fi
     output "SUCCESS!"
+fi
+
+ask="Install: PGAdmin4 (UI for Postgres)?"
+if continueYesNo "$ask"; then
+    runCommand "sudo apt-get install curl ca-certificates gnupg"
+    runCommand "curl https://www.postgresql.org/media/keys/ACCC4CF8.asc | sudo apt-key add -"
+    runCommand "sudo sh -c 'echo \"deb http://apt.postgresql.org/pub/repos/apt/ bionic-pgdg main\" > /etc/apt/sources.list.d/pgdg.list'"
+    runCommand "sudo apt update"
+    runCommand "sudo apt install -y pgadmin4"
+fi
+
+ask="Install: MongoDB Compass (UI for MongoDB)?"
+if continueYesNo "$ask"; then
+    runCommand "wget -O mongodb-compass_amd64.deb https://downloads.mongodb.com/compass/mongodb-compass_1.19.6_amd64.deb"
+    runCommand "sudo dpkg -i mongodb-compass_amd64.deb"
+    runCommand "sudo apt install -y -f"
+    runCommand "rm mongodb-compass_amd64.deb"
+fi
+
+#TODO: This does not work because of some missing dependencies.At least not on kubuntu 19.04
+ask="Install: MySql Workbench (UI for Mysql)?"
+if continueYesNo "$ask"; then
+    runCommand "wget -O mysql-workbench-community_amd64.deb https://cdn.mysql.com//Downloads/MySQLGUITools/mysql-workbench-community_8.0.16-1ubuntu18.04_amd64.deb"
+    runCommand "sudo dpkg -i mysql-workbench-community_amd64.deb"
+    runCommand "sudo apt install -y -f"
+    runCommand "rm mysql-workbench-community_amd64.deb"
 fi
 
 ask="Install: openjdk-11? (java8 from oracle can't be installed with script ATM)"
