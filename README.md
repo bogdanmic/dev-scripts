@@ -30,11 +30,6 @@ Get started
  $ cd config-scripts
  $ ./setup.sh
  ```
-If you want to go through the steps without any changes to your computer you can 
-run it like this
- ```bash
- $ ./setup.sh --dry-run
- ```
 
 What does it do?
 ------------
@@ -49,15 +44,22 @@ These steps are in order with their substeps:
 - Install **chrome** browser
 - Install **skype**
 - Install **dbeaver** (sql client)
-- Install **numix-icon-theme-circle** this is just a icon theme I like, suited for a dock setup
+- Install **numix-icon-theme-circle** this is just a icon theme I like, suited for a dock setup because it has circle icons
 - Install **papirus-icon-theme** this is just a icon theme I like, suited for a classic setup
 - Install **docker, docker-compose**
 - Install **PgAdmin4** (UI for Postgres)
 - Install **MongoDB Compass** (UI for MongoDB)
 - Install: **MySql Workbench** (UI for Mysql)
-- Install **java11 and java8 (openjdk-11-jdk openjdk-8-jdk)**. We installed java8 before Oracle changed his licence policies. To change from one version of Java to another ```$ sudo update-alternatives --config java```
-  - Install **maven, activator, JetBrains ToolBox** (makes it easier to install and
-  update JetBrains products)
+- Install: **SDKMan** (The Software Development Kit Manager). We will use this to manage multiple versions of java on the same machine. And it can do much more.
+  - Install **java8 and java11**. To change from one version of Java to another:
+  ```bash
+  # Make default java 11
+  $ sdk default java 11.0.2-open
+  # Make default java 8
+  $ sdk default java 8.0.222.hs-adpt
+  # For more usage example for sdkman check: https://sdkman.io/
+  ```
+- Install **maven, activator, JetBrains ToolBox** (makes it easier to install and update JetBrains products)
 - Install **nodejs**
   - Install **yarn**
 - Install **Tilix** tiling terminal emulator
