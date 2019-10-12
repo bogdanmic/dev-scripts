@@ -152,13 +152,9 @@ if continueYesNo "$ask"; then
 
         github_username=$(askInput "Enter your GitHub user.name" $github_username)
 
-        if ! $DRY_RUN; then
-          curl -u "$github_username" \
-            --data "{\"title\":\"`lsb_release -ds`-`date +%Y-%m-%d-%H:%M:%S`\",\"key\":\"`cat $SETUP_PATH_PRIVATE/id_rsa_github.pub`\"}" \
-            https://api.github.com/user/keys
-        else
-          runCommand "Some complicated command that adds the generated SSH KEY to your github  account."
-        fi
+        curl -u "$github_username" \
+          --data "{\"title\":\"`lsb_release -ds`-`date +%Y-%m-%d-%H:%M:%S`\",\"key\":\"`cat $SETUP_PATH_PRIVATE/id_rsa_github.pub`\"}" \
+          https://api.github.com/user/keys
     fi
 
     output '!!! This might take quite a while. All = max 300 (3 requests, each time input the password)!!!'
@@ -169,259 +165,263 @@ if continueYesNo "$ask"; then
 
         github_username=$(askInput "Enter your GitHub user.name" $github_username)
 
-        if ! $DRY_RUN; then
-          curl -u "$github_username" "https://api.github.com/user/repos?page=1&per_page=100" | grep -e 'ssh_url*' | cut -d \" -f 4 | xargs -L1 git clone
-          curl -u "$github_username" "https://api.github.com/user/repos?page=2&per_page=100" | grep -e 'ssh_url*' | cut -d \" -f 4 | xargs -L1 git clone
-          curl -u "$github_username" "https://api.github.com/user/repos?page=3&per_page=100" | grep -e 'ssh_url*' | cut -d \" -f 4 | xargs -L1 git clone
-        else
-          runCommand "Some complicated command that clones your github  repositories."
-        fi
+        curl -u "$github_username" "https://api.github.com/user/repos?page=1&per_page=100" | grep -e 'ssh_url*' | cut -d \" -f 4 | xargs -L1 git clone
+        curl -u "$github_username" "https://api.github.com/user/repos?page=2&per_page=100" | grep -e 'ssh_url*' | cut -d \" -f 4 | xargs -L1 git clone
+        curl -u "$github_username" "https://api.github.com/user/repos?page=3&per_page=100" | grep -e 'ssh_url*' | cut -d \" -f 4 | xargs -L1 git clone
     fi
 
-    ask="Configure your Terminal prompt for GIT?"
-    if continueYesNo "$ask"; then
-        customizeBash 'export PS1='\''${debian_chroot:+($debian_chroot)}\[\033[01;32m\]\u@\h\[\033[00m\]:\[\033[01;34m\]\w\[\033[00m\]\[\033[01;31m\]$(declare -F __git_ps1 &>/dev/null && __git_ps1 " (%s)")\[\033[00m\]\[\033[01;36m\]:\$\[\033[00m\] '\'
-        customizeBash 'export GIT_PS1_SHOWDIRTYSTATE=true'
-        customizeBash 'export GIT_PS1_SHOWUNTRACKEDFILES=true'
-        customizeBash 'alias gg='\''echo "Latest 3 tags:" && git tag --sort=-version:refname | head -n 3 && git status -sb'\'
-        customizeBash "alias myip='ifconfig | sed -En '\''s/127.0.0.1//;s/.*inet (addr:)?(([0-9]*\.){3}[0-9]*).*/\2/p'\'"
-    fi
+    # ask="Configure your Terminal prompt for GIT?"
+    # if continueYesNo "$ask"; then
+    #     customizeBash 'export PS1='\''${debian_chroot:+($debian_chroot)}\[\033[01;32m\]\u@\h\[\033[00m\]:\[\033[01;34m\]\w\[\033[00m\]\[\033[01;31m\]$(declare -F __git_ps1 &>/dev/null && __git_ps1 " (%s)")\[\033[00m\]\[\033[01;36m\]:\$\[\033[00m\] '\'
+    #     customizeBash 'export GIT_PS1_SHOWDIRTYSTATE=true'
+    #     customizeBash 'export GIT_PS1_SHOWUNTRACKEDFILES=true'
+    #     customizeBash 'alias gg='\''echo "Latest 3 tags:" && git tag --sort=-version:refname | head -n 3 && git status -sb'\'
+    #     customizeBash "alias myip='ifconfig | sed -En '\''s/127.0.0.1//;s/.*inet (addr:)?(([0-9]*\.){3}[0-9]*).*/\2/p'\'"
+    # fi
     output "SUCCESS!"
 fi
 
-ask="Install: filezilla, vlc, firefox, vim, net-tools?"
-if continueYesNo "$ask"; then
-    runCommand "sudo apt install -y filezilla vlc firefox vim net-tools"
-    output "SUCCESS!"
-fi
+# ask="Install: filezilla, vlc, firefox, vim, net-tools?"
+# if continueYesNo "$ask"; then
+#     runCommand "sudo apt install -y filezilla vlc firefox vim net-tools"
+#     output "SUCCESS!"
+# fi
 
-ask="Install: chrome?"
-if continueYesNo "$ask"; then
-    runCommand "wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb"
-    runCommand "sudo dpkg -i google-chrome-stable_current_amd64.deb"
-    runCommand "sudo apt install -y -f"
-    runCommand "rm google-chrome-stable_current_amd64.deb"
-    output "SUCCESS!"
-fi
+# ask="Install: chrome?"
+# if continueYesNo "$ask"; then
+#     runCommand "wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb"
+#     runCommand "sudo dpkg -i google-chrome-stable_current_amd64.deb"
+#     runCommand "sudo apt install -y -f"
+#     runCommand "rm google-chrome-stable_current_amd64.deb"
+#     output "SUCCESS!"
+# fi
 
-ask="Install: skype?"
-if continueYesNo "$ask"; then
-    runCommand "wget https://repo.skype.com/latest/skypeforlinux-64.deb"
-    runCommand "sudo dpkg -i skypeforlinux-64.deb"
-    runCommand "sudo apt install -y -f"
-    runCommand "rm skypeforlinux-64.deb"
-    output "SUCCESS!"
-fi
+# ask="Install: skype?"
+# if continueYesNo "$ask"; then
+#     runCommand "wget https://repo.skype.com/latest/skypeforlinux-64.deb"
+#     runCommand "sudo dpkg -i skypeforlinux-64.deb"
+#     runCommand "sudo apt install -y -f"
+#     runCommand "rm skypeforlinux-64.deb"
+#     output "SUCCESS!"
+# fi
 
-ask="Install: dbeaver (sql client)?"
-if continueYesNo "$ask"; then
-    runCommand "wget https://dbeaver.jkiss.org/files/dbeaver-ce_latest_amd64.deb"
-    runCommand "sudo dpkg -i dbeaver-ce_latest_amd64.deb"
-    runCommand "sudo apt install -y -f"
-    runCommand "rm dbeaver-ce_latest_amd64.deb"
-    output "SUCCESS!"
-fi
+# ask="Install: dbeaver (sql client)?"
+# if continueYesNo "$ask"; then
+#     runCommand "wget https://dbeaver.io/files/dbeaver-ce_latest_amd64.deb"
+#     runCommand "sudo dpkg -i dbeaver-ce_latest_amd64.deb"
+#     runCommand "sudo apt install -y -f"
+#     runCommand "rm dbeaver-ce_latest_amd64.deb"
+#     output "SUCCESS!"
+# fi
 
-ask="Install: numix-icon-theme-circle?"
-if continueYesNo "$ask"; then
-    runCommand "sudo add-apt-repository -y ppa:numix/ppa"
-    runCommand "sudo apt update"
-    runCommand "sudo apt install -y numix-icon-theme-circle"
-    output "SUCCESS!"
-fi
+# ask="Install: numix-icon-theme-circle?"
+# if continueYesNo "$ask"; then
+#     runCommand "sudo add-apt-repository -y ppa:numix/ppa"
+#     runCommand "sudo apt update"
+#     runCommand "sudo apt install -y numix-icon-theme-circle"
+#     output "SUCCESS!"
+# fi
 
-ask="Install: papirus-icon-theme?"
-if continueYesNo "$ask"; then
-    runCommand "sudo add-apt-repository -y ppa:papirus/papirus"
-    runCommand "sudo apt update"
-    runCommand "sudo apt install -y papirus-icon-theme"
-    output "SUCCESS!"
-fi
+# ask="Install: papirus-icon-theme?"
+# if continueYesNo "$ask"; then
+#     runCommand "sudo add-apt-repository -y ppa:papirus/papirus"
+#     runCommand "sudo apt update"
+#     runCommand "sudo apt install -y papirus-icon-theme"
+#     output "SUCCESS!"
+# fi
 
 ask="Install: docker, docker-compose?"
 if continueYesNo "$ask"; then
     # Install docker
-    runCommand "sudo apt install -y apt-transport-https ca-certificates curl software-properties-common"
-    runCommand "sudo curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -"
+    sudo apt install -y apt-transport-https ca-certificates curl software-properties-common
+    sudo curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
     # In some cases if the Linux used is to fresh(new), then the docker package
     # might not be available yet so we can use the previous version one
-    runCommand "sudo add-apt-repository -y \"deb [arch=amd64] https://download.docker.com/linux/ubuntu cosmic stable\""
-    # runCommand "sudo add-apt-repository -y \"deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable\""
-    runCommand "sudo apt update"
-    runCommand "sudo apt install -y docker-ce"
-    runCommand "sudo usermod -aG docker $USER"
+    # sudo add-apt-repository -y "deb [arch=amd64] https://download.docker.com/linux/ubuntu cosmic stable"
+    sudo add-apt-repository -y "deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable"
+    sudo apt update
+    sudo apt install -y docker-ce
+    sudo usermod -aG docker $USER
 
     # Install docker-compose
-    runCommand "sudo curl -L https://github.com/docker/compose/releases/download/1.21.0/docker-compose-$(uname -s)-$(uname -m) -o /usr/local/bin/docker-compose"
-    runCommand "sudo chmod +x /usr/local/bin/docker-compose"
-    runCommand "sudo curl -L https://raw.githubusercontent.com/docker/compose/1.21.0/contrib/completion/bash/docker-compose -o /etc/bash_completion.d/docker-compose"
+    # runCommand "sudo curl -L https://github.com/docker/compose/releases/download/1.21.0/docker-compose-$(uname -s)-$(uname -m) -o /usr/local/bin/docker-compose"
+    # runCommand "sudo chmod +x /usr/local/bin/docker-compose"
+    # runCommand "sudo curl -L https://raw.githubusercontent.com/docker/compose/1.21.0/contrib/completion/bash/docker-compose -o /etc/bash_completion.d/docker-compose"
 
     output "SUCCESS!"
 fi
 
-ask="Install: PGAdmin4 (UI for Postgres)?"
-if continueYesNo "$ask"; then
-    runCommand "sudo apt-get install curl ca-certificates gnupg"
-    runCommand "curl https://www.postgresql.org/media/keys/ACCC4CF8.asc | sudo apt-key add -"
-    runCommand "sudo sh -c 'echo \"deb http://apt.postgresql.org/pub/repos/apt/ bionic-pgdg main\" > /etc/apt/sources.list.d/pgdg.list'"
-    runCommand "sudo apt update"
-    runCommand "sudo apt install -y pgadmin4"
-fi
+# ask="Install: PGAdmin4 (UI for Postgres)?"
+# if continueYesNo "$ask"; then
+#     runCommand "sudo apt-get install curl ca-certificates gnupg"
+#     runCommand "curl https://www.postgresql.org/media/keys/ACCC4CF8.asc | sudo apt-key add -"
+#     runCommand "sudo sh -c 'echo \"deb http://apt.postgresql.org/pub/repos/apt/ bionic-pgdg main\" > /etc/apt/sources.list.d/pgdg.list'"
+#     runCommand "sudo apt update"
+#     runCommand "sudo apt install -y pgadmin4"
+# fi
 
-ask="Install: MongoDB Compass (UI for MongoDB)?"
-if continueYesNo "$ask"; then
-    runCommand "wget -O mongodb-compass_amd64.deb https://downloads.mongodb.com/compass/mongodb-compass_1.19.6_amd64.deb"
-    runCommand "sudo dpkg -i mongodb-compass_amd64.deb"
-    runCommand "sudo apt install -y -f"
-    runCommand "rm mongodb-compass_amd64.deb"
-fi
+# ask="Install: MongoDB Compass (UI for MongoDB)?"
+# if continueYesNo "$ask"; then
+#     runCommand "wget -O mongodb-compass_amd64.deb https://downloads.mongodb.com/compass/mongodb-compass_1.19.6_amd64.deb"
+#     runCommand "sudo dpkg -i mongodb-compass_amd64.deb"
+#     runCommand "sudo apt install -y -f"
+#     runCommand "rm mongodb-compass_amd64.deb"
+# fi
 
 #TODO: This does not work because of some missing dependencies.At least not on kubuntu 19.04
-ask="Install: MySql Workbench (UI for Mysql)?"
-if continueYesNo "$ask"; then
-    runCommand "wget -O mysql-workbench-community_amd64.deb https://cdn.mysql.com//Downloads/MySQLGUITools/mysql-workbench-community_8.0.16-1ubuntu18.04_amd64.deb"
-    runCommand "sudo dpkg -i mysql-workbench-community_amd64.deb"
-    runCommand "sudo apt install -y -f"
-    runCommand "rm mysql-workbench-community_amd64.deb"
-fi
+# TODO: also check the version for this and other stuff
+# ask="Install: MySql Workbench (UI for Mysql)?"
+# if continueYesNo "$ask"; then
+#     runCommand "wget -O mysql-workbench-community_amd64.deb https://cdn.mysql.com//Downloads/MySQLGUITools/mysql-workbench-community_8.0.16-1ubuntu18.04_amd64.deb"
+#     runCommand "sudo dpkg -i mysql-workbench-community_amd64.deb"
+#     runCommand "sudo apt install -y -f"
+#     runCommand "rm mysql-workbench-community_amd64.deb"
+# fi
 
-ask="Install: openjdk-11? (java8 from oracle can't be installed with script ATM)"
-if continueYesNo "$ask"; then
+# TODO: Install SDKMAN???
+
+# ask="Install: openjdk-11? (java8 from oracle can't be installed with script ATM)"
+# if continueYesNo "$ask"; then
     # TODO: ppa:webupd8team/java is not available ATM because of some Oracle licences stuff starting with Ubuntu 19.04.
     # runCommand "sudo add-apt-repository -y ppa:webupd8team/java"
     # runCommand "sudo apt update"
     # runCommand "sudo apt install -y oracle-java8-installer"
     # runCommand "sudo add-apt-repository -y ppa:openjdk-r/ppa"
     # runCommand "sudo apt update"
-    runCommand "sudo apt install -y openjdk-11-jdk openjdk-8-jdk"
+    # runCommand "sudo apt install -y openjdk-11-jdk openjdk-8-jdk"
 
-    ask="Install: maven, activator, JetBrains ToolBox?"
-    if continueYesNo "$ask"; then
-        runCommand "sudo apt install -y zip gzip tar"
-        runCommand "mkdir -p $SETUP_PATH_TOOLS"
+    # ask="Install: maven, activator, JetBrains ToolBox?"
+    # if continueYesNo "$ask"; then
+    #     runCommand "sudo apt install -y zip gzip tar"
+    #     runCommand "mkdir -p $SETUP_PATH_TOOLS"
 
-        # Get maven
-        runCommand "wget -qO- http://apache.javapipe.com/maven/maven-3/3.6.0/binaries/apache-maven-3.6.0-bin.tar.gz | tar xvz -C $SETUP_PATH_TOOLS"
-        # Add maven to PATH
-        customizeBash "PATH=\$PATH:$SETUP_PATH_TOOLS/apache-maven-3.6.0/bin"
-        customizeBash 'export MAVEN_OPTS="-Xmx512m"'
+    #     # Get maven
+    #     # runCommand "wget http://mirrors.hostingromania.ro/apache.org/maven/maven-3/3.6.2/binaries/apache-maven-3.6.2-bin.zip -P $SETUP_PATH_TOOLS"
+    #     # runCommand "unzip -o $SETUP_PATH_TOOLS/apache-maven-3.6.2-bin.zip -d $SETUP_PATH_TOOLS && rm $SETUP_PATH_TOOLS/apache-maven-3.6.2-bin.zip"
+    #     # # Add maven to PATH
+    #     # customizeBash "PATH=\$PATH:$SETUP_PATH_TOOLS/apache-maven-3.6.2/bin"
+    #     # customizeBash 'export MAVEN_OPTS="-Xmx512m"'
+    #     # TODO: maybe use the sudo install?
+    #     # runCommand "sudo apt install -y maven" 
 
-        # Get typesafe activator
-        runCommand "wget http://downloads.typesafe.com/typesafe-activator/1.3.12/typesafe-activator-1.3.12-minimal.zip -P $SETUP_PATH_TOOLS"
-        runCommand "unzip -o $SETUP_PATH_TOOLS/typesafe-activator-1.3.12-minimal.zip -d $SETUP_PATH_TOOLS && rm $SETUP_PATH_TOOLS/typesafe-activator-1.3.12-minimal.zip"
-        # Add activator to PATH
-        customizeBash "PATH=\$PATH:$SETUP_PATH_TOOLS/activator-1.3.12-minimal/bin"
+    #     # # Get typesafe activator
+    #     # runCommand "wget http://downloads.typesafe.com/typesafe-activator/1.3.12/typesafe-activator-1.3.12-minimal.zip -P $SETUP_PATH_TOOLS"
+    #     # runCommand "unzip -o $SETUP_PATH_TOOLS/typesafe-activator-1.3.12-minimal.zip -d $SETUP_PATH_TOOLS && rm $SETUP_PATH_TOOLS/typesafe-activator-1.3.12-minimal.zip"
+    #     # # Add activator to PATH
+    #     # customizeBash "PATH=\$PATH:$SETUP_PATH_TOOLS/activator-1.3.12-minimal/bin"
 
-        # Get JetBrains ToolBox app that makes it easier to update InteliJ ad get it.
-        runCommand "wget -qO- https://download.jetbrains.com/toolbox/jetbrains-toolbox-1.13.4801.tar.gz | tar xvz -C $SETUP_PATH_TOOLS"
-    fi
-    output "SUCCESS!"
-fi
+    #     # # Get JetBrains ToolBox app that makes it easier to update InteliJ ad get it.
+    #     # runCommand "wget -qO- https://download.jetbrains.com/toolbox/jetbrains-toolbox-1.13.4801.tar.gz | tar xvz -C $SETUP_PATH_TOOLS"
+    # fi
+    # output "SUCCESS!"
+# fi
 
 ask="Install: nodejs?"
 if continueYesNo "$ask"; then
-    runCommand "wget -qO- https://deb.nodesource.com/setup_10.x | sudo -E bash -"
-    runCommand "sudo apt-get install -y nodejs"
+    # TODO: Linux mint tina is not supporte atm so we commented this out.
+    wget -qO- https://deb.nodesource.com/setup_12.x | sudo -E bash -
+    # runCommand "echo -e \"deb https://deb.nodesource.com/node_10.x bionic main\" | sudo tee /etc/apt/sources.list.d/nodesource.list"
+    # runCommand "echo -e \"deb-src https://deb.nodesource.com/node_10.x bionic main\" | sudo tee -a /etc/apt/sources.list.d/nodesource.list"
+    # runCommand "sudo apt update -y"
+    # runCommand "sudo apt install -y nodejs"
+    sudo apt-get install -y nodejs
     output "SUCCESS!"
 
-    ask="Install: yarn?"
-    if continueYesNo "$ask"; then
-        runCommand "curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | sudo apt-key add -"
-        runCommand "echo \"deb https://dl.yarnpkg.com/debian/ stable main\" | sudo tee /etc/apt/sources.list.d/yarn.list"
-        runCommand "sudo apt update && sudo apt install -y yarn"
-        output "SUCCESS!"
-    fi
+    # ask="Install: yarn?"
+    # if continueYesNo "$ask"; then
+    #     runCommand "curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | sudo apt-key add -"
+    #     runCommand "echo \"deb https://dl.yarnpkg.com/debian/ stable main\" | sudo tee /etc/apt/sources.list.d/yarn.list"
+    #     runCommand "sudo apt update && sudo apt install -y yarn"
+    #     output "SUCCESS!"
+    # fi
 fi
 
-ask="Install: Tilix terminal?"
-if continueYesNo "$ask"; then
-    runCommand "sudo add-apt-repository -y ppa:webupd8team/terminix"
-    runCommand "sudo apt-get update"
-    runCommand "sudo apt-get install -y tilix"
-    runCommand "sudo update-alternatives --config x-terminal-emulator"
-    output "SUCCESS!"
-fi
+# ask="Install: Tilix terminal?"
+# if continueYesNo "$ask"; then
+#     runCommand "sudo add-apt-repository -y ppa:webupd8team/terminix"
+#     runCommand "sudo apt-get update"
+#     runCommand "sudo apt-get install -y tilix"
+#     runCommand "sudo update-alternatives --config x-terminal-emulator"
+#     output "SUCCESS!"
+# fi
 
-ask="Add any private aliases found in ${BASH_PRIVATE_FILE} file?"
-if continueYesNo "$ask"; then
-    if [ -f $BASH_PRIVATE_FILE ]; then
-      appendFileToBashProfile $BASH_PRIVATE_FILE
-      output "SUCCESS!"
-    else
-      output "File $BASH_PRIVATE_FILE does not exist."
-    fi
-fi
+# TODO: Maybe add the file with exist condition or create the file and make it empty
+# ask="Add any private aliases found in ${BASH_PRIVATE_FILE} file?"
+# if continueYesNo "$ask"; then
+#     if [ -f $BASH_PRIVATE_FILE ]; then
+#       appendFileToBashProfile $BASH_PRIVATE_FILE
+#       output "SUCCESS!"
+#     else
+#       output "File $BASH_PRIVATE_FILE does not exist."
+#     fi
+# fi
 
-# We install the IDE after installing Java because it's a prerequisite
-ask="Install: vscode ide?"
-if continueYesNo "$ask"; then
-    runCommand "wget -O vscode.deb https://update.code.visualstudio.com/latest/linux-deb-x64/stable"
-    runCommand "sudo dpkg -i vscode.deb"
-    runCommand "sudo apt install -y -f"
-    runCommand "rm vscode.deb"
-    output "SUCCESS!"
-    ask="Install: vscode ide - settings sync extension?"
-    if continueYesNo "$ask"; then
-      runCommand "code --install-extension Shan.code-settings-sync"
-    fi
-fi
+# ask="Install: vscode ide?"
+# if continueYesNo "$ask"; then
+#     runCommand "wget -O vscode.deb https://update.code.visualstudio.com/latest/linux-deb-x64/stable"
+#     runCommand "sudo dpkg -i vscode.deb"
+#     runCommand "sudo apt install -y -f"
+#     runCommand "rm vscode.deb"
+#     output "SUCCESS!"
+#     ask="Install: vscode ide - settings sync extension?"
+#     if continueYesNo "$ask"; then
+#       runCommand "code --install-extension Shan.code-settings-sync"
+#     fi
+# fi
 
-ask="Install: Postman?"
-if continueYesNo "$ask"; then
-    runCommand "wget -qO- https://dl.pstmn.io/download/latest/linux64 | tar xvz -C $SETUP_PATH_TOOLS"
-    # Add postman to PATH
-    customizeBash "PATH=\$PATH:$SETUP_PATH_TOOLS/Postman"
-    runCommand "echo -e \"[Desktop Entry]\n
-      Version=1.0\n
-      Type=Application\n
-      Terminal=false\n
-      Exec=$SETUP_PATH_TOOLS/Postman/Postman\n
-      Name=Postman\n
-      Comment=Postman\n
-      Icon=$SETUP_PATH_TOOLS/Postman/app/resources/app/assets/icon.png\" > $SETUP_PATH_TOOLS/Postman.desktop"
-    runCommand "mkdir -p ~/.local/share/applications/"
-    runCommand "sudo ln -s $SETUP_PATH_TOOLS/Postman.desktop ~/.local/share/applications/"
-    output "SUCCESS!"
-fi
+# ask="Install: Postman?"
+# if continueYesNo "$ask"; then
+#     runCommand "wget -qO- https://dl.pstmn.io/download/latest/linux64 | tar xvz -C $SETUP_PATH_TOOLS"
+#     # Add postman to PATH
+#     customizeBash "PATH=\$PATH:$SETUP_PATH_TOOLS/Postman"
+#     runCommand "echo -e \"[Desktop Entry]\n
+#       Version=1.0\n
+#       Type=Application\n
+#       Terminal=false\n
+#       Exec=$SETUP_PATH_TOOLS/Postman/Postman\n
+#       Name=Postman\n
+#       Comment=Postman\n
+#       Icon=$SETUP_PATH_TOOLS/Postman/app/resources/app/assets/icon.png\" > $SETUP_PATH_TOOLS/Postman.desktop"
+#     runCommand "mkdir -p ~/.local/share/applications/"
+#     runCommand "sudo ln -s $SETUP_PATH_TOOLS/Postman.desktop ~/.local/share/applications/"
+#     output "SUCCESS!"
+# fi
 
-# We install slack
-ask="Install: slack-desktop?"
-if continueYesNo "$ask"; then
-    # runCommand "sudo snap install slack --classic"
-    # runCommand "sudo apt-get update"
-    # runCommand "sudo apt-get upgrade slack-desktop"
-    runCommand "wget -O slack-desktop.deb https://downloads.slack-edge.com/linux_releases/slack-desktop-3.3.8-amd64.deb"
-    runCommand "sudo dpkg -i slack-desktop.deb"
-    runCommand "sudo apt install -y -f"
-    runCommand "rm slack-desktop.deb"
-    output "SUCCESS!"
-fi
+# ask="Install: slack-desktop?"
+# if continueYesNo "$ask"; then
+#     # runCommand "sudo snap install slack --classic"
+#     # runCommand "sudo apt-get update"
+#     # runCommand "sudo apt-get upgrade slack-desktop"
+#     runCommand "wget -O slack-desktop.deb https://downloads.slack-edge.com/linux_releases/slack-desktop-3.3.8-amd64.deb"
+#     runCommand "sudo dpkg -i slack-desktop.deb"
+#     runCommand "sudo apt install -y -f"
+#     runCommand "rm slack-desktop.deb"
+#     output "SUCCESS!"
+# fi
 
-ask="Install: awscli?"
-if continueYesNo "$ask"; then
-  #TODO: This needs some more testing.
-  runCommand "curl -O https://bootstrap.pypa.io/get-pip.py"
-  runCommand "python3 get-pip.py --user"
-  runCommand "~/.local/bin/pip3 install awscli --upgrade --user"
-  runCommand "rm get-pip.py"
-  customizeBash "PATH=\$PATH:~/.local/bin"
+# ask="Install: awscli?"
+# if continueYesNo "$ask"; then
+#   runCommand "curl https://s3.amazonaws.com/aws-cli/awscli-bundle.zip -o awscli-bundle.zip"
+#   runCommand "unzip awscli-bundle.zip"
+#   runCommand "sudo ./awscli-bundle/install -i /usr/local/aws -b /usr/local/bin/aws"
+#   runCommand "rm -R awscli-bundle*"
 
-  ask="Configure awscli?"
-  if continueYesNo "$ask"; then
-      runCommand "~/.local/bin/aws configure"
-  fi
-fi
+#   ask="Configure awscli?"
+#   if continueYesNo "$ask"; then
+#       runCommand "aws configure"
+#   fi
+# fi
 
-output "Add all the bash customization that we did to the ~/.bashrc file ..."
-# Add all the bash customization that we did to the ~/.bashrc file.
-appendFileToBashProfile $BASH_CUSTOMIZATION_FILE
+# output "Add all the bash customization that we did to the ~/.bashrc file ..."
+# # Add all the bash customization that we did to the ~/.bashrc file.
+# appendFileToBashProfile $BASH_CUSTOMIZATION_FILE
 
-output "Cheching for updates ..."
-runCommand "sudo apt update"
-runCommand "sudo apt upgrade -y"
-runCommand "sudo apt autoremove -y"
+# output "Cheching for updates ..."
+# runCommand "sudo apt update"
+# runCommand "sudo apt upgrade -y"
+# runCommand "sudo apt autoremove -y"
 
-ask="Reboot?"
-if continueYesNo "$ask"; then
-    runCommand "sudo reboot"
-fi
+# ask="Reboot?"
+# if continueYesNo "$ask"; then
+#     runCommand "sudo reboot"
+# fi
