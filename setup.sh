@@ -77,35 +77,9 @@ if ! continueYesNo "$ask"; then
     exit 1
 fi
 
-sudo apt install -y curl
-
 #TODO: generate the files from the start and then just append to them if they don' exist
 BASH_CUSTOMIZATION_FILE=$SETUP_PATH_PRIVATE/bash_customization
 BASH_PRIVATE_FILE=$SETUP_PATH_PRIVATE/aliases
-
-ask="Install: filezilla, vlc, firefox, vim, net-tools?"
-if continueYesNo "$ask"; then
-    sudo apt install -y filezilla vlc firefox vim net-tools
-    output "SUCCESS!"
-fi
-
-ask="Install: chrome?"
-if continueYesNo "$ask"; then
-    wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
-    sudo dpkg -i google-chrome-stable_current_amd64.deb
-    sudo apt install -y -f
-    rm google-chrome-stable_current_amd64.deb
-    output "SUCCESS!"
-fi
-
-ask="Install: skype?"
-if continueYesNo "$ask"; then
-    wget https://repo.skype.com/latest/skypeforlinux-64.deb
-    sudo dpkg -i skypeforlinux-64.deb
-    sudo apt install -y -f
-    rm skypeforlinux-64.deb
-    output "SUCCESS!"
-fi
 
 ask="Install: dbeaver (sql client)?"
 if continueYesNo "$ask"; then
@@ -234,15 +208,6 @@ if continueYesNo "$ask"; then
     fi
 fi
 
-ask="Install: Tilix terminal?"
-if continueYesNo "$ask"; then
-    sudo add-apt-repository -y ppa:webupd8team/terminix
-    sudo apt-get update
-    sudo apt-get install -y tilix
-    sudo update-alternatives --config x-terminal-emulator
-    output "SUCCESS!"
-fi
-
 ask="Install: Any private aliases found in ${BASH_PRIVATE_FILE} file?"
 if continueYesNo "$ask"; then
     if [ -f $BASH_PRIVATE_FILE ]; then
@@ -285,15 +250,7 @@ if continueYesNo "$ask"; then
     output "SUCCESS!"
 fi
 
-ask="Install: slack-desktop?"
-if continueYesNo "$ask"; then
-    # TODO: At some point consider snap packages
-    wget -O slack-desktop.deb https://downloads.slack-edge.com/linux_releases/slack-desktop-4.1.1-amd64.deb
-    sudo dpkg -i slack-desktop.deb
-    sudo apt install -y -f
-    rm slack-desktop.deb
-    output "SUCCESS!"
-fi
+# TODO: add terraform maybe?
 
 ask="Install: awscli?"
 if continueYesNo "$ask"; then
@@ -311,13 +268,3 @@ fi
 
 output "Add all the bash customization that we did to the ~/.bashrc file ..."
 appendFileToBashProfile $BASH_CUSTOMIZATION_FILE
-
-output "Cheching for updates ..."
-sudo apt update
-sudo apt upgrade -y
-sudo apt autoremove -y
-
-ask="Reboot?"
-if continueYesNo "$ask"; then
-    sudo reboot
-fi
