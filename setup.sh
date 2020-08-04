@@ -65,13 +65,11 @@ else
 fi
 
 # Define paths that we will use (All these have the slash because we added above)
-SETUP_PATH_WORK=$(realpath ${SETUP_PATH}/work)
 SETUP_PATH_TOOLS=$(realpath ${SETUP_PATH}/tools)
 SETUP_PATH_PRIVATE=$(realpath ${SETUP_PATH}/private)
 
 output "This script will use the following paths where applicable:"
 output "   to store keys and customization files" $SETUP_PATH_PRIVATE
-output "   to store your GitHub repositories" $SETUP_PATH_WORK
 output "   to store tools that we will use for development" $SETUP_PATH_TOOLS
 
 ask="Continue?"
@@ -84,63 +82,6 @@ sudo apt install -y curl
 #TODO: generate the files from the start and then just append to them if they don' exist
 BASH_CUSTOMIZATION_FILE=$SETUP_PATH_PRIVATE/bash_customization
 BASH_PRIVATE_FILE=$SETUP_PATH_PRIVATE/aliases
-
-ask="Install: git, git-flow?"
-if continueYesNo "$ask"; then
-    sudo apt install -y git git-flow
-
-    ask="Configure  GIT?"
-    if continueYesNo "$ask"; then
-        github_username=$(askInput "Enter your GIT user.name: " $github_username)
-        github_useremail=$(askInput "Enter your GIT user.email: " $github_useremail)
-
-        git config --global user.name "$github_username"
-        git config --global user.email "$github_useremail"
-        git config --global color.ui auto
-        git config -l
-    fi
-
-    ask="Setup GitHub SSH key?"
-    if continueYesNo "$ask"; then
-        mkdir -p $SETUP_PATH_PRIVATE
-        mkdir -p ~/.ssh/
-
-        ssh-keygen -t rsa -b 4096 -C "$(git config --global user.email)" -f $SETUP_PATH_PRIVATE/id_rsa_github
-        ln -sf $SETUP_PATH_PRIVATE/id_rsa_github ~/.ssh/
-        $(ssh-agent -s)
-        echo "IdentityFile ~/.ssh/id_rsa_github" >> ~/.ssh/config
-        ssh-add ~/.ssh/id_rsa_github
-
-        github_username=$(askInput "Enter your GitHub user.name" $github_username)
-
-        curl -u "$github_username" \
-          --data "{\"title\":\"`lsb_release -ds`-`date +%Y-%m-%d-%H:%M:%S`\",\"key\":\"`cat $SETUP_PATH_PRIVATE/id_rsa_github.pub`\"}" \
-          https://api.github.com/user/keys
-    fi
-
-    output '!!! This might take quite a while. All = max 300 (3 requests, each time input the password)!!!'
-    ask="Clone all your GitHub repos?"
-    if continueYesNo "$ask"; then
-        mkdir -p $SETUP_PATH_WORK
-        cd $SETUP_PATH_WORK
-
-        github_username=$(askInput "Enter your GitHub user.name" $github_username)
-
-        curl -u "$github_username" "https://api.github.com/user/repos?page=1&per_page=100" | grep -e 'ssh_url*' | cut -d \" -f 4 | xargs -L1 git clone
-        curl -u "$github_username" "https://api.github.com/user/repos?page=2&per_page=100" | grep -e 'ssh_url*' | cut -d \" -f 4 | xargs -L1 git clone
-        curl -u "$github_username" "https://api.github.com/user/repos?page=3&per_page=100" | grep -e 'ssh_url*' | cut -d \" -f 4 | xargs -L1 git clone
-    fi
-
-    ask="Configure your Terminal prompt for GIT?"
-    if continueYesNo "$ask"; then
-        customizeBash 'export PS1='\''${debian_chroot:+($debian_chroot)}\[\033[01;32m\]\u@\h\[\033[00m\]:\[\033[01;34m\]\w\[\033[00m\]\[\033[01;31m\]$(declare -F __git_ps1 &>/dev/null && __git_ps1 " (%s)")\[\033[00m\]\[\033[01;36m\]:\$\[\033[00m\] '\'
-        customizeBash 'export GIT_PS1_SHOWDIRTYSTATE=true'
-        customizeBash 'export GIT_PS1_SHOWUNTRACKEDFILES=true'
-        customizeBash 'alias gg='\''echo "Latest 3 tags:" && git tag --sort=-version:refname | head -n 3 && git status -sb'\'
-        customizeBash "alias myip='ifconfig | sed -En '\''s/127.0.0.1//;s/.*inet (addr:)?(([0-9]*\.){3}[0-9]*).*/\2/p'\'"
-    fi
-    output "SUCCESS!"
-fi
 
 ask="Install: filezilla, vlc, firefox, vim, net-tools?"
 if continueYesNo "$ask"; then
@@ -302,7 +243,7 @@ if continueYesNo "$ask"; then
     output "SUCCESS!"
 fi
 
-ask="Add any private aliases found in ${BASH_PRIVATE_FILE} file?"
+ask="Install: Any private aliases found in ${BASH_PRIVATE_FILE} file?"
 if continueYesNo "$ask"; then
     if [ -f $BASH_PRIVATE_FILE ]; then
       appendFileToBashProfile $BASH_PRIVATE_FILE

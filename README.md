@@ -1,12 +1,13 @@
-config-scripts
+dev-scripts
 ==============
 
 ***Atenttion:*** This script used to create some docker container services, now
-those have moved at a new repo [bogdanmic/dev-container-services](https://github.com/bogdanmic/dev-container-services).
+those have moved at a new repo [bogdanmic/dev-services](https://github.com/bogdanmic/dev-services).
 
+TODO: Rethink this doc as a list of scripts. More separation probably will come.
 
 This is collection of scripts that I use on my linux machine to configure my
-workspace. For now I use a **Ubuntu** distribution. It should work fairly decent with all **Ubuntu** based distros.
+workspace. For now I use a **Ubuntu** distribution. It should work fairly decent with all **Ubuntu** based distros. There are two scripts at the moment in this repository.
 
 The [**setup.sh**](setup.sh) script when running creates the following directory 
 structure in a specified **SETUP_PATH**:
@@ -15,19 +16,22 @@ structure in a specified **SETUP_PATH**:
  - **private** - here we will store secrets like the GitHub ssh keys, bash 
  customization file and if an **aliases** file is present with your personal 
  aliases, it will be added to your ***bashrc*** profile
- - **work** - here you will find clones of all your GitHub repositories
+
+The [**install_git.sh**](install_git.sh) script will install git, git-flow, [GitHub
+Desktop](https://github.com/shiftkey/desktop/releases) and it will prompt you to
+configure **git**. It also provides some **git-flow** aliases.
 
 Get started
 ------------
  ```bash
- $ bash <(curl -s https://raw.githubusercontent.com/bogdanmic/config-scripts/master/setup.sh)
+ $ bash <(curl -s https://raw.githubusercontent.com/bogdanmic/dev-scripts/master/setup.sh)
  ```
  **NOTICE:** Since you are executing an untrusted script from the interwebs, I
  would recommend you to take a look at it before proceeding. So probably you
  should do this.
  ```bash
- $ git clone https://github.com/bogdanmic/config-scripts.git
- $ cd config-scripts
+ $ git clone https://github.com/bogdanmic/dev-scripts.git
+ $ cd dev-scripts
  $ ./setup.sh
  ```
 
