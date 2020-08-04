@@ -90,22 +90,6 @@ if continueYesNo "$ask"; then
     output "SUCCESS!"
 fi
 
-ask="Install: numix-icon-theme-circle?"
-if continueYesNo "$ask"; then
-    sudo add-apt-repository -y ppa:numix/ppa
-    sudo apt update
-    sudo apt install -y numix-icon-theme-circle
-    output "SUCCESS!"
-fi
-
-ask="Install: papirus-icon-theme?"
-if continueYesNo "$ask"; then
-    sudo add-apt-repository -y ppa:papirus/papirus
-    sudo apt update
-    sudo apt install -y papirus-icon-theme
-    output "SUCCESS!"
-fi
-
 ask="Install: docker, docker-compose?"
 if continueYesNo "$ask"; then
     sudo apt remove docker docker-engine docker.io containerd runc

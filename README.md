@@ -5,6 +5,7 @@ dev-scripts
 those have moved at a new repo [bogdanmic/dev-services](https://github.com/bogdanmic/dev-services).
 
 TODO: Rethink this doc as a list of scripts. More separation probably will come.
+TODO: update doc to include making the scripts executable with sudo command 655 or 755?
 
 This is collection of scripts that I use on my linux machine to configure my
 workspace. For now I use a **Ubuntu** distribution. It should work fairly decent with all **Ubuntu** based distros. There are two scripts at the moment in this repository.
