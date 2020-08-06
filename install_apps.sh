@@ -17,7 +17,6 @@ continueYesNo() {
 ask="Install: filezilla, vlc, firefox, vim, net-tools, curl?"
 if continueYesNo "$ask"; then
     sudo apt install -y filezilla vlc firefox vim net-tools curl
-    output "SUCCESS!"
 fi
 
 ask="Install: chrome?"
@@ -26,7 +25,6 @@ if continueYesNo "$ask"; then
     sudo dpkg -i google-chrome-stable_current_amd64.deb
     sudo apt install -y -f
     rm google-chrome-stable_current_amd64.deb
-    output "SUCCESS!"
 fi
 
 ask="Install: skype?"
@@ -35,7 +33,6 @@ if continueYesNo "$ask"; then
     sudo dpkg -i skypeforlinux-64.deb
     sudo apt install -y -f
     rm skypeforlinux-64.deb
-    output "SUCCESS!"
 fi
 
 ask="Install: Tilix terminal?"
@@ -44,17 +41,22 @@ if continueYesNo "$ask"; then
     sudo apt-get update
     sudo apt-get install -y tilix
     sudo update-alternatives --config x-terminal-emulator
-    output "SUCCESS!"
 fi
 
 ask="Install: slack-desktop?"
 if continueYesNo "$ask"; then
-    # TODO: At some point consider snap packages
-    wget -O slack-desktop.deb https://downloads.slack-edge.com/linux_releases/slack-desktop-4.1.1-amd64.deb
+    wget -O slack-desktop.deb https://downloads.slack-edge.com/linux_releases/slack-desktop-4.8.0-amd64.deb
     sudo dpkg -i slack-desktop.deb
     sudo apt install -y -f
     rm slack-desktop.deb
-    output "SUCCESS!"
+fi
+
+ask="Install: etcher (Flash OS images to SD cards & USB drives)?"
+if continueYesNo "$ask"; then
+    echo "deb https://deb.etcher.io stable etcher" | sudo tee /etc/apt/sources.list.d/balena-etcher.list
+    sudo apt-key adv --keyserver hkps://keyserver.ubuntu.com:443 --recv-keys 379CE192D401AB61
+    sudo apt-get update
+    sudo apt-get install -y balena-etcher-electron
 fi
 
 printf "\e[32m%s\e[39m\n" "Cheching for updates ..."
