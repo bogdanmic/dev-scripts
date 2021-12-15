@@ -22,6 +22,7 @@ icon packs and others.
 git and adds a few git related aliases. Recommended insallation method is with 
 **git** to be able to use the **git-flow aliases** provided.
 
+#TODO: rephrase this maybe?
 Looking for **docker** related helpers, then check out [bogdanmic/dev-services](https://github.com/bogdanmic/dev-services).
 
 ## How to use

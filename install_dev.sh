@@ -53,6 +53,7 @@ fi
 # TODO: Test this next time. Does it install yarn as well? If not it needs to be part of this.
 ask="Install: nodejs?"
 if continueYesNo "$ask"; then
+# TODO: install with nvm maybe for future flexibility and sdkman like experience?
     wget -qO- https://deb.nodesource.com/setup_12.x | sudo -E bash -
     sudo apt update && sudo apt install -y nodejs
 
