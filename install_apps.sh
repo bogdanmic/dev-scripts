@@ -45,7 +45,7 @@ fi
 
 ask="Install: slack-desktop?"
 if continueYesNo "$ask"; then
-    wget -O slack-desktop.deb https://downloads.slack-edge.com/linux_releases/slack-desktop-4.8.0-amd64.deb
+    wget -O slack-desktop.deb https://downloads.slack-edge.com/releases/linux/4.23.0/prod/x64/slack-desktop-4.23.0-amd64.deb
     sudo dpkg -i slack-desktop.deb
     sudo apt install -y -f
     rm slack-desktop.deb

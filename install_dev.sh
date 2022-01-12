@@ -53,7 +53,7 @@ fi
 # TODO: Test this next time. Does it install yarn as well? If not it needs to be part of this.
 ask="Install: nodejs?"
 if continueYesNo "$ask"; then
-    wget -qO- https://deb.nodesource.com/setup_12.x | sudo -E bash -
+    wget -qO- https://deb.nodesource.com/setup_16.x | sudo -E bash -
     sudo apt update && sudo apt install -y nodejs
 
     # curl -sSL https://deb.nodesource.com/gpgkey/nodesource.gpg.key | sudo apt-key add -
@@ -104,7 +104,7 @@ fi
 
 ask="Install: MongoDB Compass (UI for MongoDB)?"
 if continueYesNo "$ask"; then
-    wget -O mongodb-compass_amd64.deb https://downloads.mongodb.com/compass/mongodb-compass_1.21.2_amd64.deb
+    wget -O mongodb-compass_amd64.deb https://downloads.mongodb.com/compass/mongodb-compass_1.29.6_amd64.deb
     sudo dpkg -i mongodb-compass_amd64.deb
     sudo apt install -y -f
     rm mongodb-compass_amd64.deb
@@ -113,7 +113,7 @@ fi
 # TODO: This does not work because of some missing dependencies.At least not on kubuntu 19.04
 ask="Install: MySql Workbench (UI for Mysql)?"
 if continueYesNo "$ask"; then
-    wget -O mysql-workbench-community_amd64.deb https://cdn.mysql.com//Downloads/MySQLGUITools/mysql-workbench-community_8.0.21-1ubuntu20.04_amd64.deb
+    wget -O mysql-workbench-community_amd64.deb https://cdn.mysql.com//Downloads/MySQLGUITools/mysql-workbench-community_8.0.27-1ubuntu20.04_amd64.deb
     sudo dpkg -i mysql-workbench-community_amd64.deb
     sudo apt install -y -f
     rm mysql-workbench-community_amd64.deb
@@ -133,16 +133,10 @@ if continueYesNo "$ask"; then
 fi
 
 ask="Install: terraform?"
-if [ -d $SETUP_PATH_TOOLS ] && [ ! -z "$SETUP_PATH_TOOLS" ]; then
-    if continueYesNo "$ask"; then
-        mkdir -p $SETUP_PATH_TOOLS/terraform
-        curl https://releases.hashicorp.com/terraform/0.12.29/terraform_0.12.29_linux_amd64.zip -o terraform.zip
-        unzip terraform.zip -d $SETUP_PATH_TOOLS/terraform
-        rm -R terraform.zip
-        echo "PATH=\$PATH:$SETUP_PATH_TOOLS/terraform" >> ~/.bashrc
-    fi
-else
-    printf "%s \e[31m[%s]\e[39m. Skipping \e[34m[%s]\e[39m step\n" "Not a valid directory:" "$SETUP_PATH_TOOLS" "$ask"
+if continueYesNo "$ask"; then
+    curl -fsSL https://apt.releases.hashicorp.com/gpg | sudo apt-key add -
+    sudo apt-add-repository "deb [arch=amd64] https://apt.releases.hashicorp.com focal main"
+    sudo apt-get update && sudo apt-get install terraform
 fi
 
 
@@ -153,10 +147,10 @@ if [ -d $SETUP_PATH_TOOLS ] && [ ! -z "$SETUP_PATH_TOOLS" ]; then
         mkdir -p $SETUP_PATH_TOOLS
 
         # Get maven
-        wget https://mirror.efect.ro/apache/maven/maven-3/3.6.3/binaries/apache-maven-3.6.3-bin.tar.gz -P $SETUP_PATH_TOOLS
-        unzip -o $SETUP_PATH_TOOLS/apache-maven-3.6.3-bin.zip -d $SETUP_PATH_TOOLS && rm $SETUP_PATH_TOOLS/apache-maven-3.6.3-bin.zip
+        wget https://mirror.efect.ro/apache/maven/maven-3/3.8.4/binaries/apache-maven-3.8.4-bin.zip -P $SETUP_PATH_TOOLS
+        unzip -o $SETUP_PATH_TOOLS/apache-maven-3.8.4-bin.zip -d $SETUP_PATH_TOOLS && rm $SETUP_PATH_TOOLS/apache-maven-3.8.4-bin.zip
         # Add maven to PATH
-        echo "PATH=\$PATH:$SETUP_PATH_TOOLS/apache-maven-3.6.3/bin" >> ~/.bashrc
+        echo "PATH=\$PATH:$SETUP_PATH_TOOLS/apache-maven-3.8.4/bin" >> ~/.bashrc
         echo "export MAVEN_OPTS=\"-Xmx512m\"" >> ~/.bashrc
 
         # Get typesafe activator
@@ -166,7 +160,7 @@ if [ -d $SETUP_PATH_TOOLS ] && [ ! -z "$SETUP_PATH_TOOLS" ]; then
         echo "PATH=\$PATH:$SETUP_PATH_TOOLS/activator-1.3.12-minimal/bin" >> ~/.bashrc
 
         # Get JetBrains ToolBox app that makes it easier to update InteliJ and get it.
-        wget -qO- https://download.jetbrains.com/toolbox/jetbrains-toolbox-1.17.7275.tar.gz | tar xvz -C $SETUP_PATH_TOOLS
+        wget -qO- https://download.jetbrains.com/toolbox/jetbrains-toolbox-1.22.10970.tar.gz | tar xvz -C $SETUP_PATH_TOOLS
     fi
 else
     printf "%s \e[31m[%s]\e[39m. Skipping \e[34m[%s]\e[39m step\n" "Not a valid directory:" "$SETUP_PATH_TOOLS" "$ask"

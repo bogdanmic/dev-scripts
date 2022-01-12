@@ -83,7 +83,7 @@ if continueYesNo "$ask"; then
     # Until we have an official version use this: https://github.com/shiftkey/desktop/releases
     ask="Install: GitHub Desktop (un-official: https://github.com/shiftkey/desktop/releases)?"
     if continueYesNo "$ask"; then
-        wget -O GitHubDesktop.deb https://github.com/shiftkey/desktop/releases/download/release-2.5.3-linux1/GitHubDesktop-linux-2.5.3-linux1.deb
+        wget -O GitHubDesktop.deb https://github.com/shiftkey/desktop/releases/download/release-2.9.6-linux1/GitHubDesktop-linux-2.9.6-linux1.deb
         sudo dpkg -i GitHubDesktop.deb
         sudo apt install -y -f
         rm GitHubDesktop.deb

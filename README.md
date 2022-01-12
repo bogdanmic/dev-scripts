@@ -116,7 +116,7 @@ manage multiple versions of java on the same machine. And it can do much more.
 - Install: **MySql Workbench (UI for Mysql)**
 - Install: **awscli**. This one needs a bit more testing...
   - Configure awscli
-- Install: **terraform** if a ```/path/to/tools/download/folder``` was provided.
+- Install: **terraform**
 - Install: **maven, activator, JetBrains ToolBox** if a ```/path/to/tools/download/folder```
  was provided. **JetBrains ToolBox** makes it easier to install and update 
  JetBrains products.
