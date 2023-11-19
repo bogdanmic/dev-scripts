@@ -1,9 +1,9 @@
-#!/bin/bash
+#!/bin/zsh
 # Installs most common apps that you might use
 
 continueYesNo() {
     printf "%s \e[34m%s\e[39m" "$1" "[Y/n]" >/dev/stderr
-    read -n 1 -r
+    read -k 1 -r
     echo # (optional) move to a new line
     if [[ $REPLY =~ ^[Yy]$ ]]; then
         # 0 = true

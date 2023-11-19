@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/zsh
 # Installs git and other git helpers and aliases
 
 SCRIPT_PATH="$(
@@ -18,7 +18,7 @@ askInput() {
 
 continueYesNo() {
     printf "%s \e[34m%s\e[39m" "$1" "[Y/n]" >/dev/stderr
-    read -n 1 -r
+    read -k 1 -r
     echo # (optional) move to a new line
     if [[ $REPLY =~ ^[Yy]$ ]]; then
         # 0 = true
@@ -48,7 +48,7 @@ if continueYesNo "$ask"; then
 
     ask="Configure:  GIT?"
     if continueYesNo "$ask"; then
-        github_username="lol"
+        github_username="your_username"
         github_username=$(askInput "Enter your GIT user.name:" $github_username)
         github_useremail=$(askInput "Enter your GIT user.email:" $github_useremail)
 
@@ -58,7 +58,7 @@ if continueYesNo "$ask"; then
         git config -l
     fi
 
-    ask="Setup: GitHub SSH key?"
+    ask="Setup: GitHub SSH key? (You will need to add it manually in your GitHub account)"
     if [ -d $SETUP_PATH_PRIVATE ] && [ ! -z "$SETUP_PATH_PRIVATE" ]; then
         if continueYesNo "$ask"; then
             mkdir -p $SETUP_PATH_PRIVATE
@@ -69,12 +69,6 @@ if continueYesNo "$ask"; then
             $(ssh-agent -s)
             echo "IdentityFile ~/.ssh/id_rsa_github" >> ~/.ssh/config
             ssh-add ~/.ssh/id_rsa_github
-
-            github_username=$(askInput "Enter your GitHub user.name" $github_username)
-
-            curl -u "$github_username" \
-            --data "{\"title\":\"`lsb_release -ds`-`date +%Y-%m-%d-%H:%M:%S`\",\"key\":\"`cat $SETUP_PATH_PRIVATE/id_rsa_github.pub`\"}" \
-            https://api.github.com/user/keys
         fi
     else
         printf "%s \e[31m[%s]\e[39m. Skipping \e[34m[%s]\e[39m step\n" "Not a valid directory:" "$SETUP_PATH_PRIVATE" "$ask"
@@ -83,7 +77,7 @@ if continueYesNo "$ask"; then
     # Until we have an official version use this: https://github.com/shiftkey/desktop/releases
     ask="Install: GitHub Desktop (un-official: https://github.com/shiftkey/desktop/releases)?"
     if continueYesNo "$ask"; then
-        wget -O GitHubDesktop.deb https://github.com/shiftkey/desktop/releases/download/release-2.9.6-linux1/GitHubDesktop-linux-2.9.6-linux1.deb
+        wget -O GitHubDesktop.deb https://github.com/shiftkey/desktop/releases/download/release-3.3.3-linux2/GitHubDesktop-linux-amd64-3.3.3-linux2.deb
         sudo dpkg -i GitHubDesktop.deb
         sudo apt install -y -f
         rm GitHubDesktop.deb
@@ -93,7 +87,7 @@ if continueYesNo "$ask"; then
     if continueYesNo "$ask"; then
         # Add the file of aliases if it exists
         if [ -f $ALIAS_HELPERS_FILE ]; then
-            echo -e "if [ -f $ALIAS_HELPERS_FILE ]; then \n\t. $ALIAS_HELPERS_FILE \nfi" >> ~/.bashrc
+            echo -e "if [ -f $ALIAS_HELPERS_FILE ]; then \n\t. $ALIAS_HELPERS_FILE \nfi" >> ~/.zshrc
         fi
     fi
 
