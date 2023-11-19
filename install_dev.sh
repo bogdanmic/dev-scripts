@@ -33,10 +33,6 @@ if continueYesNo "$ask"; then
     sudo dpkg -i vscode.deb
     sudo apt install -y -f
     rm vscode.deb
-    ask="Install: vscode ide - settings sync extension?"
-    if continueYesNo "$ask"; then
-      code --install-extension Shan.code-settings-sync
-    fi
 fi
 
 ask="Install: SDKMan (Software Development Kit Manager)?"
