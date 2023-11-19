@@ -11,6 +11,21 @@ will work for you if you do the same, otherwise there might be small issues.
 - *(Optional)* **git** although recommended.
 - *(Optional)* **curl**
 - *(Optional)* **unzip** or some tool that will allow you un-archive a zip file.
+- Switch to **ZSH** if you haven't already
+  ```bash
+  $ sudo apt install zsh -y
+  $ sudo chsh -s /usr/bin/zsh $USER
+  # Close and open your terminal again
+  $ sudo wget https://github.com/robbyrussell/oh-my-zsh/raw/master/tools/install.sh -O - | zsh
+  $ sudo git clone https://github.com/romkatv/powerlevel10k.git ~/.oh-my-zsh/custom/themes/powerlevel10k
+  # nano ~./zshrc and change your theme to ZSH_THEME="powerlevel10k/powerlevel10k"
+  # Install font from https://github.com/romkatv/powerlevel10k/blob/master/font.md#manual-font-installation
+  # Select it as custom font for your terminal and update your Terminal font family for VS Code to "MesloLGS NF"
+  $ sudo git clone https://github.com/zsh-users/zsh-autosuggestions  ~/.oh-my-zsh/custom/plugins/zsh-autosuggestions 
+  $ sudo git clone https://github.com/zsh-users/zsh-syntax-highlighting ~/.oh-my-zsh/custom/plugins/zsh-syntax-highlighting
+  # Update your .zshrc plugins to plugins=(git nvm zsh-autosuggestions zsh-syntax-highlighting)
+  $ source ~/.zshrc
+  ``` 
 
 ## The scripts
 The scripts available are as follows:
@@ -19,7 +34,7 @@ The scripts available are as follows:
 icon packs and others.
 - [install_dev.sh](install_dev.sh) - Installs applications used for development.
 - [install_git.sh](install_git.sh) - Installs **git-flow**, helps to configure 
-git and adds a few git related aliases. Recommended insallation method is with 
+git and adds a few git related aliases. Recommended installation method is with 
 **git** to be able to use the **git-flow aliases** provided.
 
 Looking for **docker** related helpers, then check out [bogdanmic/dev-services](https://github.com/bogdanmic/dev-services).
@@ -60,18 +75,17 @@ $ ./install_apps.sh
 This script runs in multiple steps, steps that are optional:
 - Install: **filezilla, vlc, firefox, vim, net-tools, curl**
 - Install: **chrome** browser
-- Install: **skype**
 - Install: **Tilix terminal** tiling terminal emulator
 - Install: **Slack Desktop**
 - Install: **etcher** that helps you to "Flash OS images to SD cards & USB drives"
 - Update and Reboot
 
 ### [install_custom.sh](install_custom.sh)
-Installs popular icon-packs and other bash customization fle that you might have.
+Installs popular icon-packs and other ZSH customization file that you might have.
 #### Usage
 ```bash
-# The /path/to/bash/custom_file is optional and if not present some steps will be skipped
-$ ./install_apps.sh /path/to/bash/custom_file
+# The /path/to/zsh/custom_file is optional and if not present some steps will be skipped
+$ ./install_apps.sh /path/to/zsh/custom_file
 ```
 #### Execution effect
 This script runs in multiple steps, steps that are optional:
@@ -79,8 +93,8 @@ This script runs in multiple steps, steps that are optional:
 for a dock setup because it has circle icons
 - Install: **papirus-icon-theme** this is just a icon theme I like, suited for 
 a classic setup
-- Install: any bash customization/aliases file to the **~/.bashrc** file if 
-a ```/optional/path/to/bash/custom_file``` was provided.
+- Install: any zsh customization/aliases file to the **~/.zshrc** file if 
+a ```/optional/path/to/zsh/custom_file``` was provided.
 
 ### [install_dev.sh](install_dev.sh)
 Installs packages and applications needed for a development work flow. Well the
@@ -94,21 +108,20 @@ $ ./install_dev.sh /path/to/tools/download/folder
 This script runs in multiple steps, steps that are optional and some steps 
 have sub-steps. Some of the steps require a distribution based on **Focal Fossa**
 or later:
-- Install: **vscode ide** a quite decent and lightweight IDE and an alternative 
-to **atom ide**.
-  - Add a extension for **Settings sync** to github.
+- Install: **vscode ide**
 - Install: **SDKMan (Software Development Kit Manager)**. We will use this to 
 manage multiple versions of java on the same machine. And it can do much more.
-  - Install: **Java 8 & 14 using SDKMan**. To change from one version of Java to 
+  - Install: **Java 17 & 21 using SDKMan**. To change from one version of Java to 
   another:
   ```bash
-  # Make default java 14
-  $ sdk default java 14.0.2.hs-adpt
-  # Use java 8 in the current terminal session
-  $ sdk use java 8.0.265.hs-adpt
+  # Make default java 21
+  $ sdk default java 21.0.1-tem
+  # Use java 17 in the current terminal session
+  $ sdk use java 17.0.9-tem
   # For more usage example for sdkman check: https://sdkman.io/
   ```
-- Install: **nodejs** this will install **yarn** as well.
+  - Install: **maven using SDKMan**.
+- Install: **nodejs** using **nvm**.
 - Install: **docker, docker-compose**. *Focal Fossa or later required.
 - Install: **dbeaver (sql client)**
 - Install: **PGAdmin4 (UI for Postgres)**. *Focal Fossa or later required.
@@ -117,7 +130,7 @@ manage multiple versions of java on the same machine. And it can do much more.
 - Install: **awscli**. This one needs a bit more testing...
   - Configure awscli
 - Install: **terraform**
-- Install: **maven, activator, JetBrains ToolBox** if a ```/path/to/tools/download/folder```
+- Install: **JetBrains ToolBox** if a ```/path/to/tools/download/folder```
  was provided. **JetBrains ToolBox** makes it easier to install and update 
  JetBrains products.
 - Install: **Postman** if a ```/path/to/tools/download/folder``` was provided.
@@ -137,7 +150,8 @@ $ ./install_git.sh /path/to/private/folder
 This script runs in multiple steps, steps that are optional and have sub-steps:
 - Install: **git, git-flow**
   - Configure  GIT
-  - Setup GitHub SSH key if a ```/path/to/private/folder``` was provided.
+  - Prepares a GitHub SSH key if a ```/path/to/private/folder``` was provided.
+  Due to MFA you will need to add the SSH key to your GitHub account.
   - Install: [GitHub Desktop un-official](https://github.com/shiftkey/desktop/releases)
   - Install: **git-flow alias helpers and git terminal prompt integration**
 
