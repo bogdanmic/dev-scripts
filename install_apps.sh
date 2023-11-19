@@ -27,14 +27,6 @@ if continueYesNo "$ask"; then
     rm google-chrome-stable_current_amd64.deb
 fi
 
-ask="Install: skype?"
-if continueYesNo "$ask"; then
-    wget https://repo.skype.com/latest/skypeforlinux-64.deb
-    sudo dpkg -i skypeforlinux-64.deb
-    sudo apt install -y -f
-    rm skypeforlinux-64.deb
-fi
-
 ask="Install: Tilix terminal?"
 if continueYesNo "$ask"; then
     sudo add-apt-repository -y ppa:webupd8team/terminix
@@ -45,7 +37,7 @@ fi
 
 ask="Install: slack-desktop?"
 if continueYesNo "$ask"; then
-    wget -O slack-desktop.deb https://downloads.slack-edge.com/releases/linux/4.23.0/prod/x64/slack-desktop-4.23.0-amd64.deb
+    wget -O slack-desktop.deb https://downloads.slack-edge.com/releases/linux/4.35.126/prod/x64/slack-desktop-4.35.126-amd64.deb
     sudo dpkg -i slack-desktop.deb
     sudo apt install -y -f
     rm slack-desktop.deb
