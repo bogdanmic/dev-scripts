@@ -6,10 +6,10 @@ alias gg='echo "Latest 3 tags:" && git tag --sort=-version:refname | head -n 3 &
 alias gitcpb="git checkout -"
 # Update the develop branch
 alias gitud="git checkout develop && git pull"
-# Update the master branch
-alias gitum="git checkout master && git pull"
-# Push master and develop branches
-alias gitpmd='git checkout develop && git push && git checkout master && git push && git push --tags'
+# Update the main branch
+alias gitum="git checkout main && git pull"
+# Push main and develop branches
+alias gitpmd='git checkout develop && git push && git checkout main && git push && git push --tags'
 
 
 ### GitFlow Aliases
