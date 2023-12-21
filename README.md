@@ -166,13 +166,13 @@ available to you.
   - ```gitfp``` - Publish your *feature* branch.
   - ```gitff``` - Update the ```develop``` branch, finish your *feature* branch
   **with squash** and push your changes. 
-  - ```giths``` - Update the ```master``` branch and start a new *hotfix* branch.
+  - ```giths``` - Update the ```main``` branch and start a new *hotfix* branch.
   - ```githp``` - Publish your *hotfix* branch.
-  - ```githf``` - Update the ```master``` and ```develop``` branches, finish your
+  - ```githf``` - Update the ```main``` and ```develop``` branches, finish your
    *hotfix* branch **with squash** and push your changes. 
   - ```gitrs``` - Update the ```develop``` branch and start a new *release* branch.
   - ```gitrp``` - Publish your *release* branch.
-  - ```gitrf``` - Update the ```master``` and ```develop``` branches, finish your
+  - ```gitrf``` - Update the ```main``` and ```develop``` branches, finish your
    feature branch **without squash** and push your changes. 
 The **git-flow** aliases they work on the current checked out feature/hotfix/release
 branch. And that is how they are intended to be used.
