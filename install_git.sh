@@ -74,15 +74,6 @@ if continueYesNo "$ask"; then
         printf "%s \e[31m[%s]\e[39m. Skipping \e[34m[%s]\e[39m step\n" "Not a valid directory:" "$SETUP_PATH_PRIVATE" "$ask"
     fi
 
-    # Until we have an official version use this: https://github.com/shiftkey/desktop/releases
-    ask="Install: GitHub Desktop (un-official: https://github.com/shiftkey/desktop/releases)?"
-    if continueYesNo "$ask"; then
-        wget -O GitHubDesktop.deb https://github.com/shiftkey/desktop/releases/download/release-3.3.3-linux2/GitHubDesktop-linux-amd64-3.3.3-linux2.deb
-        sudo dpkg -i GitHubDesktop.deb
-        sudo apt install -y -f
-        rm GitHubDesktop.deb
-    fi
-
     ask="Install: git-flow alias helpers and git terminal prompt integration?"
     if continueYesNo "$ask"; then
         # Add the file of aliases if it exists
