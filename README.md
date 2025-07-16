@@ -138,8 +138,7 @@ A rest client app. Can be invoked with Postman from a terminal or it should
 appear in the start menu.
 
 ### [install_git.sh](install_git.sh)
-Installs **git-flow**, [GitHub Desktop un-official](https://github.com/shiftkey/desktop/releases)
-and tries to help your development workflow especially if you are using 
+Installs **git-flow** and tries to help your development workflow especially if you are using 
 [git-flow](https://nvie.com/posts/a-successful-git-branching-model/)
 #### Usage
 ```bash
@@ -152,7 +151,6 @@ This script runs in multiple steps, steps that are optional and have sub-steps:
   - Configure  GIT
   - Prepares a GitHub SSH key if a ```/path/to/private/folder``` was provided.
   Due to MFA you will need to add the SSH key to your GitHub account.
-  - Install: [GitHub Desktop un-official](https://github.com/shiftkey/desktop/releases)
   - Install: **git-flow alias helpers and git terminal prompt integration**
 
 #### Available aliases
